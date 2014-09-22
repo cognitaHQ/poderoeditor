@@ -1,0 +1,31 @@
+{%extends "components/includes/base.html"%}
+{%block content%} 
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Flod is installed!</h1>
+        <p>Flod was installed successfully in your server. Here are a few things you can start doing with it.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Explore</h2>
+          <p>Take a look at the data available. Try dereferencing URIs available from your SPARQL endpoint.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Develop</h2>
+          <p>Learn how to create different components in Flod. These components will help you to create different views and process your data.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+       </div>
+        <div class="col-md-4">
+          <h2>Provide feedback</h2>
+          <p>Flod is still in its early developing stages. Any help, suggestions and bug reports are welcome!</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+    </div>
+{%endblock%}
