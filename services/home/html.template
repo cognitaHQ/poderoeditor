@@ -3,8 +3,8 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Flod is installed!</h1>
-        <p>Flod was installed successfully in your server. Here are a few things you can start doing with it.</p>
+        <h1>Welcome to PoderoEditor</h1>
+        <p>A semantic-based editor to map power relations based on the Poderopedia Vocabulary.</p>
       </div>
     </div>
 

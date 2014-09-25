@@ -1,0 +1,16 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+
+SELECT DISTINCT ?c ?cName WHERE{
+  GRAPH <{{flod.ontologyGraph}}>{
+  	{
+  		?c a owl:Class .
+  	}UNION{
+  		?c a rdfs:Class .
+  	}
+  	OPTIONAL{
+  		?c <{{flod.labelPredicate}}> ?cName
+  		{%if flod.labelLanguage%}FILTER(LANG(?cName) = "{{flod.labelLanguage}}" ). {%endif%}
+  	}
+  }
+}

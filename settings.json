@@ -9,10 +9,20 @@
  		"local": "http://localhost:3030/poderoeditor/query",
  		"dbpedia": "http://dbpedia.org/sparql"
  	},
+ 	"sparqlUpdateEndpoint": {
+ 		"local": {
+ 			"url": "http://localhost:3030/poderoeditor/data"
+ 		}
+ 	},
  	"host": "0.0.0.0",
  	"port": 54321,
  	"flod": { 
- 	  "title": "FLOD"
+ 	  "title": "FLOD",
+ 	  "ontologyGraph": "http://cognita.io/poderoEditor/ontology/",
+ 	  "displayGraph": "http://cognita.io/poderoEditor/display/",
+ 	  "dataGraph": "http://cognita.io/poderoEditor/data/",
+ 	  "labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
+ 	  "labelLanguage": "es"
  	},
  	"secret": "870319403015226788",
  	"root": "home"

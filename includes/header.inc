@@ -5,7 +5,7 @@
 	<meta name="author" content="">
 	<link rel="shortcut icon" href="/ico/favicon.ico">
 
-	<title>Welcome to FLOD</title>
+	<title>PoderoEditor</title>
 
 	<!-- Bootstrap core CSS -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
