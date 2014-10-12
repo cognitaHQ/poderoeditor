@@ -1,4 +1,5 @@
 {
+	"debug": false,
  	"modules": [ "Static", "Users", "Services", "Types"],
  	"ns": {
  		"local": "http://localhost:54321/",
@@ -24,6 +25,15 @@
  	  "labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
  	  "labelLanguage": "es"
  	},
+ 	"additionalFilters": [
+ 							{
+ 								"class": "bla",
+ 								"filters": [
+ 												{"name": "hola", "method": "hola"},
+ 												{"name": "hola2", "method": "chao"}
+ 								]
+ 							}
+ 	],
  	"secret": "870319403015226788",
  	"root": "home"
 }

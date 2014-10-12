@@ -1,0 +1,40 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+
+<div class="container" ng-app="ontologyFormApp">
+<h1>Default service</h1>
+<div class="row" ng-controller="ontologyFormList">
+
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>S</th><th>P</th><th>O</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for row in queries.main%}
+				<tr>
+					<td>{{row.predicate.value}}</td><td>{{row.htmlElement.value}}</td><td>{{row.number.value}}</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	<ul class="form">
+  <li ng-repeat="widget in formData">
+    [[widget.htmlElement]]AA
+  </li>
+</ul>
+
+</div>
+<h2>asd</h2>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<script>
+var a = {
+	a: "holi"
+}
+</script>
+<script src="/js/ontologyForm.js"></script>
+{%endblock%}

@@ -1,0 +1,14 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+
+select distinct ?predicate ?htmlElement ?number WHERE {
+ graph <http://cognita.io/poderoEditor/ontology/>  {
+   ?predicate rdfs:domain {{args[0]}} . 
+ }
+ graph <http://cognita.io/poderoEditor/display/>  {
+   ?predicateWidget layout:anchoredTo ?htmlElement;
+   					layout:predicateDisplayed ?predicate;
+   					layout:positionNumber ?number .
+ }
+}
