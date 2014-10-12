@@ -10,7 +10,9 @@ SELECT DISTINCT ?c ?cName WHERE{
   	}
   	OPTIONAL{
   		?c <{{flod.labelPredicate}}> ?cName
-  		{%if flod.labelLanguage%}FILTER(LANG(?cName) = "{{flod.labelLanguage}}" ). {%endif%}
+      OPTIONAL{
+  		  {%if flod.labelLanguage%}FILTER(LANG(?cName) = "{{flod.labelLanguage}}" ). {%endif%}
+      }
   	}
   }
 }
