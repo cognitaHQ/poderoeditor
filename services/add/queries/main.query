@@ -3,12 +3,20 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 
 select distinct ?predicate ?htmlElement ?number WHERE {
- graph <http://cognita.io/poderoEditor/ontology/>  {
-   ?predicate rdfs:domain {{args[0]}} . 
+ graph <{{flod.ontologyGraph}}>  {
+   ?predicate rdfs:domain ?d .
+   {{args[0]}} rdfs:subClassOf* ?d .
+   
+   OPTIONAL{
+   	?predicate <{{flod.labelPredicate}}> ?predicateLabel .
+      OPTIONAL{
+  		  {%if flod.labelLanguage%}FILTER(LANG(?cName) = "{{flod.labelLanguage}}" ). {%endif%}
+      }   	
+   }
  }
- graph <http://cognita.io/poderoEditor/display/>  {
+ graph <{{flod.displayGraph}}>  {
    ?predicateWidget layout:anchoredTo ?htmlElement;
    					layout:predicateDisplayed ?predicate;
    					layout:positionNumber ?number .
  }
-}
+}ORDER BY ?htmlElement ?number

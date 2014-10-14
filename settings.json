@@ -3,7 +3,8 @@
  	"modules": [ "Static", "Users", "Services", "Types"],
  	"ns": {
  		"local": "http://localhost:54321/",
- 		"origin": "http://poderopedia.org/vocab/"
+ 		"origin": "http://poderopedia.org/vocab/",
+ 		"v": "http://cognita.io/cp/vocab/"
  	},
  	"mirrored": true,
  	"endpoints": {
@@ -27,10 +28,10 @@
  	},
  	"additionalFilters": [
  							{
- 								"class": "bla",
+ 								"class": "PoderoeditorFilter",
  								"filters": [
- 												{"name": "hola", "method": "hola"},
- 												{"name": "hola2", "method": "chao"}
+ 												{"name": "textInput", "method": "HTMLInputTextWidget"},
+ 												{"name": "textArea", "method": "HTMLInputTextareaWidget"}
  								]
  							}
  	],

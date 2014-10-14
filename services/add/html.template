@@ -1,40 +1,23 @@
 {%extends "components/includes/base.html"%}
 {%block content%}
 
-<div class="container" ng-app="ontologyFormApp">
-<h1>Default service</h1>
-<div class="row" ng-controller="ontologyFormList">
+<div class="container" data-ng-app="ontologyFormApp">
+	<div class="row" data-ng-controller="ontologyFormList">
+	<h2>Add instance of {{args[0]}}</h2>
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			<form action="" method="POST" role="form" id="myForm"></form>
 
-	<div class="table-responsive">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>S</th><th>P</th><th>O</th>
-				</tr>
-			</thead>
-			<tbody>
-				{%for row in queries.main%}
-				<tr>
-					<td>{{row.predicate.value}}</td><td>{{row.htmlElement.value}}</td><td>{{row.number.value}}</td>
-				</tr>
-				{%endfor%}
-			</tbody>
-		</table>
+		</div>
 	</div>
-	<ul class="form">
-  <li ng-repeat="widget in formData">
-    [[widget.htmlElement]]AA
-  </li>
-</ul>
 
+	<script>
+		var data = [
+		{"predicate": "foaf:name", "anchor": "form"},
+		{"predicate": "foaf:familyName", "anchor": "form"}
+		]
+	</script>
+	<script src="/js/angular.min.js"> </script>
+	<script src="/js/ontologyForm.js"> </script>
 </div>
-<h2>asd</h2>
-</div>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-<script>
-var a = {
-	a: "holi"
-}
-</script>
-<script src="/js/ontologyForm.js"></script>
-{%endblock%}
+	{%endblock%}
