@@ -24,7 +24,8 @@
  	  "displayGraph": "http://cognita.io/poderoEditor/display/",
  	  "dataGraph": "http://cognita.io/poderoEditor/data/",
  	  "labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
- 	  "labelLanguage": "es"
+ 	  "labelLanguage": "es",
+ 	  "instanceNamespace": "http://cognita.io/poderoeditor/instance/"
  	},
  	"additionalFilters": [
  							{

@@ -13,6 +13,12 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', function($sco
     	}
     };
 
+    $scope.urlify = function(u){
+    	return u.toLowerCase().replace(/[^a-zA-Z0-9\-]+/g, '_');
+    }
+
+    $scope.identifier = "";
+    $scope.baseNamespace = function(){return baseNamespace+$scope.urlify($scope.identifier)}
 	$http.get(url, config).success(function(data){
 		$scope.formData = data.main;
 
@@ -20,12 +26,13 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', function($sco
 //		console.log(data);
 		$scope.formData.forEach(function(datum){
 			var formElement = document.createElement("p");
-			var legend = document.createElement("legend");
+			var legend = document.createElement("label");
 			legend.innerHTML = datum.predicate.curie;
 			formElement.appendChild(legend);
 			var aux = document.createElement('input');
 			aux.type="text";
 			aux.id=datum.predicate.value;
+			aux.setAttribute("class", "form-control");
 			aux.setAttribute("data-predicate", datum.predicate.value);
 			formElement.appendChild(aux);
   			var parent = document.getElementById(datum.htmlElement.value).appendChild(formElement);
