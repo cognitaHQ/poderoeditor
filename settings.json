@@ -3,7 +3,7 @@
  	"modules": [ "Static", "Users", "Services", "JsonBasedWriter", "Types"],
  	"ns": {
  		"local": "http://localhost:54321/",
- 		"origin": "http://poderopedia.org/vocab/",
+ 		"origin": "http://poderopedia.org/",
  		"v": "http://cognita.io/cp/vocab/"
  	},
  	"mirrored": true,
@@ -25,7 +25,7 @@
  	  "dataGraph": "http://cognita.io/poderoEditor/data/",
  	  "labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
  	  "labelLanguage": "es",
- 	  "instanceNamespace": "http://cognita.io/poderoeditor/instance/"
+ 	  "instanceNamespace": "http://poderopedia.org/instance/"
  	},
  	"additionalFilters": [
  							{

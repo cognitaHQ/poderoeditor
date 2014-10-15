@@ -17,6 +17,7 @@
             {%else%}
             
             <li><a href="/admin/edituser">Edit</a></li>
+            <li><a href="/search">Search</a></li>
             <li><a href="/addEntity">Add Entity</a></li>
             <li><a href="/logout">Logout</a></li>
             {%endif%}
