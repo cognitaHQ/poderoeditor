@@ -1,6 +1,6 @@
 {
 	"debug": false,
- 	"modules": [ "Static", "Users", "Services", "Types"],
+ 	"modules": [ "Static", "Users", "Services", "JsonBasedWriter", "Types"],
  	"ns": {
  		"local": "http://localhost:54321/",
  		"origin": "http://poderopedia.org/vocab/",
@@ -13,7 +13,7 @@
  	},
  	"sparqlUpdateEndpoint": {
  		"local": {
- 			"url": "http://localhost:3030/poderoeditor/data"
+ 			"url": "http://localhost:3030/poderoeditor/update"
  		}
  	},
  	"host": "0.0.0.0",
