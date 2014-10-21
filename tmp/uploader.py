@@ -3,7 +3,8 @@ from flask import Flask, request, redirect, url_for, send_from_directory, sessio
 from werkzeug import secure_filename
 import csv
 
-UPLOAD_FOLDER = '/Users/nloira/projects/cognita/poderoeditor/tmp'
+UPLOAD_FOLDER = '/tmp'
+# UPLOAD_FOLDER = '/Users/nloira/projects/cognita/poderoeditor/tmp'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
 
 app = Flask(__name__)
@@ -84,7 +85,7 @@ def uploaded():
         return "Session error: filename is empty!"
 
     # check for valid csv
-    csv = CSVHandler(filename)
+    csv = CSVHandler(UPLOAD_FOLDER+"/"+filename)
     if csv == None:
         return "This is not a valid CSV!"
     data = csv.head(20)
