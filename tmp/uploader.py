@@ -1,11 +1,12 @@
-import os
+import sys, os
 from flask import Flask, request, redirect, url_for, send_from_directory, session, escape, render_template
 from werkzeug import secure_filename
 import csv
 
+
 UPLOAD_FOLDER = '/tmp'
 # UPLOAD_FOLDER = '/Users/nloira/projects/cognita/poderoeditor/tmp'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
+ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -15,8 +16,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 class CSVHandler():
     def __init__(self, filename):
         # check if file exists
+
         if not os.path.isfile(filename):
-            return None
+            raise IOError("File not found")
 
         # open carefully to take care of encodings
         csvfd = open(filename, 'rb')
@@ -77,17 +79,22 @@ def allowed_file(filename):
 @app.route('/csvuploaded')
 def uploaded():
 
-    minitable = ""
     error = None
 
     filename = escape(session['csvname'])
     if filename == None:
-        return "Session error: filename is empty!"
+        error = "Session error: filename is empty!"
+        return render_template('csvpreview.html', error=error)
+
 
     # check for valid csv
-    csv = CSVHandler(UPLOAD_FOLDER+"/"+filename)
-    if csv == None:
-        return "This is not a valid CSV!"
+    try:
+        csv = CSVHandler(UPLOAD_FOLDER+"/"+filename)
+    except IOError:
+        return "File not found!"
+    except:
+        return "Unexpected error: " + sys.exc_info()[0]
+
     data = csv.head(20)
 
     # get ontology terms
@@ -99,7 +106,7 @@ def uploaded():
     msg = "File ("+filename+") uploaded. Congratulations!"
 
     # render template
-    r = render_template('csvpreview.html', msg=msg, error=error, data=data, terms=allTerms, ncols=csv.NF)
+    r = render_template('csvpreview.html', msg=msg, data=data, terms=allTerms, ncols=csv.NF)
 
     # close the CSV reader
     csv.close()
