@@ -1,0 +1,33 @@
+<!doctype html>
+<title>CSV uploaded</title>
+{% if error %}
+	<h2>{{ error }}</h2>
+{% else %}
+	<h2>{{ msg }}</h2>
+	<br>
+	{% if data %}
+		<table>
+
+		<tr>
+		{% for i in range(ncols) %}
+			<td><select>
+			{% for t in terms %}
+				<option>{{ t }}</option>
+			{% endfor %}
+			</select></td>
+		{% endfor %}
+		</tr>
+
+		{% for row in data %}
+			<tr>
+			{%- for datum in row -%}
+				<td>{{ datum }}</td>
+			{%- endfor -%}
+			</tr>
+		{% endfor %}
+		</table>
+	{% endif %}
+
+
+
+{% endif %}
