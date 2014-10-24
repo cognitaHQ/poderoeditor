@@ -1,0 +1,50 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+
+<div class="container" ng-app="csvUploaderApp">
+	<div ng-controller="csvUploaderCtrl">
+		<div class="row">
+			<label for="fileToUpload">Select a File to Upload</label><br />
+			<input type="file" ng-model-instant id="fileToUpload" multiple onchange="angular.element(this).scope().setFiles(this)" />
+		</div>
+		<div id="dropbox" class="dropbox" ng-class="dropClass"><span>[[dropText]]</span></div>
+		<div ng-show="files.length">
+			<div ng-repeat="file in files.slice(0)">
+				<span>[[file.webkitRelativePath || file.name]]</span>
+				(<span ng-switch="file.size > 1024*1024">
+				<span ng-switch-when="true">[[file.size / 1024 / 1024 | number:2]] MB</span>
+				<span ng-switch-default>[[file.size / 1024 | number:2]] kB</span>
+			</span>)
+		</div>
+		<input type="button" class="btn btn-primary" ng-click="uploadFile()" value="Upload" />
+		<div ng-show="progressVisible">
+			<div class="percent">[[progress]]%</div>
+			<div class="progress-bar">
+				<div class="uploaded" ng-style="{'width': progress+'%'}"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th data-ng-repeat="h in header">
+						<td>[[h]]</td> 
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in dataset">
+					<td data-ng-repeat="val in item">[[val]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	</div>
+</div>
+</div>
+<script src="/js/jquery.min.js"> </script>
+<script src="/js/angular.min.js"> </script>
+<script src="/js/csvUploader.js"> </script>
+{%endblock%}
