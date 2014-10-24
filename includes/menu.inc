@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">FLOD</a>
+          <a class="navbar-brand" href="#">PoderoEditor</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -16,7 +16,7 @@
             <li><a href="/login">Login</a></li>
             {%else%}
             
-            <li><a href="/admin/edituser">Edit</a></li>
+            <li><a href="/admin/edituser">My Profile</a></li>
             <li><a href="/search">Search</a></li>
             <li><a href="/addEntity">Add Entity</a></li>
             <li><a href="/import">Import Data</a></li>
