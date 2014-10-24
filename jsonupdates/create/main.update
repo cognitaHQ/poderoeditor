@@ -1,0 +1,15 @@
+
+INSERT DATA{
+#Insert
+  GRAPH <{{flod.dataGraph}}>{
+  {%for i in data%}
+  #triple
+	{%for j in data[i]%}
+	{%if i != "uri"%}
+		<{{data["uri"][0]}}> <{{i}}> "{{j}}" .
+	{%endif%}
+	{%endfor%}
+  {%endfor%}
+  
+  }
+}
