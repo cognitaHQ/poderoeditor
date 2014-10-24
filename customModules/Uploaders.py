@@ -1,4 +1,4 @@
-"""Another classes."""
+"""Uploaders classes."""
 
 #from Utils import Namespace, MimetypeSelector, EnvironmentFactory
 from jinja2 import Template
@@ -11,7 +11,7 @@ from flask_login import session
 import uuid
 import json
 
-class Another:
+class Uploaders:
 	settings = {}
 	basedir = "components/uploaders/"
 	configfilename = "config.json"
