@@ -12,19 +12,19 @@
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
-          <h2>Explore</h2>
+         <!--  <h2>Explore</h2>
           <p>Take a look at the data available. Try dereferencing URIs available from your SPARQL endpoint.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
         </div>
         <div class="col-md-4">
-          <h2>Develop</h2>
-          <p>Learn how to create different components in Flod. These components will help you to create different views and process your data.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <h2>Login</h2>
+          <p>Enter to PoderoEditor.</p>
+          <p><a class="btn btn-default" href="/login" role="button">View details &raquo;</a></p>
        </div>
         <div class="col-md-4">
-          <h2>Provide feedback</h2>
+          <!-- <h2>Provide feedback</h2>
           <p>Flod is still in its early developing stages. Any help, suggestions and bug reports are welcome!</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
         </div>
       </div>
     </div>
