@@ -36,6 +36,7 @@
 				"menu_import": "Importar",
 				"menu_export": "Exportar",
 				"menu_profile": "Mi perfil",
+				"menu_visualization": "Visualización",
 				"search_search_title": "Buscar",
 				"search_submit_button": "Buscar",
 				"search_input_placeholder": "Persona, Empresa u Organización",
@@ -46,7 +47,10 @@
 				"add_submit_button": "Agregar",
 				"export_title": "Exportar datos",
 				"export_format_label": "Elija el formato a usar",
-				"export_button": "Exportar"
+				"export_button": "Exportar",
+				"viz_select_label": "Seleccione una entidad",
+				"viz_title": "Visualización",
+				"viz_button": "Visualizar"
 
 			},
 			"en":{
@@ -58,6 +62,7 @@
 				"menu_import": "Import",
 				"menu_export": "Export",
 				"menu_profile": "My profile",
+				"menu_visualization": "Visualization",
 				"search_search_title": "Search",
 				"search_submit_button": "Submit",
 				"search_input_placeholder": "Person, Company or Organization",
@@ -68,7 +73,10 @@
 				"add_submit_button": "Add",
 				"export_title": "Export data",
 				"export_format_label": "Choose the format",
-				"export_button": "Export"
+				"export_button": "Export",
+				"viz_select_label": "Select an entity",
+				"viz_title": "Visualization",
+				"viz_button": "Visualize"
 			}
 		}
 	},

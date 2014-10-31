@@ -19,6 +19,7 @@
             <li><a href="/admin/edituser">{{flod.languages[flod.labelLanguage].menu_profile}}</a></li>
             <li><a href="/search">{{flod.languages[flod.labelLanguage].menu_search}}</a></li>
             <li><a href="/addEntity">{{flod.languages[flod.labelLanguage].menu_add_entity}}</a></li>
+            <li><a href="/viz">{{flod.languages[flod.labelLanguage].menu_visualization}}</a></li>
             <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
             <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
             <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
