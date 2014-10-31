@@ -11,7 +11,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/">Home</a></li>
+            <li><a href="/">{{flod.languages[flod.labelLanguage].menu_home}}</a></li>
             {%if "username" not in session %}
             <li><a href="/login">{{flod.languages[flod.labelLanguage].menu_login}}</a></li>
             {%else%}
@@ -20,6 +20,7 @@
             <li><a href="/search">{{flod.languages[flod.labelLanguage].menu_search}}</a></li>
             <li><a href="/addEntity">{{flod.languages[flod.labelLanguage].menu_add_entity}}</a></li>
             <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
+            <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
             <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
             {%endif%}
           </ul>

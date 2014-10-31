@@ -28,6 +28,7 @@
 		"instanceNamespace": "http://poderopedia.org/instance/",
 		"languages": {
 			"es":{
+				"menu_home": "Inicio",
 				"menu_login": "Ingreso",
 				"menu_logout": "Salir",
 				"menu_search": "Buscar",
@@ -42,10 +43,14 @@
 				"addentity_title": "Tipo de entidad a agregar",
 				"add_title": "Agregar ",
 				"add_table_label": "Etiqueta",
-				"add_submit_button": "Agregar"
+				"add_submit_button": "Agregar",
+				"export_title": "Exportar datos",
+				"export_format_label": "Elija el formato a usar",
+				"export_button": "Exportar"
 
 			},
 			"en":{
+				"menu_home": "Home",
 				"menu_login": "Login",
 				"menu_logout": "Logout",
 				"menu_search": "Search",
@@ -60,7 +65,10 @@
 				"addentity_title": "Type of entity to be added",
 				"add_title": "Add ",
 				"add_table_label": "Label",
-				"add_submit_button": "Add"
+				"add_submit_button": "Add",
+				"export_title": "Export data",
+				"export_format_label": "Choose the format",
+				"export_button": "Export"
 			}
 		}
 	},

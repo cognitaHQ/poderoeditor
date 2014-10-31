@@ -1,0 +1,22 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+
+<div class="container">
+<div class="row">
+<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+	
+</div>
+	<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+<h1>{{flod.languages[flod.labelLanguage].export_title}}</h1>
+		<h4>{{flod.languages[flod.labelLanguage].export_format_label}}</h4>
+		<select name="" id="input" class="form-control" required="required">
+			<option value="rdf">RDF</option>
+			<option value="json">JSON</option>
+		</select>
+		<button type="button" class="btn btn-primary">{{flod.languages[flod.labelLanguage].export_button}}</button>
+	</div>
+
+</div>
+	
+</div>
+{%endblock%}
