@@ -1,42 +1,79 @@
 {
 	"debug": false,
- 	"modules": [ "Uploaders", "Static", "Users", "Services", "JsonBasedWriter", "Types"],
- 	"ns": {
- 		"local": "http://localhost:54321/",
- 		"origin": "http://poderopedia.org/",
- 		"v": "http://cognita.io/cp/vocab/"
- 	},
- 	"mirrored": true,
- 	"endpoints": {
- 		"local": "http://localhost:3030/poderoeditor/query",
- 		"dbpedia": "http://dbpedia.org/sparql"
- 	},
- 	"sparqlUpdateEndpoint": {
- 		"local": {
- 			"url": "http://localhost:3030/poderoeditor/update"
- 		}
- 	},
- 	"host": "0.0.0.0",
- 	"port": 54321,
- 	"flod": { 
- 	  "title": "FLOD",
- 	  "ontologyGraph": "http://cognita.io/poderoEditor/ontology/",
- 	  "displayGraph": "http://cognita.io/poderoEditor/display/",
- 	  "dataGraph": "http://cognita.io/poderoEditor/data/",
- 	  "labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
- 	  "labelLanguage": "es",
- 	  "instanceNamespace": "http://poderopedia.org/instance/"
- 	},
- 	"additionalFilters": [
- 							{
- 								"class": "PoderoeditorFilter",
- 								"filters": [
- 												{"name": "textInput", "method": "HTMLInputTextWidget"},
- 												{"name": "textArea", "method": "HTMLInputTextareaWidget"}
- 								]
- 							}
- 	],
- 	"additionalModules": ["components/customModules"],
- 	"secret": "870319403015226788",
- 	"root": "home"
+	"modules": [ "Uploaders", "Static", "Users", "Services", "JsonBasedWriter", "Types"],
+	"ns": {
+		"local": "http://localhost:54321/",
+		"origin": "http://poderopedia.org/",
+		"v": "http://cognita.io/cp/vocab/"
+	},
+	"mirrored": true,
+	"endpoints": {
+		"local": "http://localhost:3030/poderoeditor/query",
+		"dbpedia": "http://dbpedia.org/sparql"
+	},
+	"sparqlUpdateEndpoint": {
+		"local": {
+			"url": "http://localhost:3030/poderoeditor/update"
+		}
+	},
+	"host": "0.0.0.0",
+	"port": 54321,
+	"flod": {
+		"title": "FLOD",
+		"ontologyGraph": "http://cognita.io/poderoEditor/ontology/",
+		"displayGraph": "http://cognita.io/poderoEditor/display/",
+		"dataGraph": "http://cognita.io/poderoEditor/data/",
+		"labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
+		"labelLanguage": "es",
+		"instanceNamespace": "http://poderopedia.org/instance/",
+		"languages": {
+			"es":{
+				"menu_login": "Ingreso",
+				"menu_logout": "Salir",
+				"menu_search": "Buscar",
+				"menu_add_entity": "Agregar entidad",
+				"menu_import": "Importar",
+				"menu_export": "Exportar",
+				"menu_profile": "Mi perfil",
+				"search_search_title": "Buscar",
+				"search_submit_button": "Buscar",
+				"search_input_placeholder": "Persona, Empresa u Organización",
+				"addentity_table_header": "Entidades disponibles",
+				"addentity_title": "Tipo de entidad a agregar",
+				"add_title": "Agregar ",
+				"add_table_label": "Etiqueta",
+				"add_submit_button": "Agregar"
+
+			},
+			"en":{
+				"menu_login": "Login",
+				"menu_logout": "Logout",
+				"menu_search": "Search",
+				"menu_add_entity": "Add entity",
+				"menu_import": "Import",
+				"menu_export": "Export",
+				"menu_profile": "My profile",
+				"search_search_title": "Search",
+				"search_submit_button": "Submit",
+				"search_input_placeholder": "Person, Company or Organization",
+				"addentity_table_header": "Available entities",
+				"addentity_title": "Type of entity to be added",
+				"add_title": "Add ",
+				"add_table_label": "Label",
+				"add_submit_button": "Add"
+			}
+		}
+	},
+	"additionalFilters": [
+		{
+			"class": "PoderoeditorFilter",
+			"filters": [
+				{"name": "textInput", "method": "HTMLInputTextWidget"},
+				{"name": "textArea", "method": "HTMLInputTextareaWidget"}
+			]
+		}
+	],
+	"additionalModules": ["components/customModules"],
+	"secret": "870319403015226788",
+	"root": "home"
 }

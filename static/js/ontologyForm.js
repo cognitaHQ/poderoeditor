@@ -71,7 +71,7 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
 		var submit = document.createElement("submit");
 		submit.type="submit";
 		submit.setAttribute("class", "btn btn-primary");
-		submit.innerHTML = "Submit";
+		submit.innerHTML = submitLabel;
 		submit.setAttribute("ng-click", "avisa()");
 		document.getElementById("myForm").appendChild(submit);
 		$compile(submit)($scope);

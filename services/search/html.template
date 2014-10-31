@@ -2,18 +2,17 @@
 {%block content%}
 
 <div class="container" data-ng-app="searchFormApp">
-<h1>Search</h1>
 <div class="row" data-ng-controller="searchForm">
+<h1>{{flod.languages[flod.labelLanguage].search_search_title}}</h1>
 	<form role="form" ng-submit="goSearch()">
 	
 		<div class="form-group">
-			<label for="">Search</label>
-			<input type="text" class="form-control" id="search-text" placeholder="Person, company or organization" ng-model="searchText">
+			<input type="text" class="form-control" id="search-text" placeholder="{{flod.languages[flod.labelLanguage].search_input_placeholder}}" ng-model="searchText">
 		</div>
 	
 		
 	
-		<button type="submit" class="btn btn-primary" >Submit</button>
+		<button type="submit" class="btn btn-primary" >{{flod.languages[flod.labelLanguage].search_submit_button}}</button>
 	</form>
 </div>
 <div class="row">

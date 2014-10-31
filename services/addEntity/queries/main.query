@@ -1,13 +1,15 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 
-SELECT DISTINCT ?c ?cName WHERE{
+SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
   GRAPH <{{flod.ontologyGraph}}>{
   	{
   		?c a owl:Class .
   	}UNION{
   		?c a rdfs:Class .
   	}
+    ?predicate rdfs:domain ?c .
   	OPTIONAL{
   		?c <{{flod.labelPredicate}}> ?cName
       OPTIONAL{
@@ -15,4 +17,7 @@ SELECT DISTINCT ?c ?cName WHERE{
       }
   	}
   }
-}
+  graph <{{flod.displayGraph}}>  {
+      [] layout:predicateDisplayed ?predicate;
+  }
+}GROUP BY ?c

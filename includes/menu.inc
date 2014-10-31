@@ -13,14 +13,14 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/">Home</a></li>
             {%if "username" not in session %}
-            <li><a href="/login">Login</a></li>
+            <li><a href="/login">{{flod.languages[flod.labelLanguage].menu_login}}</a></li>
             {%else%}
             
-            <li><a href="/admin/edituser">My Profile</a></li>
-            <li><a href="/search">Search</a></li>
-            <li><a href="/addEntity">Add Entity</a></li>
-            <li><a href="/import">Import Data</a></li>
-            <li><a href="/logout">Logout</a></li>
+            <li><a href="/admin/edituser">{{flod.languages[flod.labelLanguage].menu_profile}}</a></li>
+            <li><a href="/search">{{flod.languages[flod.labelLanguage].menu_search}}</a></li>
+            <li><a href="/addEntity">{{flod.languages[flod.labelLanguage].menu_add_entity}}</a></li>
+            <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
+            <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
             {%endif%}
           </ul>
         </div><!--/.nav-collapse -->
