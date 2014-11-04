@@ -1,5 +1,5 @@
 {
-	"debug": false,
+	"debug": true,
 	"modules": [ "Uploaders", "Static", "Users", "Services", "JsonBasedWriter", "Types"],
 	"ns": {
 		"local": "http://localhost:54321/",
