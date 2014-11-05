@@ -9,6 +9,7 @@
 
 	<!-- Bootstrap core CSS -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/select2.css" rel="stylesheet"/>
 	<style>
 		body {
 			padding-top: 40px;

@@ -23,6 +23,7 @@
 	var submitLabel = "{{flod.languages[flod.labelLanguage].add_submit_button}}";
 	</script>
 	<script src="/js/jquery.min.js"> </script>
+	<script src="/js/select2/select2.js"> </script>
 	<script src="/js/angular.min.js"> </script>
 	<script src="/js/ontologyForm.js"> </script>
 </div>

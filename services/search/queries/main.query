@@ -1,7 +1,7 @@
 {%if args[0]%}
-SELECT DISTINCT ?i ?iLabel WHERE{
+SELECT DISTINCT ?id ?iLabel WHERE{
 	GRAPH <{{flod.dataGraph}}>{
-		?i <{{flod.labelPredicate}}> ?iLabel.
+		?id ?x ?iLabel.
 		FILTER(regex(?iLabel, "{{args[0]}}", "i"))
 	}
 }LIMIT 10
