@@ -4,7 +4,7 @@ INSERT DATA{
   GRAPH <{{flod.dataGraph}}>{
   {%for t in data.triples%}
 	  #triple
-		<{{t["s"]}}> <{{t["p"]}}> "{{t["o"].value}}" .
+		<{{t["s"]}}> <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%else%} <{{t["o"].value}}> {%endif%}.
   {%endfor%}
   
   }

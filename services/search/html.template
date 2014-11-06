@@ -27,7 +27,7 @@
 			<tbody>
 				{%for row in queries.main%}
 				<tr>
-					<td><a href='{{row.i.value}}'>{{row.iLabel.value}}</td>
+					<td><a href='{{row.id.value}}'>{{row.iLabel.value}}</td>
 				</tr>
 				{%endfor%}
 			</tbody>

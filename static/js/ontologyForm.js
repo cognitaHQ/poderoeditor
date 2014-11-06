@@ -83,15 +83,20 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 });
-  // var _generator = {
-  //   predicate: predicate,
-  //   id:  id,
-  //   f: function(id, p){
-  //     return {s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "text"}};
-  //   }
+  var _generator = {
+    predicate: predicate,
+    id:  id,
+    f: function(id, p){
+      var data = $("#"+id).select2("data");
+      if(data != undefined && data.id.mirroredUri != undefined){
+        return [{s: $("#uri").val(), p: p, o: {value: data.id.mirroredUri, type: "uri"}}] ;
+      }else{
+        return [];
+      }
+    }
 
-  // }
-  // $scope.tripleGenerators.push(_generator);
+  }
+  $scope.tripleGenerators.push(_generator);
 }
 
 $scope._createTextWidget = function(predicate, htmlElement){
@@ -115,7 +120,11 @@ $scope._createTextWidget = function(predicate, htmlElement){
     predicate: predicate,
     id:  id,
     f: function(id, p){
-      return {s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "text"}};
+      if($("#"+id).val() != "" && $("#"+id).val() != undefined){ 
+        return [{s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "text"}}];
+      }else{
+        return [];
+      }
     }
 
   }
@@ -126,7 +135,7 @@ $scope.identifier = "";
 $scope.baseNamespace = function(){return baseNamespace+$scope.urlify($scope.identifier)}
 $scope.letMeKnow = function(){
  msg = {uri: $("#uri").val(), triples: []};
-
+ msg.triples.push({s: $("#uri").val(), p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
  for(var i=0; i<$scope.tripleGenerators.length; i++){
   var thisGenerator = $scope.tripleGenerators[i];
   a = thisGenerator.f(thisGenerator.id, thisGenerator.predicate);
