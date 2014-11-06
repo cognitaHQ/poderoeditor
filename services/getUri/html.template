@@ -1,0 +1,4 @@
+{
+	"exist": {%if queries.main|length > 0 %}true{%else%}false{%endif%},
+	"uri": "{{"/".join(args)}}"
+}

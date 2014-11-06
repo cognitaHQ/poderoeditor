@@ -1,0 +1,5 @@
+SELECT DISTINCT * WHERE{
+	GRAPH <{{flod.dataGraph}}>{
+		<{{"/".join(args)}}> ?p ?o .
+	}
+}LIMIT 1
