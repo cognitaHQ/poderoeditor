@@ -132,10 +132,18 @@ $scope._createTextWidget = function(predicate, htmlElement){
 }
 
 $scope.identifier = "";
-$scope.baseNamespace = function(){return baseNamespace+$scope.urlify($scope.identifier)}
+$scope.baseNamespace = function(){
+  $.ajax({
+    url: "/getUri/"+ baseNamespace+$scope.urlify($scope.identifier)
+  })
+  return baseNamespace+$scope.urlify($scope.identifier)
+
+};
+
 $scope.letMeKnow = function(){
  msg = {uri: $("#uri").val(), triples: []};
  msg.triples.push({s: $("#uri").val(), p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
+ msg.triples.push({s: $("#uri").val(), p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});
  for(var i=0; i<$scope.tripleGenerators.length; i++){
   var thisGenerator = $scope.tripleGenerators[i];
   a = thisGenerator.f(thisGenerator.id, thisGenerator.predicate);

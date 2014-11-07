@@ -17,7 +17,7 @@
 			<tbody>
 				{%for row in queries.main%}
 				<tr>
-					<td><a href='/add/{{row.c.curie}}'>{{row.className.value}}</a></td>
+					<td><a href='/add/{{row.c.mirroredUri}}'>{{row.className.value}}</a></td>
 				</tr>
 				{%endfor%}
 			</tbody>

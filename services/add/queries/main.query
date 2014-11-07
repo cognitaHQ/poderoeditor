@@ -5,7 +5,7 @@ PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 select distinct ?predicate ?htmlElement ?number ?widget WHERE {
  graph <{{flod.ontologyGraph}}>  {
    ?predicate rdfs:domain ?d .
-   {{args[0]}} rdfs:subClassOf* ?d .
+   <{{"/".join(args)}}> rdfs:subClassOf* ?d .
    
    OPTIONAL{
    	?predicate <{{flod.labelPredicate}}> ?predicateLabel .
