@@ -6,11 +6,11 @@
 
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
 		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-		<h2>{{flod.languages[flod.labelLanguage].add_title}} {{"/".join(args)}}</h2>
+		<h2>{{flod.languages[flod.labelLanguage].edit_title}} {{args[0]}}</h2>
 			<form action="" method="POST" role="form" id="myForm">
 			<div class="form-group">
 			<label>URI</label>
-				<input type="text" name="uri" id="uri" data-predicate="uri" class="form-control" value="[[baseNamespace()]]" required="required" title="" readonly>
+				<input type="text" name="uri" id="uri" data-predicate="uri" class="form-control" value="{{"/".join(args)}}" required="required" title="" readonly>
 			<label>{{flod.languages[flod.labelLanguage].add_table_label}}</label>
 			<input type="text" name="uriLabel" id="uriLabel" class="form-control" ng-model="identifier" value=""/> 
 			</div>
@@ -18,16 +18,20 @@
 		</div>
 	</div>
 	<script>
-	var baseNamespace = "{{flod.instanceNamespace}}";
+	var baseNamespace = "{{"/".join(args)}}";
 	var labelPredicate = "{{flod.labelPredicate}}";
-	var submitLabel = "{{flod.languages[flod.labelLanguage].add_submit_button}}";
-	var deleteLabel = null;
-	var uriClass = "{{"/".join(args)}}";
-	var instanceData = null;
+	var submitLabel = "{{flod.languages[flod.labelLanguage].edit_submit_button}}";
+	var deleteLabel = "{{flod.languages[flod.labelLanguage].edit_delete_button}}";
+	var uriClass = "{{first.uritype.type.value}}";
 	</script>
 	<script src="/js/jquery.min.js"> </script>
 	<script src="/js/select2/select2.js"> </script>
 	<script src="/js/angular.min.js"> </script>
+	<script>
+	var instanceData = {};
+	{%for row in queries.uridata%}
+	instanceData["{{row.p.mirroredUri}}"] = ["{{row.o.value}}"];{%endfor%}
+	</script>
 	<script src="/js/ontologyForm.js"> </script>
 </div>
 	{%endblock%}

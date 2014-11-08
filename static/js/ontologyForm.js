@@ -24,7 +24,7 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
-}  
+}
 
 $scope._createAutocompleteWidget = function(predicate, htmlElement){
   var formElement = document.createElement("p");
@@ -38,7 +38,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
   aux.setAttribute("class", "form-control input-xlarge");
   aux.setAttribute("data-predicate", predicate);
   aux.setAttribute("ng-model", "instance."+$scope.urlify(predicate)+".value");
-  $scope.instance[$scope.urlify(predicate)] = {"predicate": predicate}
+  $scope.instance[predicate] = {"predicate": predicate}
   formElement.appendChild(aux);
   $compile(formElement)($scope);
   var parent = document.getElementById(htmlElement).appendChild(formElement);
@@ -57,7 +57,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
     initSelection: function(element, callback) {
         // the input tag has a value attribute preloaded that points to a preselected repository's id
         // this function resolves that id attribute to an object that select2 can render
-        // using its formatResult renderer - that way the repository name is shown preselected        
+        // using its formatResult renderer - that way the repository name is shown preselected
         var id = $(element).val();
         if (id !== "") {
             $.ajax("https://api.github.com/repositories/" + id, {
@@ -66,7 +66,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
         }
     },
     formatResult: function(item) {
-      var markup = 
+      var markup =
       '<div class="row">' +
           '<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">' +
             '<div class="row">' +
@@ -77,7 +77,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
 
       return markup;
     }, // omitted for brevity, see the source of this page
-    formatSelection: function(item) {      
+    formatSelection: function(item) {
       return item.iLabel.value;
     },
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
@@ -110,17 +110,20 @@ $scope._createTextWidget = function(predicate, htmlElement){
   aux.setAttribute("id", id);
   aux.setAttribute("class", "form-control");
   aux.setAttribute("data-predicate", predicate);
-  aux.setAttribute("ng-model", "instance."+$scope.urlify(predicate)+".value");
-  $scope.instance[$scope.urlify(predicate)] = {"predicate": predicate}
+  aux.setAttribute("ng-model", "instance[\""+predicate+"\"]");
+  $scope.instance[predicate] = "";//{"predicate": predicate}
   formElement.appendChild(aux);
   $compile(formElement)($scope);
   var parent = document.getElementById(htmlElement).appendChild(formElement);
+  if(instanceData != null && instanceData[predicate] != undefined){
+    $scope.instance[predicate] = instanceData[predicate][0];
+  }
 
   var _generator = {
     predicate: predicate,
     id:  id,
     f: function(id, p){
-      if($("#"+id).val() != "" && $("#"+id).val() != undefined){ 
+      if($("#"+id).val() != "" && $("#"+id).val() != undefined){
         return [{s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "text"}}];
       }else{
         return [];
@@ -133,10 +136,10 @@ $scope._createTextWidget = function(predicate, htmlElement){
 
 $scope.identifier = "";
 $scope.baseNamespace = function(){
-  $.ajax({
-    url: "/getUri/"+ baseNamespace+$scope.urlify($scope.identifier)
-  })
-  return baseNamespace+$scope.urlify($scope.identifier)
+  // $.ajax({
+  //   url: "/getUri/"+ baseNamespace+$scope.urlify($scope.identifier)
+  // })
+  return (instanceData ==  null)?baseNamespace+$scope.urlify($scope.identifier):baseNamespace;
 
 };
 
@@ -149,8 +152,8 @@ $scope.letMeKnow = function(){
   a = thisGenerator.f(thisGenerator.id, thisGenerator.predicate);
   msg.triples = msg.triples.concat(a);
 }
-console.log(msg);
-$http({url: '/create',
+var submitUrl = (instanceData ==  null)?'/create':'/editInstance';
+$http({url: submitUrl,
  data: msg,
  method: "POST",
 
@@ -165,6 +168,9 @@ error(function(data, status, headers, config) {
 $("#uriLabel").attr("data-predicate", labelPredicate);
 $http.get(url, config).success(function(data){
   $scope.formData = data.main;
+  if(instanceData != null){
+    $("#uriLabel").val(instanceData[labelPredicate][0]);
+  }
   $scope.formData.forEach(function(datum){
     if(datum.widget.value != "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
       $scope._createAutocompleteWidget(datum.predicate.value, datum.htmlElement.value);
@@ -172,12 +178,24 @@ $http.get(url, config).success(function(data){
       $scope._createTextWidget(datum.predicate.value, datum.htmlElement.value);
     }
   });
+
+
   var submit = document.createElement("submit");
   submit.type="submit";
   submit.setAttribute("class", "btn btn-primary");
   submit.innerHTML = submitLabel;
   submit.setAttribute("ng-click", "letMeKnow()");
   document.getElementById("myForm").appendChild(submit);
+
+  if(deleteLabel != null){
+    var deleteButton = document.createElement("deleteButton");
+    deleteButton.type="deleteButton";
+    deleteButton.setAttribute("class", "btn btn-danger");
+    deleteButton.innerHTML = deleteLabel || "delete";
+    deleteButton.setAttribute("ng-click", "deleteInstance()");
+    document.getElementById("myForm").appendChild(deleteButton);
+  }
+  
   $compile(submit)($scope);
 
 });

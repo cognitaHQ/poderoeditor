@@ -1,0 +1,5 @@
+SELECT ?p ?o WHERE {
+	GRAPH <{{flod.dataGraph}}>{
+		<{{"/".join(args)}}> ?p ?o .
+	}
+}

@@ -1,0 +1,17 @@
+WITH <{{flod.dataGraph}}>
+DELETE {
+		<{{data.uri}}> ?p ?o .
+	    ?x ?y <{{data.uri}}> .
+}
+INSERT {
+  {%for t in data.triples%}
+		<{{t["s"]}}> <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%else%} <{{t["o"].value}}> {%endif%}.
+  {%endfor%}
+}WHERE{
+	OPTIONAL{
+		<{{data.uri}}> ?p ?o .
+	}
+	OPTIONAL{
+	    ?x ?y <{{data.uri}}> .
+	}
+}

@@ -1,0 +1,5 @@
+SELECT ?type WHERE {
+	GRAPH <{{flod.dataGraph}}>{
+		<{{"/".join(args)}}> a ?type .
+	}
+}limit 1
