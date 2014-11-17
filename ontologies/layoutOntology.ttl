@@ -100,7 +100,7 @@
 :userViewRestriction a owl:ObjectProperty;
 				rdfs:label "User View Restriction" ;
 				rdfs:comment "A property that defines potential restrictions to access a view by users" ;
-				rdfs:subPropertyOf :viewRestriction .
+				rdfs:subPropertyOf :viewRestriction ;
 				rdfs:range foaf:Person .
 
 :groupViewRestriction a owl:ObjectProperty;
@@ -156,6 +156,4 @@
 									 :anchoredTo "myForm"
 								   ]
 						]
-
-			]
-
+.
