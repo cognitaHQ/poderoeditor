@@ -1,0 +1,161 @@
+@prefix : <http://cognita.io/poderoEditor/layoutOntology/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#>.
+@prefix poder:         <http://poderopedia.com/vocab/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+: a owl:Ontology;
+		rdfs:label "Layout Ontology" .
+
+
+################
+### CLASSES  ###
+################
+
+:FormView a owl:Class;
+			rdfs:label "Class of a view." .
+
+:VisualWidget a owl:Class;
+			  rdfs:label "Class of all the visual widgets" .
+
+
+:HTMLWidget rdfs:subClassOf :VisualWidget ;
+			rdfs:label "Class of all the HTML Widgets" .
+
+:HTMLInputTextWidget rdfs:subClassOf :HTMLWidget ;
+					 rdfs:label "HTML Input text widget" .
+
+:HTMLInputNumberWidget rdfs:subClassOf :HTMLWidget ;
+					 rdfs:label "HTML Input number widget" .
+
+:HTMLInputDateWidget rdfs:subClassOf :HTMLWidget ;
+					 rdfs:label "HTML Input date widget" .
+
+:HTMLTextareaWidget rdfs:subClassOf :HTMLWidget ;
+					 rdfs:label "HTML textarea widget" .
+
+:HTMLSelectionWidget rdfs:subClassOf :HTMLWidget ;
+					 rdfs:label "HTML selection widgets" .
+
+:HTMLRadioWidget rdfs:subClassOf :HTMLSelectionWidget ;
+					 rdfs:label "HTML radio widget" .
+
+:HTMLCheckboxWidget rdfs:subClassOf :HTMLSelectionWidget ;
+					 rdfs:label "HTML checkbox widget" .
+
+##################
+### PREDICATES  ###
+##################
+
+
+:positionNumber a owl:DatatypeProperty;
+			 rdfs:label "Order number";
+			 rdfs:comment "Defines the priority in which a widget will be included on an element. The elements will be sorted based on this property to be displayed";
+			 rdfs:domain :VisualWidget;
+			 rdfs:range xsd:integer .
+
+:anchoredTo a owl:ObjectProperty;
+			rdfs:label "Anchored to";
+			rdfs:comment "Defines an entity (e.g., canvas, DOM element) to which this widget should be anchored to.";
+			rdfs:domain :VisualWidget .
+
+:restrictionFunction a owl:DatatypeProperty;
+					 rdfs:label "Restriction function";
+					 rdfs:comment "Contains the name of a potential function that can be used to validate the input. This function can be a Javascript function for HTML documents or any other function in other contexts.";
+					 rdfs:domain :HTMLWidget;
+					 rdfs:range xsd:string .
+
+:predicateDisplayed a owl:ObjectProperty;
+			rdfs:label "Predicate displayed";
+			rdfs:comment "Defines the predicate that will be displayed in the form.";
+			rdfs:domain :VisualWidget .
+
+
+:hasWidget a owl:ObjectProperty;
+			rdfs:label "has widget";
+			rdfs:comment "Relates this view with one or more widgets";
+			rdfs:domain :FormView;
+			rdfs:range :VisualWidget .
+
+
+:classAssociated a owl:ObjectProperty;
+			rdfs:label "Class associated";
+			rdfs:comment "Class associated to a view";
+			rdfs:domain :FormView ;
+			rdfs:range owl:Class .
+
+:hasSubView a owl:ObjectProperty;
+			rdfs:label "Has subview";
+			rdfs:comment "Subview associated to a view" ;
+			rdfs:domain :FormView ;
+			rdfs:range :FormView .
+
+:viewRestriction a owl:ObjectProperty;
+				rdfs:label "View Restriction" ;
+				rdfs:comment "A property that defines potential restrictions to access a view" ;
+				rdfs:domain :FormView .
+
+:userViewRestriction a owl:ObjectProperty;
+				rdfs:label "User View Restriction" ;
+				rdfs:comment "A property that defines potential restrictions to access a view by users" ;
+				rdfs:subPropertyOf :viewRestriction .
+				rdfs:range foaf:Person .
+
+:groupViewRestriction a owl:ObjectProperty;
+				rdfs:label "Group View Restriction" ;
+				rdfs:comment "A property that defines potential restrictions to access a view by groups" ;
+				rdfs:subPropertyOf :viewRestriction ;
+				rdfs:range foaf:Group .
+
+
+#################
+### EXAMPLES  ###
+#################
+
+
+<#basicView> a :FormView ;
+			:classAssociated foaf:Person ;
+			:hasWidget [ a :HTMLInputTextWidget, :HTMLWidget;
+          				:predicateDisplayed foaf:firstName;
+		  				:positionNumber 0;
+		  				:anchoredTo "myForm" 
+		  			   ],
+		  			   [ a :HTMLInputTextWidget, :HTMLWidget;
+		  				:predicateDisplayed foaf:familyName;
+		  				:positionNumber 1;
+		  				:anchoredTo "myForm" 
+		  			   ],
+		  			   [ a :HTMLInputCalendarWidget, :HTMLWidget;
+		  				:predicateDisplayed foaf:birthday;
+		  				:positionNumber 2;
+		  				:anchoredTo "myForm" 
+		  			   ],
+		  			   [ a :HTMLResourceWidget, :HTMLWidget;
+						   :predicateDisplayed poder:countryOfResidence ;
+						   :positionNumber 3;
+						   :anchoredTo "myForm"
+					   ] ;
+			:hasSubView [
+						a :FormView ;
+						:classAssociated poder:Marriage ;
+						:hasWidget [ a :HTMLInputTextWidget;
+									 :predicateDisplayed poder:connectionStartDate;
+									 :positionNumber 1;
+									 :anchoredTo "myForm"
+								   ],
+								   [ a :HTMLInputTextWidget;
+									 :predicateDisplayed poder:connectionEndDate;
+									 :positionNumber 2;
+									 :anchoredTo "myForm"
+								   ],
+								   [ a :HTMLInputTextWidget;
+									 :predicateDisplayed poder:hasSpouse;
+									 :positionNumber 1;
+									 :anchoredTo "myForm"
+								   ]
+						]
+
+			]
+
