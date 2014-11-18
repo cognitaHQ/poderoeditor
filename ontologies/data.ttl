@@ -1,0 +1,40 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix bio: <http://purl.org/vocab/bio/0.1/> .
+@prefix rel: <http://purl.org/vocab/relationship/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix label: <http://purl.org/net/vocab/2004/03/label#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix bcnbio: <http://datos.bcn.cl/ontologies/bcn-biographies#> .
+@prefix : <http://poderopedia.com/vocab/> .
+@prefix i: <http://poderopedia.com/instances/> .
+
+
+###############
+## Countries ##
+###############
+
+i:Chile a :Country;
+		rdfs:label "Chile" .
+
+i:Argentina a :Country;
+		rdfs:label "Argentina" .
+
+i:Peru a :Country;
+		rdfs:label "Peru" .
+
+i:Bolivia a :Country;
+		rdfs:label "Bolivia" .
+
+i:Uruguay a :Country;
+		rdfs:label "Uruguay" .
+
+i:Brazil a :Country;
+		rdfs:label "Brazil" .
+
