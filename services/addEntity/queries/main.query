@@ -3,7 +3,7 @@ PREFIX owl:  <http://www.w3.org/2002/07/owl#>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 
 SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
-  GRAPH <{{flod.ontologyGraph}}>{
+  GRAPH <{{flod.dataOntologyGraph}}>{
   	{
   		?c a owl:Class .
   	}UNION{
@@ -17,7 +17,7 @@ SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
       }
   	}
   }
-  graph <{{flod.displayGraph}}>  {
+  graph <{{flod.layoutGraph}}>  {
       [] layout:predicateDisplayed ?predicate;
   }
 }GROUP BY ?c

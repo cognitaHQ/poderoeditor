@@ -46,7 +46,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
     placeholder: "Search for a person, company or organization",
     minimumInputLength: 1,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-        url: function(terms){return "/search/"+terms},
+        url: function(terms){return "/search/"+terms+"/"+predicate},
         params: { headers: {"Accept": "application/json"}},
         dataType: 'json',
         quietMillis: 450,

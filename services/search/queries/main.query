@@ -1,8 +1,18 @@
 {%if args[0]%}
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
 SELECT DISTINCT ?id ?iLabel WHERE{
+	{%if args|length > 1 %}
+	GRAPH <{{flod.dataOntologyGraph}}>{
+		<{{"/".join(args[1:])}}> rdfs:range ?range .
+	}
+	{%endif%}
 	GRAPH <{{flod.dataGraph}}>{
-		?id ?x ?iLabel.
+		?id ?x ?iLabel ;
+			a ?range .
 		FILTER(regex(?iLabel, "{{args[0]}}", "i"))
 	}
 }LIMIT 10
+
 {%endif%}

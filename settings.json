@@ -19,7 +19,7 @@
 	"host": "0.0.0.0",
 	"port": 54321,
 	"flod": {
-		"title": "FLOD",
+		"title": "PoderoEditor",
 		"dataOntologyGraph": "http://cognita.io/poderoEditor/dataOntology",
 		"layoutOntologyGraph": "http://cognita.io/poderoEditor/layoutOntology",
 		"dataGraph": "http://cognita.io/poderoEditor/data",
