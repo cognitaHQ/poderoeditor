@@ -6,7 +6,7 @@ select distinct ?predicate ?htmlElement ?number ?widget WHERE {
  graph <{{flod.dataGraph}}>  {
  	<{{"/".join(args)}}> a ?d
  }
- graph <{{flod.ontologyGraph}}>  {
+ graph <{{flod.dataOntologyGraph}}>  {
    ?predicate rdfs:domain [  rdfs:subClassOf* ?d  ] .
    
    OPTIONAL{
@@ -16,7 +16,7 @@ select distinct ?predicate ?htmlElement ?number ?widget WHERE {
       }   	
    }
  }
- graph <{{flod.displayGraph}}>  {
+ graph <{{flod.layoutOntologyGraph}}>  {
    ?predicateWidget a ?widget;
                   layout:anchoredTo ?htmlElement;
    					layout:predicateDisplayed ?predicate;

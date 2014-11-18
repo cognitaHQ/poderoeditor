@@ -20,9 +20,10 @@
 	"port": 54321,
 	"flod": {
 		"title": "FLOD",
-		"ontologyGraph": "http://cognita.io/poderoEditor/ontology/",
-		"displayGraph": "http://cognita.io/poderoEditor/display/",
-		"dataGraph": "http://cognita.io/poderoEditor/data/",
+		"dataOntologyGraph": "http://cognita.io/poderoEditor/dataOntology",
+		"layoutOntologyGraph": "http://cognita.io/poderoEditor/layoutOntology",
+		"dataGraph": "http://cognita.io/poderoEditor/data",
+		"layoutGraph": "http://cognita.io/poderoEditor/layout",
 		"labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
 		"labelLanguage": "es",
 		"instanceNamespace": "http://poderopedia.org/instance/",
