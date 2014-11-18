@@ -1,10 +1,11 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 INSERT DATA{
 #Insert
   GRAPH <{{flod.dataGraph}}>{
   {%for t in data.triples%}
 	  #triple
-		<{{t["s"]}}> <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%else%} <{{t["o"].value}}> {%endif%}.
+		<{{t["s"]}}> <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%elif t["o"].type == "date"%}"""{{t["o"].value}}"""^^xsd:date{%else %} <{{t["o"].value}}> {%endif%}.
   {%endfor%}
   
   }

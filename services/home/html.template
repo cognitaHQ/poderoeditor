@@ -3,29 +3,21 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Welcome to PoderoEditor</h1>
-        <p>A semantic-based editor to map power relations based on the Poderopedia Vocabulary.</p>
+        <h1>{{flod.languages[flod.labelLanguage].home_title}}</h1>
+        <p>{{flod.languages[flod.labelLanguage].home_subtitle}}</p>
       </div>
     </div>
 
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-md-4">
-         <!--  <h2>Explore</h2>
-          <p>Take a look at the data available. Try dereferencing URIs available from your SPARQL endpoint.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
-        </div>
+        <div class="col-md-4"></div>
         <div class="col-md-4">
           <h2>Login</h2>
           <p>Enter to PoderoEditor.</p>
           <p><a class="btn btn-default" href="/login" role="button">View details &raquo;</a></p>
        </div>
-        <div class="col-md-4">
-          <!-- <h2>Provide feedback</h2>
-          <p>Flod is still in its early developing stages. Any help, suggestions and bug reports are welcome!</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
-        </div>
+        <div class="col-md-4"></div>
       </div>
     </div>
 {%endblock%}

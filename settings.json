@@ -29,6 +29,8 @@
 		"instanceNamespace": "http://poderopedia.org/instance/",
 		"languages": {
 			"es":{
+				"home_title": "Bienvenido a PoderoEditor",
+				"home_subtitle": "Un editor semántico para mapear las relaciones de poder usando el vocabulario de Poderopedia",
 				"menu_home": "Inicio",
 				"menu_login": "Ingreso",
 				"menu_logout": "Salir",
@@ -56,6 +58,8 @@
 				"edit_delete_button": "Eliminar"
 			},
 			"en":{
+				"home_title": "Welcome to PoderoEditor",
+				"home_subtitle": "A semantic-based editor to map power relations based on the Poderopedia Vocabulary",
 				"menu_home": "Home",
 				"menu_login": "Login",
 				"menu_logout": "Logout",

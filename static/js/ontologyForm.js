@@ -99,6 +99,43 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
   $scope.tripleGenerators.push(_generator);
 }
 
+
+$scope._createCalendarWidget = function(predicate, htmlElement){
+  var formElement = document.createElement("p");
+  var legend = document.createElement("label");
+  legend.innerHTML = predicate;
+  formElement.appendChild(legend);
+  var aux = document.createElement('input');
+  aux.type="text";
+  var id = $scope.uuid();
+  aux.setAttribute("id", id);
+  aux.setAttribute("class", "form-control");
+  aux.setAttribute("data-predicate", predicate);
+  aux.setAttribute("ng-model", "instance[\""+predicate+"\"]");
+  $scope.instance[predicate] = "";//{"predicate": predicate}
+  formElement.appendChild(aux);
+  $compile(formElement)($scope);
+  var parent = document.getElementById(htmlElement).appendChild(formElement);
+  $("#"+id).datepicker({format: "yyyy-mm-dd"});
+  if(instanceData != null && instanceData[predicate] != undefined){
+    $scope.instance[predicate] = instanceData[predicate][0];
+  }
+
+  var _generator = {
+    predicate: predicate,
+    id:  id,
+    f: function(id, p){
+      if($("#"+id).val() != "" && $("#"+id).val() != undefined){
+        return [{s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "date"}}];
+      }else{
+        return [];
+      }
+    }
+
+  }
+  $scope.tripleGenerators.push(_generator);
+}
+
 $scope._createTextWidget = function(predicate, htmlElement){
   var formElement = document.createElement("p");
   var legend = document.createElement("label");
@@ -172,10 +209,12 @@ $http.get(url, config).success(function(data){
     $("#uriLabel").val(instanceData[labelPredicate][0]);
   }
   $scope.formData.forEach(function(datum){
-    if(datum.widget.value != "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
-      $scope._createAutocompleteWidget(datum.predicate.value, datum.htmlElement.value);
+    if(datum.widget.value == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
+      $scope._createTextWidget(datum.predicate.value, datum.htmlElement.value);      
+    }else if(datum.widget.value == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
+      $scope._createCalendarWidget(datum.predicate.value, datum.htmlElement.value);
     }else{
-      $scope._createTextWidget(datum.predicate.value, datum.htmlElement.value);
+      $scope._createAutocompleteWidget(datum.predicate.value, datum.htmlElement.value);
     }
   });
 

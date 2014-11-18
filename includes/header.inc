@@ -10,6 +10,7 @@
 	<!-- Bootstrap core CSS -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/css/select2.css" rel="stylesheet"/>
+	<link href="/css/datepicker.css" rel="stylesheet" type="text/css">
 	<style>
 		body {
 			padding-top: 40px;

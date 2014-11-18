@@ -23,7 +23,7 @@
 		  				:positionNumber 20;
 		  				:anchoredTo "myForm" 
 		  			   ],
-		  			   [ a :HTMLInputTextWidget ;
+		  			   [ a :HTMLInputDateWidget ;
 		  				:predicateDisplayed foaf:birthday;
 		  				:positionNumber 30;
 		  				:anchoredTo "myForm" 
