@@ -35,20 +35,22 @@
 					   ] ;
 			:hasSubView [
 						a :FormView ;
+						:positionNumber 35;
+						:anchoredTo "myForm";
 						:classAssociated poder:Marriage ;
-						:hasWidget [ a :HTMLInputTextWidget;
+						:hasWidget [ a :HTMLInputDateWidget;
 									 :predicateDisplayed poder:connectionStartDate;
-									 :positionNumber 1;
+									 :positionNumber 20;
 									 :anchoredTo "myForm"
 								   ],
-								   [ a :HTMLInputTextWidget;
+								   [ a :HTMLInputDateWidget;
 									 :predicateDisplayed poder:connectionEndDate;
-									 :positionNumber 2;
+									 :positionNumber 30;
 									 :anchoredTo "myForm"
 								   ],
-								   [ a :HTMLInputTextWidget;
+								   [ a :HTMLResourceWidget;
 									 :predicateDisplayed poder:hasSpouse;
-									 :positionNumber 1;
+									 :positionNumber 10;
 									 :anchoredTo "myForm"
 								   ]
 						]

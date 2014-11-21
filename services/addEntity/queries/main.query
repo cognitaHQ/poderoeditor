@@ -18,6 +18,12 @@ SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
   	}
   }
   graph <{{flod.layoutGraph}}>  {
-      [] layout:predicateDisplayed ?predicate;
+      ?view layout:predicateDisplayed ?predicate .
+      OPTIONAL{
+        ?parent layout:hasSubView ?view .
+      }
+              FILTER(!BOUND(?parent))
+
+
   }
 }GROUP BY ?c

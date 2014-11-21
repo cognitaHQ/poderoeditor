@@ -15,6 +15,7 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   };
 
   $scope.tripleGenerators = [];
+  $scope.subWidgets = {};
 
   $scope.urlify = function(u){
    return u.toLowerCase().replace(/[^a-zA-Z0-9\-]+/g, '_');
@@ -24,6 +25,22 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
+}
+$scope._createSubWidgetElement = function(htmlElement, subClass){
+  var id = $scope.uuid();
+  var div = document.createElement("div");
+  div.setAttribute("class", "panel panel-default");
+  var divH = document.createElement("div");
+  divH.setAttribute("class", "panel-heading");
+  divH.innerHTML= subClass;
+  var div2 = document.createElement("div");
+  div2.setAttribute("class", "panel-body");
+  div2.setAttribute("id", id);
+  div.appendChild(divH);
+  div.appendChild(div2);
+  $compile(div)($scope);
+  document.getElementById(htmlElement).appendChild(div);
+  return id;
 }
 
 $scope._createAutocompleteWidget = function(predicate, htmlElement){
@@ -180,6 +197,17 @@ $scope.baseNamespace = function(){
 
 };
 
+$scope._getWidget = function(type, predicate, elem, cls){
+  console.log(type, predicate, elem);
+  if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
+      $scope._createTextWidget(predicate, elem);
+    }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
+      $scope._createCalendarWidget(predicate, elem);
+    }else{
+      $scope._createAutocompleteWidget(predicate, elem);
+  }
+}
+
 $scope.letMeKnow = function(){
  msg = {uri: $("#uri").val(), triples: []};
  msg.triples.push({s: $("#uri").val(), p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
@@ -202,19 +230,25 @@ error(function(data, status, headers, config) {
   alert("Error");
 });
 }
+
 $("#uriLabel").attr("data-predicate", labelPredicate);
 $http.get(url, config).success(function(data){
   $scope.formData = data.main;
+  console.log($scope.formData);
   if(instanceData != null){
     $("#uriLabel").val(instanceData[labelPredicate][0]);
   }
   $scope.formData.forEach(function(datum){
-    if(datum.widget.value == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
-      $scope._createTextWidget(datum.predicate.value, datum.htmlElement.value);      
-    }else if(datum.widget.value == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
-      $scope._createCalendarWidget(datum.predicate.value, datum.htmlElement.value);
+    if(datum.sub_class.value != null){
+        var subClass = datum.sub_class.value;
+        if($scope.subWidgets[subClass] == undefined){
+          var _id = $scope._createSubWidgetElement(datum.htmlElement.value, subClass);
+          $scope.subWidgets[subClass] = {widgets: [], id: _id};
+        }
+        console.log(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
+        $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
     }else{
-      $scope._createAutocompleteWidget(datum.predicate.value, datum.htmlElement.value);
+        $scope._getWidget(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
     }
   });
 
@@ -234,7 +268,7 @@ $http.get(url, config).success(function(data){
     deleteButton.setAttribute("ng-click", "deleteInstance()");
     document.getElementById("myForm").appendChild(deleteButton);
   }
-  
+
   $compile(submit)($scope);
 
 });
