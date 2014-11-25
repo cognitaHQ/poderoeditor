@@ -5,7 +5,7 @@ INSERT DATA{
   GRAPH <{{flod.dataGraph}}>{
   {%for t in data.triples%}
 	  #triple
-		<{{t["s"]}}> <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%elif t["o"].type == "date"%}"""{{t["o"].value}}"""^^xsd:date{%else %} <{{t["o"].value}}> {%endif%}.
+		{%if t["s"].type == "blank"%}{{t["s"].value}}{%else %}<{{t["s"].value}}>{%endif%} <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%elif t["o"].type == "date"%}"""{{t["o"].value}}"""^^xsd:date{%elif t["o"].type == "blank"%}{{t["o"].value}}{%else %} <{{t["o"].value}}> {%endif%}.
   {%endfor%}
   
   }

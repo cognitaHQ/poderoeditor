@@ -16,17 +16,17 @@
 			:hasWidget [ a :HTMLInputTextWidget ;
           				:predicateDisplayed foaf:firstName;
 		  				:positionNumber 10;
-		  				:anchoredTo "myForm" 
+		  				:anchoredTo "myForm"
 		  			   ],
 		  			   [ a :HTMLInputTextWidget ;
 		  				:predicateDisplayed foaf:familyName;
 		  				:positionNumber 20;
-		  				:anchoredTo "myForm" 
+		  				:anchoredTo "myForm"
 		  			   ],
 		  			   [ a :HTMLInputDateWidget ;
 		  				:predicateDisplayed foaf:birthday;
 		  				:positionNumber 30;
-		  				:anchoredTo "myForm" 
+		  				:anchoredTo "myForm"
 		  			   ],
 		  			   [ a :HTMLResourceWidget ;
 						 :predicateDisplayed poder:countryOfResidence ;
@@ -38,6 +38,7 @@
 						:positionNumber 35;
 						:anchoredTo "myForm";
 						:classAssociated poder:Marriage ;
+						:reverseAssociatedPredicate poder:hasSpouse;
 						:hasWidget [ a :HTMLInputDateWidget;
 									 :predicateDisplayed poder:connectionStartDate;
 									 :positionNumber 20;

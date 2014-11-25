@@ -2,7 +2,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 
-select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
+select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
  graph <{{flod.layoutGraph}}>  {
    {
       ?view a layout:FormView ;
@@ -15,6 +15,13 @@ select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?
    }UNION{
       ?sub_view layout:classAssociated <{{"/".join(args)}}>;
                   layout:hasSubView ?view .
+      OPTIONAL{
+         ?view layout:reverseAssociatedPredicate ?super_predicate_reverse .
+      }
+      OPTIONAL{
+         ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
+      }
+
       ?view a layout:FormView ;
             layout:positionNumber ?number ;
             layout:anchoredTo ?htmlElement;

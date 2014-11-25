@@ -43,7 +43,7 @@ $scope._createSubWidgetElement = function(htmlElement, subClass){
   return id;
 }
 
-$scope._createAutocompleteWidget = function(predicate, htmlElement){
+$scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
   var formElement = document.createElement("p");
   var legend = document.createElement("label");
   legend.innerHTML = predicate;
@@ -60,14 +60,14 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
   $compile(formElement)($scope);
   var parent = document.getElementById(htmlElement).appendChild(formElement);
   $("#"+id).select2({
-    placeholder: "Search for a person, company or organization",
+    placeholder: "",
     minimumInputLength: 1,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
         url: function(terms){return "/search/"+terms+"/"+predicate},
         params: { headers: {"Accept": "application/json"}},
         dataType: 'json',
         quietMillis: 450,
-        id: function(item){ console.log(item);return item.id.value; },
+        id: function(item){ return item.id.value; },
         results: function (data, page) { return { results: data.main, more: false }; },
         cache: false
     },
@@ -102,22 +102,30 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement){
 });
   var _generator = {
     predicate: predicate,
-    id:  id,
-    f: function(id, p){
-      var data = $("#"+id).select2("data");
-      if(data != undefined && data.id.mirroredUri != undefined){
-        return [{s: $("#uri").val(), p: p, o: {value: data.id.mirroredUri, type: "uri"}}] ;
+    subject:  $("#uri").val(),
+    object: $("#"+id).val(),
+    objId: id,
+    f: function(s, p, o){
+      var obj = $("#"+o).select2("data");
+      if(obj != "" && obj != undefined && obj != null){
+        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj.id.value, type: "uri"}}];
       }else{
         return [];
       }
     }
-
   }
-  $scope.tripleGenerators.push(_generator);
+
+
+  if(cls != null){
+    $scope.subWidgets[cls].generators.push(_generator);
+  }else{
+    $scope.tripleGenerators.push(_generator);
+  }
 }
 
 
-$scope._createCalendarWidget = function(predicate, htmlElement){
+
+$scope._createCalendarWidget = function(predicate, htmlElement, cls){
   var formElement = document.createElement("p");
   var legend = document.createElement("label");
   legend.innerHTML = predicate;
@@ -137,23 +145,30 @@ $scope._createCalendarWidget = function(predicate, htmlElement){
   if(instanceData != null && instanceData[predicate] != undefined){
     $scope.instance[predicate] = instanceData[predicate][0];
   }
-
+  
   var _generator = {
     predicate: predicate,
-    id:  id,
-    f: function(id, p){
-      if($("#"+id).val() != "" && $("#"+id).val() != undefined){
-        return [{s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "date"}}];
+    subject:  $("#uri").val(),
+    object: $("#"+id).val(),
+    objId: id,
+    f: function(s, p, o){
+      var obj = $("#"+o).val();
+      if(obj != "" && obj != undefined){
+        return [{s: s, p: p, o: {value: obj, type: "date"}}];
       }else{
         return [];
       }
     }
-
   }
-  $scope.tripleGenerators.push(_generator);
+
+  if(cls != undefined){
+    $scope.subWidgets[cls].generators.push(_generator);
+  }else{
+    $scope.tripleGenerators.push(_generator);
+  }
 }
 
-$scope._createTextWidget = function(predicate, htmlElement){
+$scope._createTextWidget = function(predicate, htmlElement, cls){
   var formElement = document.createElement("p");
   var legend = document.createElement("label");
   legend.innerHTML = predicate;
@@ -175,17 +190,23 @@ $scope._createTextWidget = function(predicate, htmlElement){
 
   var _generator = {
     predicate: predicate,
-    id:  id,
-    f: function(id, p){
-      if($("#"+id).val() != "" && $("#"+id).val() != undefined){
-        return [{s: $("#uri").val(), p: p, o: {value: $("#"+id).val(), type: "text"}}];
+    subject:  $("#uri").val(),
+    object: $("#"+id).val(),
+    objId: id,
+    f: function(s, p, o){
+      var obj = $("#"+o).val();
+      if(obj != "" && obj != undefined){
+        return [{s: s, p: p, o: {value: obj, type: "text"}}];
       }else{
         return [];
       }
     }
-
   }
-  $scope.tripleGenerators.push(_generator);
+  if(cls != undefined){
+    $scope.subWidgets[cls].generators.push(_generator);
+  }else{
+    $scope.tripleGenerators.push(_generator);
+  }
 }
 
 $scope.identifier = "";
@@ -198,26 +219,47 @@ $scope.baseNamespace = function(){
 };
 
 $scope._getWidget = function(type, predicate, elem, cls){
-  console.log(type, predicate, elem);
   if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
       $scope._createTextWidget(predicate, elem);
     }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
-      $scope._createCalendarWidget(predicate, elem);
+      $scope._createCalendarWidget(predicate, elem, cls);
     }else{
-      $scope._createAutocompleteWidget(predicate, elem);
+      $scope._createAutocompleteWidget(predicate, elem, cls);
   }
 }
 
 $scope.letMeKnow = function(){
  msg = {uri: $("#uri").val(), triples: []};
- msg.triples.push({s: $("#uri").val(), p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
- msg.triples.push({s: $("#uri").val(), p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});
+ msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
+ msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});
  for(var i=0; i<$scope.tripleGenerators.length; i++){
   var thisGenerator = $scope.tripleGenerators[i];
-  a = thisGenerator.f(thisGenerator.id, thisGenerator.predicate);
+  a = thisGenerator.f($("#uri").val(), thisGenerator.predicate, thisGenerator.objId);
   msg.triples = msg.triples.concat(a);
-}
+ }
+ //Sub widgets
+ for(var k in $scope.subWidgets){
+  var subwidget = $scope.subWidgets[k];
+  var blankNode = "_:"+subwidget.id;
+  if(subwidget.revlink != null){
+    subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: subwidget.revlink, o: {value: $("#uri").val(), type: "uri"}});
+  }else{
+    subwidget.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: subwidget.fwdlink, o: {value: blankNode, type: "blank"}});
+  }
+  for(var j=0; j < subwidget.generators.length; j++){
+    var thisGenerator = subwidget.generators[j];
+    //thisGenerator.subject = blankNode;
+    //thisGenerator.objId = $("#"+thisGenerator.objId).val(),
+    a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
+    subwidget.triples = subwidget.triples.concat(a);
+  }
+  if(subwidget.triples.length > 1){
+    msg.triples = msg.triples.concat(subwidget.triples);
+  }
+
+ }
 var submitUrl = (instanceData ==  null)?'/create':'/editInstance';
+console.log(msg);
 $http({url: submitUrl,
  data: msg,
  method: "POST",
@@ -225,6 +267,7 @@ $http({url: submitUrl,
 }).
 success(function(data, status, headers, config) {
   alert("OK");
+//  window.location = msg.uri;
 }).
 error(function(data, status, headers, config) {
   alert("Error");
@@ -234,18 +277,24 @@ error(function(data, status, headers, config) {
 $("#uriLabel").attr("data-predicate", labelPredicate);
 $http.get(url, config).success(function(data){
   $scope.formData = data.main;
-  console.log($scope.formData);
   if(instanceData != null){
     $("#uriLabel").val(instanceData[labelPredicate][0]);
   }
   $scope.formData.forEach(function(datum){
     if(datum.sub_class.value != null){
+        //it is a subwidget
         var subClass = datum.sub_class.value;
         if($scope.subWidgets[subClass] == undefined){
           var _id = $scope._createSubWidgetElement(datum.htmlElement.value, subClass);
-          $scope.subWidgets[subClass] = {widgets: [], id: _id};
+          if(datum.super_predicate_forward.value != null){
+            $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: []};
+
+          }
+          if(datum.super_predicate_reverse.value != null){
+            $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: []};
+            //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
+          }
         }
-        console.log(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
         $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
     }else{
         $scope._getWidget(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
