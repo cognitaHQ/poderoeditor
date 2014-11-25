@@ -19,6 +19,7 @@
 	</div>
 	<script>
 	var baseNamespace = "{{flod.instanceNamespace}}";
+	var localNamespace = "{{flod.localInstanceNamespace}}";
 	var labelPredicate = "{{flod.labelPredicate}}";
 	var submitLabel = "{{flod.languages[flod.labelLanguage].add_submit_button}}";
 	var deleteLabel = null;

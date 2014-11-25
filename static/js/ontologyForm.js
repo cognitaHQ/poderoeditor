@@ -154,7 +154,7 @@ $scope._createCalendarWidget = function(predicate, htmlElement, cls){
     f: function(s, p, o){
       var obj = $("#"+o).val();
       if(obj != "" && obj != undefined){
-        return [{s: s, p: p, o: {value: obj, type: "date"}}];
+        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj, type: "date"}}];
       }else{
         return [];
       }
@@ -196,7 +196,7 @@ $scope._createTextWidget = function(predicate, htmlElement, cls){
     f: function(s, p, o){
       var obj = $("#"+o).val();
       if(obj != "" && obj != undefined){
-        return [{s: s, p: p, o: {value: obj, type: "text"}}];
+        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj, type: "text"}}];
       }else{
         return [];
       }
@@ -266,8 +266,7 @@ $http({url: submitUrl,
 
 }).
 success(function(data, status, headers, config) {
-  alert("OK");
-//  window.location = msg.uri;
+  window.location = msg.uri.replace(baseNamespace, localNamespace);
 }).
 error(function(data, status, headers, config) {
   alert("Error");

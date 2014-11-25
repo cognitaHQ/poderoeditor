@@ -27,6 +27,7 @@
 		"labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
 		"labelLanguage": "es",
 		"instanceNamespace": "http://poderopedia.org/instance/",
+		"localInstanceNamespace": "http://localhost:54321/instance/",
 		"languages": {
 			"es":{
 				"home_title": "Bienvenido a PoderoEditor",
