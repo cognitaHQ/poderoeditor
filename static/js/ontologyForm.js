@@ -251,6 +251,7 @@ $scope.letMeKnow = function(){
   }else{
     subwidget.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: subwidget.fwdlink, o: {value: blankNode, type: "blank"}});
   }
+  subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: subwidget.cls, type: "uri"}});
   for(var j=0; j < subwidget.generators.length; j++){
     var thisGenerator = subwidget.generators[j];
     //thisGenerator.subject = blankNode;
@@ -258,7 +259,7 @@ $scope.letMeKnow = function(){
     a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
     subwidget.triples = subwidget.triples.concat(a);
   }
-  if(subwidget.triples.length > 1){
+  if(subwidget.triples.length > 2){
     msg.triples = msg.triples.concat(subwidget.triples);
   }
 
@@ -291,11 +292,11 @@ $http.get(url, config).success(function(data){
         if($scope.subWidgets[subClass] == undefined){
           var _id = $scope._createSubWidgetElement(datum.htmlElement.value, subClass);
           if(datum.super_predicate_forward.value != null){
-            $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: []};
+            $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
 
           }
           if(datum.super_predicate_reverse.value != null){
-            $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: []};
+            $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
             //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
           }
         }

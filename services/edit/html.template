@@ -31,7 +31,7 @@
 	<script>
 	var instanceData = {};
 	{%for row in queries.uridata%}
-	{%if row.oLabel.value%}
+	{%if row.oLabel.value %}
 	instanceData["{{row.p.mirroredUri}}"] = [{id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} }];
 	{%else%}
 	instanceData["{{row.p.mirroredUri}}"] = ["{{row.o.value}}"];

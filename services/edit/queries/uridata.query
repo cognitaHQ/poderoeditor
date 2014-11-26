@@ -4,5 +4,6 @@ SELECT ?p ?o ?oLabel WHERE {
 		OPTIONAL{
 			?o <{{flod.labelPredicate}}> ?oLabel .
 		}
+
 	}
 }
