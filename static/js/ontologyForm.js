@@ -25,8 +25,8 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
-}
-$scope._createSubWidgetElement = function(htmlElement, subClass){
+ }
+ $scope._createSubWidgetElement = function(htmlElement, subClass){
   var id = $scope.uuid();
   var div = document.createElement("div");
   div.setAttribute("class", "panel panel-default");
@@ -41,7 +41,7 @@ $scope._createSubWidgetElement = function(htmlElement, subClass){
   $compile(div)($scope);
   document.getElementById(htmlElement).appendChild(div);
   return id;
-}
+ }
 
 $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
   var formElement = document.createElement("p");
@@ -71,17 +71,17 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
         results: function (data, page) { return { results: data.main, more: false }; },
         cache: false
     },
-    initSelection: function(element, callback) {
-        // the input tag has a value attribute preloaded that points to a preselected repository's id
-        // this function resolves that id attribute to an object that select2 can render
-        // using its formatResult renderer - that way the repository name is shown preselected
-        var id = $(element).val();
-        if (id !== "") {
-            $.ajax("https://api.github.com/repositories/" + id, {
-                dataType: "json"
-            }).done(function(data) { callback(data); });
-        }
-    },
+    // initSelection: function(element, callback) {
+    //     // the input tag has a value attribute preloaded that points to a preselected repository's id
+    //     // this function resolves that id attribute to an object that select2 can render
+    //     // using its formatResult renderer - that way the repository name is shown preselected
+    //     var id = $(element).val();
+    //     if (id !== "") {
+    //         $.ajax("https://api.github.com/repositories/" + id, {
+    //             dataType: "json"
+    //         }).done(function(data) { callback(data); });
+    //     }
+    // },
     formatResult: function(item) {
       var markup =
       '<div class="row">' +
@@ -100,6 +100,11 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 });
+  if(instanceData != null && instanceData[predicate] != undefined){
+    console.log(instanceData[predicate][0]);
+    $scope.instance[predicate] = instanceData[predicate][0];
+    $("#"+id).select2("data", instanceData[predicate][0]) ;
+  }
   var _generator = {
     predicate: predicate,
     subject:  $("#uri").val(),

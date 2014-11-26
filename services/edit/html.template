@@ -26,11 +26,17 @@
 	</script>
 	<script src="/js/jquery.min.js"> </script>
 	<script src="/js/select2/select2.js"> </script>
+    <script src="/js/bootstrap-datepicker.js"></script>
 	<script src="/js/angular.min.js"> </script>
 	<script>
 	var instanceData = {};
 	{%for row in queries.uridata%}
-	instanceData["{{row.p.mirroredUri}}"] = ["{{row.o.value}}"];{%endfor%}
+	{%if row.oLabel.value%}
+	instanceData["{{row.p.mirroredUri}}"] = [{id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} }];
+	{%else%}
+	instanceData["{{row.p.mirroredUri}}"] = ["{{row.o.value}}"];
+	{%endif%}
+	{%endfor%}
 	</script>
 	<script src="/js/ontologyForm.js"> </script>
 </div>

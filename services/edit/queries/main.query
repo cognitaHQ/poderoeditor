@@ -2,28 +2,37 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 
-select distinct ?predicate ?htmlElement ?number ?widget WHERE {
- graph <{{flod.dataGraph}}>  {
- 	<{{"/".join(args)}}> a ?d
+select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
+ graph <{{flod.dataGraph}}>{
+   <{{"/".join(args)}}> a ?instanceClass .
  }
- graph <{{flod.dataOntologyGraph}}>  {
-   ?predicate rdfs:domain [  rdfs:subClassOf* ?d  ] .
-   
-   OPTIONAL{
-   	?predicate <{{flod.labelPredicate}}> ?predicateLabel .
+ graph <{{flod.layoutGraph}}>  {
+   {
+      ?view a layout:FormView ;
+            layout:classAssociated ?instanceClass;
+            layout:hasWidget ?predicateWidget .
+      ?predicateWidget a ?widget;
+                     layout:anchoredTo ?htmlElement;
+                     layout:predicateDisplayed ?predicate;
+                     layout:positionNumber ?number .
+   }UNION{
+      ?sub_view layout:classAssociated ?instanceClass;
+                  layout:hasSubView ?view .
       OPTIONAL{
-  		  {%if flod.labelLanguage%}FILTER(LANG(?cName) = "{{flod.labelLanguage}}" ). {%endif%}
-      }   	
+         ?view layout:reverseAssociatedPredicate ?super_predicate_reverse .
+      }
+      OPTIONAL{
+         ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
+      }
+
+      ?view a layout:FormView ;
+            layout:positionNumber ?number ;
+            layout:anchoredTo ?htmlElement;
+            layout:classAssociated ?sub_class;
+            layout:hasWidget ?sub_predicateWidget .
+      ?sub_predicateWidget a ?sub_widget;
+                  layout:predicateDisplayed ?sub_predicate;
+                  layout:positionNumber ?sub_number .
    }
  }
- graph <{{flod.layoutOntologyGraph}}>  {
-   ?predicateWidget a ?widget;
-                  layout:anchoredTo ?htmlElement;
-   					layout:predicateDisplayed ?predicate;
-   					layout:positionNumber ?number .
-   FILTER(
-      ?widget != <http://cognita.io/poderoEditor/layoutOntology/HTMLWidget> && 
-      ?widget != <http://cognita.io/poderoEditor/layoutOntology/HTMLResourceWidget>
-   )
- }
-}ORDER BY ?htmlElement ?number
+}ORDER BY ?number ?sub_number
