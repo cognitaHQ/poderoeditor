@@ -29,13 +29,25 @@
     <script src="/js/bootstrap-datepicker.js"></script>
 	<script src="/js/angular.min.js"> </script>
 	<script>
-	var instanceData = {};
+	var instanceData = {},
+	    entitiesData = {};
 	{%for row in queries.uridata%}
 	{%if row.oLabel.value %}
 	instanceData["{{row.p.mirroredUri}}"] = [{id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} }];
 	{%else%}
 	instanceData["{{row.p.mirroredUri}}"] = ["{{row.o.value}}"];
 	{%endif%}
+	{%endfor%}
+
+	{% set previousEntity = "" %}
+	{%for row in queries.entities%}
+	  {%if previousEntity != row.s.value %}
+	    entitiesData["{{row.s.value}}"] = [];
+	    {% set previousEntity = row.s.value%}
+	  {%endif%}
+	  {% if row.p.mirroredUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and row.o.mirroredUri != "/".join(args)%}
+	    entitiesData["{{row.s.value}}"].push({predicate: "{{row.p.value}}", object: "{{row.o.mirroredUri}}"}]); 
+	  {%endif%}
 	{%endfor%}
 	</script>
 	<script src="/js/ontologyForm.js"> </script>
