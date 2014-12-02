@@ -12,7 +12,7 @@
 			<label>URI</label>
 				<input type="text" name="uri" id="uri" data-predicate="uri" class="form-control" value="{{"/".join(args)}}" required="required" title="" readonly>
 			<label>{{flod.languages[flod.labelLanguage].add_table_label}}</label>
-			<input type="text" name="uriLabel" id="uriLabel" class="form-control" ng-model="identifier" value=""/> 
+			<input type="text" name="uriLabel" id="uriLabel" class="form-control" ng-model="identifier" value=""/>
 			</div>
 			</form>
 		</div>
@@ -38,16 +38,17 @@
 	instanceData["{{row.p.mirroredUri}}"] = ["{{row.o.value}}"];
 	{%endif%}
 	{%endfor%}
-
-	{% set previousEntity = "" %}
+	{% set previousEntity = "" %}{% set previousClass = "" %}
 	{%for row in queries.entities%}
-	  {%if previousEntity != row.s.value %}
-	    entitiesData["{{row.s.value}}"] = [];
-	    {% set previousEntity = row.s.value%}
-	  {%endif%}
-	  {% if row.p.mirroredUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and row.o.mirroredUri != "/".join(args)%}
-	    entitiesData["{{row.s.value}}"].push({predicate: "{{row.p.value}}", object: "{{row.o.mirroredUri}}"}]); 
-	  {%endif%}
+	{%if previousClass != row.entityClass.value %}{% set previousClass = row.entityClass.value%}
+	entitiesData["{{row.entityClass.value}}"] = {};
+	{%endif%}
+	{%if previousEntity != row.s.value %}
+	entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"] = [];{% set previousEntity = row.s.value%}
+	{%endif%}
+	{% if row.p.mirroredUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and row.o.mirroredUri != "/".join(args)%}
+    entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"].push({predicate: "{{row.p.value}}", object: "{{row.o.mirroredUri}}", label: {%if row.oLabel.value%}"{{row.oLabel.value}}"{%else%}"{{row.o.mirroredUri}}"{%endif%} });
+	{%endif%}
 	{%endfor%}
 	</script>
 	<script src="/js/ontologyForm.js"> </script>

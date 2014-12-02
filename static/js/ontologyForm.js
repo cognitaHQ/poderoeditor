@@ -67,7 +67,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
         params: { headers: {"Accept": "application/json"}},
         dataType: 'json',
         quietMillis: 450,
-        id: function(item){ return item.id.value; },
+        id: function(item){ return item.id.mirroredUri; },
         results: function (data, page) { return { results: data.main, more: false }; },
         cache: false
     },
@@ -88,7 +88,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
           '<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">' +
             '<div class="row">' +
                '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">' + item.iLabel.value + '</div>' +
-               '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><a href="' + item.id.value + '">'+item.id.value+'</a></div>' +
+               '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><a href="' + item.id.mirroredUri + '">'+item.id.mirroredUri+'</a></div>' +
             '</div>'+
           '</div>';
 
@@ -113,7 +113,7 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
     f: function(s, p, o){
       var obj = $("#"+o).select2("data");
       if(obj != "" && obj != undefined && obj != null){
-        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj.id.value, type: "uri"}}];
+        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj.id.mirroredUri, type: "uri"}}];
       }else{
         return [];
       }
@@ -122,6 +122,17 @@ $scope._createAutocompleteWidget = function(predicate, htmlElement, cls){
 
 
   if(cls != null){
+    if(entitiesData[cls] != undefined){
+      for(var i in entitiesData[cls]){
+        var connectionInstance = entitiesData[cls][i];
+        for(var k=0; k<connectionInstance.length; k++){
+          if(connectionInstance[k].predicate == predicate){
+            $("#"+id).select2("data", {id: {value: connectionInstance[k].object}, iLabel: {value: connectionInstance[k].label } });//{id: {value: connectionInstance[k].object}, iLabel: {value: connectionInstance[k].label} });
+            break;
+          }
+        }
+      }
+    }
     $scope.subWidgets[cls].generators.push(_generator);
   }else{
     $scope.tripleGenerators.push(_generator);
@@ -146,11 +157,11 @@ $scope._createCalendarWidget = function(predicate, htmlElement, cls){
   formElement.appendChild(aux);
   $compile(formElement)($scope);
   var parent = document.getElementById(htmlElement).appendChild(formElement);
-  $("#"+id).datepicker({format: "yyyy-mm-dd"});
+  $("#"+id).datepicker({format: "yyyy-mm-dd", autoclose: true});
   if(instanceData != null && instanceData[predicate] != undefined){
     $scope.instance[predicate] = instanceData[predicate][0];
   }
-  
+
   var _generator = {
     predicate: predicate,
     subject:  $("#uri").val(),
@@ -167,6 +178,19 @@ $scope._createCalendarWidget = function(predicate, htmlElement, cls){
   }
 
   if(cls != undefined){
+    if(entitiesData[cls] != undefined){
+      for(var i in entitiesData[cls]){
+        var connectionInstance = entitiesData[cls][i];
+        for(var k=0; k<connectionInstance.length; k++){
+          if(connectionInstance[k].predicate == predicate){
+        console.log(connectionInstance[k].object, predicate)
+            $scope.instance[predicate] = connectionInstance[k].object;
+            $("#"+id).datepicker('update', connectionInstance[k].object);
+            break;
+          }
+        }
+      }
+    }
     $scope.subWidgets[cls].generators.push(_generator);
   }else{
     $scope.tripleGenerators.push(_generator);
@@ -208,6 +232,17 @@ $scope._createTextWidget = function(predicate, htmlElement, cls){
     }
   }
   if(cls != undefined){
+    if(entitiesData[cls] != undefined){
+      for(var i in entitiesData[cls]){
+        var connectionInstance = entitiesData[cls][i];
+        for(var k=0; k<connectionInstance.length; k++){
+          if(connectionInstance[k].predicate == predicate){
+            $("#"+id).val(connectionInstance[k].object);
+            break;
+          }
+        }
+      }
+    }
     $scope.subWidgets[cls].generators.push(_generator);
   }else{
     $scope.tripleGenerators.push(_generator);
