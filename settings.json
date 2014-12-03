@@ -1,6 +1,6 @@
 {
 	"debug": false,
-	"modules": [ "Uploaders", "Static", "Users", "Services", "JsonBasedWriter", "Types"],
+	"modules": [ "HTTPProxy", "Uploaders", "Static", "Users", "Services", "JsonBasedWriter", "Types"],
 	"ns": {
 		"local": "http://localhost:54321/",
 		"origin": "http://poderopedia.org/",
