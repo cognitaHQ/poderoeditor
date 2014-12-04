@@ -92,17 +92,19 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
 
     function uploadComplete(evt) {
         /* This event is raised when the server send back a response */
+        $scope.progressVisible = false;
         var response = JSON.parse(evt.target.responseText);
         $scope.loadCsv(response.url);
     }
 
     function uploadFailed(evt) {
+        $scope.progressVisible = false;
         alert("There was an error attempting to upload the file.")
     }
 
     function uploadCanceled(evt) {
         $scope.$apply(function(){
-            $scope.progressVisible = false
+            $scope.progressVisible = false;
         })
         alert("The upload has been canceled by the user or the browser dropped the connection.")
     }
@@ -111,15 +113,16 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
 
     $scope.loadCsv = function(filename){
        $http.get("/files/"+filename).then(function(response){
+        console.log(response);
         var d = response.data.split("\n");
         var h = d.shift().split(",")
-        $scope.header = h;
-
         var d2 = [];
         for(var i=0; i<Math.min(d.length, 20); i++){
             d2.push(d[i].split(","));
         }
         $scope.dataset = d2;
+        $scope.header = h;
+        console.log($scope.header);
     });
    }
 }
