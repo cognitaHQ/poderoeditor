@@ -1,19 +1,24 @@
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-
-WITH <{{flod.dataGraph}}>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
+WITH  <{{flod.dataGraph}}>
 DELETE {
-		<{{data.uri}}> ?p ?o .
-	    ?x ?y <{{data.uri}}> .
+ 		<{{data.uri}}> ?p ?o .
+ }WHERE{
+ 	<{{data.uri}}> ?p ?o . 	 
+
+ };
+WITH  <{{flod.dataGraph}}>
+DELETE {
+ 	    ?x ?y <{{data.uri}}> ;
+                 ?z ?w .
 }
-INSERT {
-  {%for t in data.triples%}
+WHERE{
+ 	    ?x ?y <{{data.uri}}> ;
+                 ?z ?w .
+};
+
+INSERT DATA{
+GRAPH   <{{flod.dataGraph}}>{
+{%for t in data.triples%}
 		{%if t["s"].type == "blank"%}{{t["s"].value}}{%else %}<{{t["s"].value}}>{%endif%} <{{t["p"]}}> {%if t["o"].type == "text"%} """{{t["o"].value}}""" {%elif t["o"].type == "date"%}"""{{t["o"].value}}"""^^xsd:date{%elif t["o"].type == "blank"%}{{t["o"].value}}{%else %} <{{t["o"].value}}> {%endif%}.
   {%endfor%}
-}WHERE{
-	OPTIONAL{
-		<{{data.uri}}> ?p ?o .
-	}
-	OPTIONAL{
-	    ?x ?y <{{data.uri}}> .
-	}
-}
+}}
