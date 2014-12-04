@@ -29,9 +29,7 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th data-ng-repeat="h in header">
-						<td>[[h]]</td> 
-					</th>
+					<th data-ng-repeat="h in headers">[[h]]</th>
 				</tr>
 			</thead>
 			<tbody>

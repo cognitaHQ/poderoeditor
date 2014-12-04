@@ -7,7 +7,7 @@ csvUploaderApp.config(['$interpolateProvider', function($interpolateProvider) {
 csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope, $http){   
 
     $scope.dataset = [];
-    $scope.header = [];
+    $scope.headers = [];
     //============== DRAG & DROP =============
     // source for drag&drop: http://www.webappers.com/2011/09/28/drag-drop-file-upload-with-html5-javascript/
     var dropbox = document.getElementById("dropbox")
@@ -121,8 +121,8 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
             d2.push(d[i].split(","));
         }
         $scope.dataset = d2;
-        $scope.header = h;
-        console.log($scope.header);
+        $scope.headers = h;
+        console.log($scope.headers);
     });
    }
 }
