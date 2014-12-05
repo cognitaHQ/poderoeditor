@@ -11,50 +11,59 @@
 				<div ng-repeat="file in files.slice(0)">
 					<span>[[file.webkitRelativePath || file.name]]</span>
 					(<span ng-switch="file.size > 1024*1024">
-					<span ng-switch-when="true">[[file.size / 1024 / 1024 | number:2]] MB</span>
-					<span ng-switch-default>[[file.size / 1024 | number:2]] kB</span>
-				</span>)
+						<span ng-switch-when="true">[[file.size / 1024 / 1024 | number:2]] MB</span>
+						<span ng-switch-default>[[file.size / 1024 | number:2]] kB</span>
+					</span>)
+				</div>
+			</div>
+			<input type="button" class="btn btn-primary" ng-click="uploadFile()" value="Upload" />
+			<div ng-show="progressVisible">
+				<div class="percent">[[progress]]%</div>
+				<div class="progress-bar">
+					<div class="uploaded" ng-style="{'width': progress+'%'}"></div>
+				</div>
 			</div>
 		</div>
-		<input type="button" class="btn btn-primary" ng-click="uploadFile()" value="Upload" />
-		<div ng-show="progressVisible">
-			<div class="percent">[[progress]]%</div>
-			<div class="progress-bar">
-				<div class="uploaded" ng-style="{'width': progress+'%'}"></div>
+		<div class="row hidden">
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			{{flod.languages[flod.labelLanguage].import_instance_label}}<input type="text" name="" id="input" class="form-control" value="" required="required" disabled data-ng-model="uriTemplate" id="uriTemplate">
 			</div>
 		</div>
-	</div>
-	<div class="row hidden">
-		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-
-		</div>
-		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-			<input type="text" name="" id="input" class="form-control" value="" required="required" disabled data-ng-model="uriTemplate" id="uriTemplate">
-		</div>
-	</div>
-	<div class="row hidden">
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th data-ng-repeat="h in headers">[[h.replace(" ","_")|lowercase]]<select id="col_[[h.replace(" ","_")|lowercase]]"><option data-ng-repeat="p in predicates" value="[[p]]">[[p]]</option><div class="checkbox">
-							<label>
-								<input type="checkbox" value="[[h]]" data-ng-click="addToURLTemplate([[h]])" ng-true-value="[[h]]" ng-false-value="[[h]]">
+		<div class="row hidden">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th data-ng-repeat="h in headers">[[h.replace(" ","_")|lowercase]]
+								<select id="col_[[h.replace(" ","_")|lowercase]]">
+									<option data-ng-repeat="p in predicates" value="[[p]]">[[p]]</option>
+								</select>
+								<div class="checkbox">
+									<input type="checkbox" value="[[h]]" data-ng-click="addToURLTemplate([[h]])" ng-true-value="[[h]]" ng-false-value="[[h]]">
 								URI
-							</label>
-						</div></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr data-ng-repeat="item in dataset">
-						<td data-ng-repeat="val in item">[[val]]</td>
-					</tr>
-				</tbody>
-			</table>
+								</div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="item in dataset">
+							<td data-ng-repeat="val in item">[[val]]</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row hidden">
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+				<button type="button" ng-click="convert()" class="btn btn-primary">Import</button>
+			</div>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
 		</div>
 	</div>
 </div>
-</div>
+
 <script>
 	var predicates = [null];
 	var baseNamespace = "{{flod.instanceNamespace}}";
