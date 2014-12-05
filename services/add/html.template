@@ -18,6 +18,7 @@
 		</div>
 	</div>
 	<script>
+	var thisUri = null;
 	var baseNamespace = "{{flod.instanceNamespace}}";
 	var localNamespace = "{{flod.localInstanceNamespace}}";
 	var labelPredicate = "{{flod.labelPredicate}}";

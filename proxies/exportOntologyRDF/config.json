@@ -1,0 +1,6 @@
+{
+  "url": "http://localhost:3030/poderoeditor/query",
+  "params": {
+  				"query": "construct {?s ?p ?o} where{ graph <http://cognita.io/poderoEditor/dataOntology>{ ?s ?p ?o} }"
+  }
+}

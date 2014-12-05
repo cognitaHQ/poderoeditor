@@ -18,7 +18,9 @@
 		</div>
 	</div>
 	<script>
-	var baseNamespace = "{{"/".join(args)}}";
+	var baseNamespace = "{{flod.instanceNamespace}}";
+	var localNamespace = "{{flod.localInstanceNamespace}}";
+	var thisUri = "{{"/".join(args)}}";
 	var labelPredicate = "{{flod.labelPredicate}}";
 	var submitLabel = "{{flod.languages[flod.labelLanguage].edit_submit_button}}";
 	var deleteLabel = "{{flod.languages[flod.labelLanguage].edit_delete_button}}";

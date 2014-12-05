@@ -2,19 +2,36 @@
 {%block content%}
 
 <div class="container">
-<div class="row">
-<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-	
-</div>
-	<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-<h1>{{flod.languages[flod.labelLanguage].export_title}}</h1>
-		<h4>{{flod.languages[flod.labelLanguage].export_format_label}}</h4>
-		<a href='/exportRDF'><button type="button" class="btn btn-primary">RDF</button>
-		<a href='#'><button type="button" disabled class="btn btn-primary">JSON</button>
-
+	<div class="row">
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+		</div>
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			<h1>{{flod.languages[flod.labelLanguage].export_data_title}}</h1>
+			<h4>{{flod.languages[flod.labelLanguage].export_format_label}}</h4>
+			<a href='/exportDataRDF'><button type="button" class="btn btn-primary">RDF</button></a>
+			<a href='#'><button type="button" disabled class="btn btn-primary">JSON</button></a>
+		</div>
 	</div>
-
-</div>
-	
-</div>
-{%endblock%}
+	<div class="row">
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+		</div>
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			<h1>{{flod.languages[flod.labelLanguage].export_ontology_title}}</h1>
+			<h4>{{flod.languages[flod.labelLanguage].export_format_label}}</h4>
+			<a href='/exportOntologyRDF'><button type="button" class="btn btn-primary">RDF</button></a>
+			<a href='#'><button type="button" disabled class="btn btn-primary">JSON</button></a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+		</div>
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+			<h1>{{flod.languages[flod.labelLanguage].export_layout_title}}</h1>
+			<h4>{{flod.languages[flod.labelLanguage].export_format_label}}</h4>
+			<a href='/exportLayoutRDF'><button type="button" class="btn btn-primary">RDF</button></a>
+			<a href='#'><button type="button" disabled class="btn btn-primary">JSON</button></a>
+		</div>
+	</div>
+</div>		
+<script>
+	{%endblock%}

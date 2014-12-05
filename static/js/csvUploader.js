@@ -8,6 +8,7 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
 
     $scope.dataset = [];
     $scope.headers = [];
+    $scope.predicates = predicates;
     //============== DRAG & DROP =============
     // source for drag&drop: http://www.webappers.com/2011/09/28/drag-drop-file-upload-with-html5-javascript/
     var dropbox = document.getElementById("dropbox")

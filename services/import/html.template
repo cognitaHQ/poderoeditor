@@ -29,7 +29,7 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th data-ng-repeat="h in headers">[[h]]</th>
+					<th data-ng-repeat="h in headers">[[h]]<select id="col_[[h]]"><option data-ng-repeat="p in predicates" value="[[p]]">[[p]]</option></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -42,6 +42,11 @@
 	</div>
 </div>
 </div>
+<script>
+var predicates = [];
+{%for row in queries.main%}predicates.push("{{row.predicate.value}}");
+{%endfor%}
+</script>
 <script src="/js/jquery.min.js"> </script>
 <script src="/js/angular.min.js"> </script>
 <script src="/js/csvUploader.js"> </script>

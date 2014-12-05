@@ -300,14 +300,17 @@ $scope.letMeKnow = function(){
 
  }
 var submitUrl = (instanceData ==  null)?'/create':'/editInstance';
-console.log(msg);
 $http({url: submitUrl,
  data: msg,
  method: "POST",
 
 }).
 success(function(data, status, headers, config) {
-  window.location = msg.uri.replace(baseNamespace, localNamespace);
+  if(thisUri == null){
+    window.location = msg.uri.replace(baseNamespace, localNamespace);
+  }else{
+    window.location = thisUri.replace(baseNamespace, localNamespace);
+  }
 }).
 error(function(data, status, headers, config) {
   alert("Error");
@@ -337,6 +340,7 @@ $http.get(url, config).success(function(data){
         }
         $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
     }else{
+      console.log(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
         $scope._getWidget(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
     }
   });
