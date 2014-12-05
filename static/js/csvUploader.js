@@ -4,7 +4,7 @@ csvUploaderApp.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.endSymbol(']]');
 }]);
 
-csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope, $http){   
+csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope, $http){
 
     $scope.dataset = [];
     $scope.headers = [];
@@ -116,7 +116,7 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
         alert("The upload has been canceled by the user or the browser dropped the connection.")
     }
 
-    
+
 
     $scope.loadCsv = function(filename){
        $http.get("/files/"+filename).then(function(response){
@@ -130,24 +130,62 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
         }
         $scope.dataset = d2;
         $scope.headers = h;
-        console.log($scope.headers);
     });
    }
 
-   $scope.addToURLTemplate = function(elem){
+   $scope.addToURLTemplate = function(elem, pos){
     var val = elem[0][0].replace(/ /, "_", "g").toLowerCase();
-    if ($scope.urlTerms.indexOf(val) < 0){
-        $scope.urlTerms.push(val);
+    if ($scope.urlTerms.map(function(e){return e.name}).indexOf(val) < 0){
+        $scope.urlTerms.push({name: val, position: pos[0][0]} );
     }else{
-        var i = $scope.urlTerms.indexOf(val);
+        var i = $scope.urlTerms.map(function(e){return e.name}).indexOf(val);
         $scope.urlTerms.splice(i, 1);
     }
-    $scope.uriTemplate = baseNamespace+$scope.urlTerms.join("_");
+    $scope.uriTemplate = baseNamespace+$scope.urlTerms.map(function(e){return e.name}).join("_");
    }
 
    $scope.convert = function(){
-    
-   }
+    var triples = [];
+    var selects = $("select option:selected");
+    var predicateList = [];
+    selects.each(function(i, item){
+        predicateList.push($(item).val());
+    });
+
+    var trs = $("tbody tr");
+    trs.each(function(i, item){
+        $tr = $(item);
+        var a = baseNamespace;
+        var aux = [];
+        if($scope.urlTerms.length == 0){
+            alert("Need elements for URI");
+            return;
+        }
+        $scope.urlTerms.map(function(e){return e.position}).forEach(function(pos){
+            td = $tr.find("td")[pos];
+            aux.push($(td).html());
+        });
+        a += aux.join("_");
+        aLabel = aux.join(" ");
+        triples.push({s: {value: a, type: "uri"}, p: "http://www.w3.org/2000/01/rdf-schema#label", o: {value: aLabel, type: "text"} });
+        triples.push({s: {value: a, type: "uri"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: "http://xmlns.com/foaf/0.1/Person", type: "uri"} });
+        $tr.find("td").each(function(j, td){
+            $td = $(td);
+            triples.push({s: {value: a, type: "uri"}, p: predicateList[j], o: {value: $td.html(), type: "text"} });
+        });
+    });
+    console.log(triples);
+    $http({url: "/importData",
+        data: {triples: triples},
+        method: "POST",
+    }).
+    success(function(data, status, headers, config) {
+        window.location = "/search";
+    }).
+    error(function(data, status, headers, config) {
+      alert("Error");
+  });
+}
 }
 ])
 
