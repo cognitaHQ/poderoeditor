@@ -1,0 +1,15 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+
+select distinct ?predicate WHERE {
+ graph <{{flod.layoutGraph}}>  {
+      ?view a layout:FormView ;
+            layout:classAssociated foaf:Person;
+            layout:hasWidget ?predicateWidget .
+      ?predicateWidget a ?widget;
+                     layout:anchoredTo ?htmlElement;
+      					layout:predicateDisplayed ?predicate;
+      					layout:positionNumber ?number .
+ }
+}ORDER BY ?predicate

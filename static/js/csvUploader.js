@@ -9,6 +9,8 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
     $scope.dataset = [];
     $scope.headers = [];
     $scope.predicates = predicates;
+    $scope.urlTerms = [];
+    $scope.uriTemplate = baseNamespace;
     //============== DRAG & DROP =============
     // source for drag&drop: http://www.webappers.com/2011/09/28/drag-drop-file-upload-with-html5-javascript/
     var dropbox = document.getElementById("dropbox")
@@ -67,6 +69,10 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
     };
 
     $scope.uploadFile = function() {
+        if($scope.files ==  undefined){
+            alert("No file selected!");
+            return;
+        }
         var fd = new FormData()
         for (var i in $scope.files) {
             fd.append("file", $scope.files[i])
@@ -115,6 +121,7 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
     $scope.loadCsv = function(filename){
        $http.get("/files/"+filename).then(function(response){
         console.log(response);
+        $("div.hidden").removeClass("hidden");
         var d = response.data.split("\n");
         var h = d.shift().split(",")
         var d2 = [];
@@ -125,6 +132,21 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
         $scope.headers = h;
         console.log($scope.headers);
     });
+   }
+
+   $scope.addToURLTemplate = function(elem){
+    var val = elem[0][0].replace(/ /, "_", "g").toLowerCase();
+    if ($scope.urlTerms.indexOf(val) < 0){
+        $scope.urlTerms.push(val);
+    }else{
+        var i = $scope.urlTerms.indexOf(val);
+        $scope.urlTerms.splice(i, 1);
+    }
+    $scope.uriTemplate = baseNamespace+$scope.urlTerms.join("_");
+   }
+
+   $scope.convert = function(){
+    
    }
 }
 ])

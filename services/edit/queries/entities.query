@@ -1,0 +1,21 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+
+SELECT ?s ?p ?o ?oLabel ?entityClass WHERE {
+	GRAPH <{{flod.dataGraph}}>{
+		?s ?someConnection <{{"/".join(args)}}> ;
+		   ?p ?o;
+		   a ?entityClass .
+		<{{"/".join(args)}}> a ?instanceClass .
+		OPTIONAL{
+			?o <{{flod.labelPredicate}}> ?oLabel .
+		}
+	}
+	GRAPH <{{flod.layoutGraph}}>{
+		?view layout:classAssociated ?entityClass .
+		?superView layout:hasSubView ?view ;
+					layout:classAssociated ?instanceClass .
+
+	}
+}
