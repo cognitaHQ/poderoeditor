@@ -1,0 +1,30 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+
+select distinct ?subClass ?predicate ?htmlElement ?number ?widget WHERE {
+ graph <{{flod.dataOntologyGraph}}>  {
+   
+   OPTIONAL{
+   	?predicate <{{flod.labelPredicate}}> ?predicateLabel .
+      OPTIONAL{
+  		  {%if flod.labelLanguage%}FILTER(LANG(?cName) = "{{flod.labelLanguage}}" ). {%endif%}
+      }   	
+   }
+ }
+ graph <{{flod.layoutGraph}}>  {
+   ?parentView layout:classAssociated <{{"/".join(args)}}> ;
+               layout:hasSubView ?view .
+   ?view a layout:FormView ;
+         layout:classAssociated ?subClass;
+         layout:hasWidget ?predicateWidget .
+   ?predicateWidget a ?widget;
+                  layout:anchoredTo ?htmlElement;
+   					layout:predicateDisplayed ?predicate;
+   					layout:positionNumber ?number .
+   FILTER(
+      ?widget != <http://cognita.io/poderoEditor/layoutOntology/HTMLWidget> #&& 
+      #?widget != <http://cognita.io/poderoEditor/layoutOntology/HTMLResourceWidget>
+   )
+ }
+}ORDER BY ?htmlElement ?number

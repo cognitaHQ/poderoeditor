@@ -1,0 +1,189 @@
+var layoutFormApp = angular.module('layoutFormApp', []);
+
+layoutFormApp.config(['$interpolateProvider', function($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+}]);
+
+layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', function($scope, $http, $compile){
+	url = window.location;
+	$scope.instance = {};
+	var config = {headers:
+		{
+      'Accept': 'application/json'
+    }
+  };
+
+  $scope.tripleGenerators = [];
+  $scope.subWidgets = {};
+
+  $scope.urlify = function(u){
+   return u.toLowerCase().replace(/[^a-zA-Z0-9\-]+/g, '_');
+ }
+ $scope.uuid = function(){
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    return v.toString(16);
+  });
+ }
+ $scope._createSubWidgetElement = function(htmlElement, subClass){
+  var id = $scope.uuid();
+  var div = document.createElement("div");
+  div.setAttribute("class", "panel panel-default");
+  var divH = document.createElement("div");
+  divH.setAttribute("class", "panel-heading");
+  divH.innerHTML= subClass;
+  var div2 = document.createElement("div");
+  div2.setAttribute("class", "panel-body");
+  div2.setAttribute("id", id);
+  div.appendChild(divH);
+  div.appendChild(div2);
+  $compile(div)($scope);
+  document.getElementById(htmlElement).appendChild(div);
+  return id;
+ }
+
+
+$scope.identifier = "";
+$scope.baseNamespace = function(){
+  // $.ajax({
+  //   url: "/getUri/"+ baseNamespace+$scope.urlify($scope.identifier)
+  // })
+  return (instanceData ==  null)?baseNamespace+$scope.urlify($scope.identifier):baseNamespace;
+
+};
+
+$scope._getWidget = function(type, predicate, elem, cls){
+  $scope.instance[predicate] = predicate;//"";//{"predicate": predicate}
+  
+  var formElement = document.createElement("tr");
+  var legendTd = document.createElement("td");
+  legendTd.innerHTML = predicate;
+  formElement.appendChild(legendTd);
+
+  
+  var availabilityTd = document.createElement("td");
+  availabilityTd.setAttribute("class", "text-center");
+  var aux = document.createElement('input');
+  aux.type="checkbox";
+  var id = $scope.uuid();
+  aux.setAttribute("id", id);
+  aux.setAttribute("checked", "checked");
+  //aux.setAttribute("class", "form-control");
+  aux.setAttribute("data-predicate", predicate);
+  aux.setAttribute("ng-model", "instance[\""+predicate+"\"]");   
+  availabilityTd.appendChild(aux);
+  formElement.appendChild(availabilityTd);
+
+  var positionTd = document.createElement("td");
+  var aux2 = document.createElement('input');
+  aux2.type="number";
+  var id = $scope.uuid();
+  aux.setAttribute("id", id);
+  positionTd.appendChild(aux2);
+  formElement.appendChild(positionTd);
+  
+  $compile(formElement)($scope);
+  var parent = document.getElementById(elem).appendChild(formElement);
+  return;
+
+}
+
+$scope.letMeKnow = function(){
+ msg = {uri: $("#uri").val(), triples: []};
+ msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
+ msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});
+ for(var i=0; i<$scope.tripleGenerators.length; i++){
+  var thisGenerator = $scope.tripleGenerators[i];
+  a = thisGenerator.f($("#uri").val(), thisGenerator.predicate, thisGenerator.objId);
+  msg.triples = msg.triples.concat(a);
+ }
+ //Sub widgets
+ for(var k in $scope.subWidgets){
+  var subwidget = $scope.subWidgets[k];
+  var blankNode = "_:"+subwidget.id;
+  if(subwidget.revlink != null){
+    subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: subwidget.revlink, o: {value: $("#uri").val(), type: "uri"}});
+  }else{
+    subwidget.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: subwidget.fwdlink, o: {value: blankNode, type: "blank"}});
+  }
+  subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: subwidget.cls, type: "uri"}});
+  for(var j=0; j < subwidget.generators.length; j++){
+    var thisGenerator = subwidget.generators[j];
+    //thisGenerator.subject = blankNode;
+    //thisGenerator.objId = $("#"+thisGenerator.objId).val(),
+    a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
+    subwidget.triples = subwidget.triples.concat(a);
+  }
+  if(subwidget.triples.length > 2){
+    msg.triples = msg.triples.concat(subwidget.triples);
+  }
+
+ }
+var submitUrl = (instanceData ==  null)?'/create':'/editInstance';
+$http({url: submitUrl,
+ data: msg,
+ method: "POST",
+
+}).
+success(function(data, status, headers, config) {
+  if(thisUri == null){
+    window.location = msg.uri.replace(baseNamespace, localNamespace);
+  }else{
+    window.location = thisUri.replace(baseNamespace, localNamespace);
+  }
+}).
+error(function(data, status, headers, config) {
+  alert("Error");
+});
+}
+
+$("#uriLabel").attr("data-predicate", labelPredicate);
+$http.get(url, config).success(function(data){
+  $scope.formData = data.main;
+  if(instanceData != null){
+    $("#uriLabel").val(instanceData[labelPredicate][0]);
+  }
+  $scope.formData.forEach(function(datum){
+    if(datum.sub_class.value != null){
+        //it is a subwidget
+        var subClass = datum.sub_class.value;
+        if($scope.subWidgets[subClass] == undefined){
+          var _id = $scope._createSubWidgetElement(datum.htmlElement.value, subClass);
+          if(datum.super_predicate_forward.value != null){
+            $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
+
+          }
+          if(datum.super_predicate_reverse.value != null){
+            $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
+            //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
+          }
+        }
+        $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
+    }else{
+      console.log(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
+        $scope._getWidget(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
+    }
+  });
+
+
+  var submit = document.createElement("submit");
+  submit.type="submit";
+  submit.setAttribute("class", "btn btn-primary");
+  submit.innerHTML = submitLabel;
+  submit.setAttribute("ng-click", "letMeKnow()");
+  document.getElementById("myForm").appendChild(submit);
+
+  if(deleteLabel != null){
+    var deleteButton = document.createElement("deleteButton");
+    deleteButton.type="deleteButton";
+    deleteButton.setAttribute("class", "btn btn-danger");
+    deleteButton.innerHTML = deleteLabel || "delete";
+    deleteButton.setAttribute("ng-click", "deleteInstance()");
+    document.getElementById("myForm").appendChild(deleteButton);
+  }
+
+  $compile(submit)($scope);
+
+});
+}])
