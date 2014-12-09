@@ -59,12 +59,16 @@ $scope._getWidget = function(type, name, predicate, position, available, elem, c
   $scope.widgets[predicate] = {};
   var formElement = document.createElement("tr");
   var legendTd = document.createElement("td");
+  var auxLabel = document.createElement("p");
+  auxLabel.setAttribute("class", "");
+  auxLabel.innerHTML = predicate;
   var aux3 = document.createElement("input");
   aux3.type="text"
   aux3.setAttribute("id", $scope.uuid());
   aux3.setAttribute("class","form-control");
   aux3.setAttribute("ng-model", "widgets[\""+predicate+"\"].name");
   legendTd.appendChild(aux3);
+  legendTd.appendChild(auxLabel);
   formElement.appendChild(legendTd);
 
 
