@@ -109,4 +109,8 @@
 				rdfs:subPropertyOf :viewRestriction ;
 				rdfs:range foaf:Group .
 
+:displayWidget a owl:DatatypeProperty;
+				rdfs:label "Diplay widget";
+				rdfs:domain :VisualWidget;
+				rdfs:range xsd:boolean .
 
