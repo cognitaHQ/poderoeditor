@@ -1,35 +1,44 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
+select distinct ?widget ?predicate ?htmlElement ?position ?widget ?displayed ?prefLabel WHERE {
  graph <{{flod.layoutGraph}}>  {
    {
       ?view a layout:FormView ;
             layout:classAssociated <{{"/".join(args)}}>;
             layout:hasWidget ?predicateWidget .
+
       ?predicateWidget a ?widget;
                      layout:anchoredTo ?htmlElement;
       					layout:predicateDisplayed ?predicate;
-      					layout:positionNumber ?number .
-   }UNION{
-      ?sub_view layout:classAssociated <{{"/".join(args)}}>;
-                  layout:hasSubView ?view .
+      					layout:positionNumber ?position .
       OPTIONAL{
-         ?view layout:reverseAssociatedPredicate ?super_predicate_reverse .
-      }
-      OPTIONAL{
-         ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
+         ?predicateWidget layout:displayWidget ?displayed .
       }
 
-      ?view a layout:FormView ;
-            layout:positionNumber ?number ;
-            layout:anchoredTo ?htmlElement;
-            layout:classAssociated ?sub_class;
-            layout:hasWidget ?sub_predicateWidget .
-      ?sub_predicateWidget a ?sub_widget;
-                  layout:predicateDisplayed ?sub_predicate;
-                  layout:positionNumber ?sub_number .
+      OPTIONAL{
+         ?predicateWidget skos:prefLabel ?prefLabel .
+      }
+#   }UNION{
+#      ?sub_view layout:classAssociated <{{"/".join(args)}}>;
+#                  layout:hasSubView ?view .
+#      OPTIONAL{
+#         ?view layout:reverseAssociatedPredicate ?super_predicate_reverse .
+#      }
+#      OPTIONAL{
+#         ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
+#      }
+#
+#      ?view a layout:FormView ;
+#            layout:positionNumber ?number ;
+#            layout:anchoredTo ?htmlElement;
+#            layout:classAssociated ?sub_class;
+#            layout:hasWidget ?sub_predicateWidget .
+#      ?sub_predicateWidget a ?sub_widget;
+#                  layout:predicateDisplayed ?sub_predicate;
+#                  layout:positionNumber ?sub_number .
    }
  }
-}ORDER BY ?number ?sub_number
+}ORDER BY ?position #?sub_number

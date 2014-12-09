@@ -7,8 +7,8 @@ layoutFormApp.config(['$interpolateProvider', function($interpolateProvider) {
 
 layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', function($scope, $http, $compile){
 	url = window.location;
-	$scope.instance = {};
-	var config = {headers:
+	$scope.widgets = {};
+  var config = {headers:
 		{
       'Accept': 'application/json'
     }
@@ -28,9 +28,11 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
  }
  $scope._createSubWidgetElement = function(htmlElement, subClass){
   var id = $scope.uuid();
-  var div = document.createElement("div");
-  div.setAttribute("class", "panel panel-default");
-  var divH = document.createElement("div");
+  var miniTable = document.createElement("table");
+  dminiTableiv.setAttribute("class", "table table-bordered table-hover");
+  var miniTableH = document.createElement("thead");
+  var miniTableTh = document.createElement("th");
+
   divH.setAttribute("class", "panel-heading");
   divH.innerHTML= subClass;
   var div2 = document.createElement("div");
@@ -53,85 +55,96 @@ $scope.baseNamespace = function(){
 
 };
 
-$scope._getWidget = function(type, predicate, elem, cls){
-  $scope.instance[predicate] = predicate;//"";//{"predicate": predicate}
-  
+$scope._getWidget = function(type, name, predicate, position, available, elem, cls){
+  $scope.widgets[predicate] = {};
   var formElement = document.createElement("tr");
   var legendTd = document.createElement("td");
-  legendTd.innerHTML = predicate;
+  var aux3 = document.createElement("input");
+  aux3.type="text"
+  aux3.setAttribute("id", $scope.uuid());
+  aux3.setAttribute("class","form-control");
+  aux3.setAttribute("ng-model", "widgets[\""+predicate+"\"].name");
+  legendTd.appendChild(aux3);
   formElement.appendChild(legendTd);
 
-  
+
   var availabilityTd = document.createElement("td");
   availabilityTd.setAttribute("class", "text-center");
   var aux = document.createElement('input');
   aux.type="checkbox";
-  var id = $scope.uuid();
-  aux.setAttribute("id", id);
-  aux.setAttribute("checked", "checked");
+  var idAvailable = $scope.uuid();
+  aux.setAttribute("id", idAvailable);
   //aux.setAttribute("class", "form-control");
   aux.setAttribute("data-predicate", predicate);
-  aux.setAttribute("ng-model", "instance[\""+predicate+"\"]");   
+  aux.setAttribute("ng-model", "widgets[\""+predicate+"\"].availability");
   availabilityTd.appendChild(aux);
   formElement.appendChild(availabilityTd);
 
   var positionTd = document.createElement("td");
   var aux2 = document.createElement('input');
   aux2.type="number";
-  var id = $scope.uuid();
-  aux.setAttribute("id", id);
+  var idNumber = $scope.uuid();
+  aux2.setAttribute("id", idNumber);
+  //aux2.setAttribute("value", position);
+  aux2.setAttribute("ng-model", "widgets[\""+predicate+"\"].position");
   positionTd.appendChild(aux2);
   formElement.appendChild(positionTd);
-  
+
   $compile(formElement)($scope);
   var parent = document.getElementById(elem).appendChild(formElement);
+  $scope.widgets[predicate].availability = available;console.log(available)
+  $scope.widgets[predicate].name = name;
+  $scope.widgets[predicate].position = parseInt(position);
+  $scope.widgets[predicate].type = type;
   return;
 
 }
 
 $scope.letMeKnow = function(){
- msg = {uri: $("#uri").val(), triples: []};
- msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
- msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});
- for(var i=0; i<$scope.tripleGenerators.length; i++){
-  var thisGenerator = $scope.tripleGenerators[i];
-  a = thisGenerator.f($("#uri").val(), thisGenerator.predicate, thisGenerator.objId);
-  msg.triples = msg.triples.concat(a);
- }
+  msg = {widgetClass: uriClass, bnodes: []};
+  for(var predicate in $scope.widgets){
+    var obj = $scope.widgets[predicate];
+    bnode = [];
+    bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/predicateDisplayed", o: {value: predicate, type: "uri"}});
+    bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/positionNumber", o: {value: obj.position, type: "number"}});
+    bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/anchoredTo", o: {value: "myForm", type: "text"}});
+    console.log(obj);
+    bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/displayWidget", o: {value: obj.availability, type: "boolean"}});
+    bnode.push({p: "http://www.w3.org/2004/02/skos/core#prefLabel", o: {value: obj.name, type: "text", lang: labelLanguage}});
+    bnode.push({p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: obj.type, type: "uri"}});
+    msg.bnodes.push(bnode);
+  }
  //Sub widgets
- for(var k in $scope.subWidgets){
-  var subwidget = $scope.subWidgets[k];
-  var blankNode = "_:"+subwidget.id;
-  if(subwidget.revlink != null){
-    subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: subwidget.revlink, o: {value: $("#uri").val(), type: "uri"}});
-  }else{
-    subwidget.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: subwidget.fwdlink, o: {value: blankNode, type: "blank"}});
-  }
-  subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: subwidget.cls, type: "uri"}});
-  for(var j=0; j < subwidget.generators.length; j++){
-    var thisGenerator = subwidget.generators[j];
-    //thisGenerator.subject = blankNode;
-    //thisGenerator.objId = $("#"+thisGenerator.objId).val(),
-    a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
-    subwidget.triples = subwidget.triples.concat(a);
-  }
-  if(subwidget.triples.length > 2){
-    msg.triples = msg.triples.concat(subwidget.triples);
-  }
+ // for(var k in $scope.subWidgets){
+ //  var subwidget = $scope.subWidgets[k];
+ //  var blankNode = "_:"+subwidget.id;
+ //  if(subwidget.revlink != null){
+ //    subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: subwidget.revlink, o: {value: $("#uri").val(), type: "uri"}});
+ //  }else{
+ //    subwidget.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: subwidget.fwdlink, o: {value: blankNode, type: "blank"}});
+ //  }
+ //  subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: subwidget.cls, type: "uri"}});
+ //  for(var j=0; j < subwidget.generators.length; j++){
+ //    var thisGenerator = subwidget.generators[j];
+ //    //thisGenerator.subject = blankNode;
+ //    //thisGenerator.objId = $("#"+thisGenerator.objId).val(),
+ //    a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
+ //    subwidget.triples = subwidget.triples.concat(a);
+ //  }
+ //  if(subwidget.triples.length > 2){
+ //    msg.triples = msg.triples.concat(subwidget.triples);
+ //  }
 
- }
-var submitUrl = (instanceData ==  null)?'/create':'/editInstance';
+ // }
+var submitUrl = '/editLayout';
+console.log(msg);
 $http({url: submitUrl,
  data: msg,
  method: "POST",
 
 }).
 success(function(data, status, headers, config) {
-  if(thisUri == null){
-    window.location = msg.uri.replace(baseNamespace, localNamespace);
-  }else{
-    window.location = thisUri.replace(baseNamespace, localNamespace);
-  }
+  location.reload();
 }).
 error(function(data, status, headers, config) {
   alert("Error");
@@ -145,25 +158,33 @@ $http.get(url, config).success(function(data){
     $("#uriLabel").val(instanceData[labelPredicate][0]);
   }
   $scope.formData.forEach(function(datum){
-    if(datum.sub_class.value != null){
-        //it is a subwidget
-        var subClass = datum.sub_class.value;
-        if($scope.subWidgets[subClass] == undefined){
-          var _id = $scope._createSubWidgetElement(datum.htmlElement.value, subClass);
-          if(datum.super_predicate_forward.value != null){
-            $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
+    // if(datum.sub_class.value != null){
+    //     //it is a subwidget
+    //     var subClass = datum.sub_class.value;
+    //     if($scope.subWidgets[subClass] == undefined){
+    //       var _id = $scope._createSubWidgetElement(datum.htmlElement.value, subClass);
+    //       if(datum.super_predicate_forward.value != null){
+    //         $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
 
-          }
-          if(datum.super_predicate_reverse.value != null){
-            $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
-            //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
-          }
+    //       }
+    //       if(datum.super_predicate_reverse.value != null){
+    //         $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
+    //         //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
+    //       }
+    //     }
+    //     $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
+    // }else{
+        var propertyName = datum.predicate.value;
+        if(datum.prefLabel != null && datum.prefLabel != undefined && datum.prefLabel.value != "" && datum.prefLabel.value != null){
+          propertyName = datum.prefLabel.value;
         }
-        $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, $scope.subWidgets[subClass].id, subClass);
-    }else{
-      console.log(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
-        $scope._getWidget(datum.widget.value, datum.predicate.value, datum.htmlElement.value);
-    }
+          console.log(datum.displayed.value)
+        var propertyDisplay = true;
+        if(datum.displayed != null && datum.displayed != undefined && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
+          propertyDisplay = false;
+        }
+        $scope._getWidget(datum.widget.value, propertyName, datum.predicate.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
+    //}
   });
 
 

@@ -22,6 +22,7 @@
 	</div>
 	<script>
 	var thisUri = null;
+	var labelLanguage = "{{flod.labelLanguage}}";
 	var baseNamespace = "{{flod.instanceNamespace}}";
 	var localNamespace = "{{flod.localInstanceNamespace}}";
 	var labelPredicate = "{{flod.labelPredicate}}";

@@ -1,0 +1,31 @@
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
+
+WITH  <{{flod.layoutGraph}}>
+DELETE {
+	?predicateWidget ?p ?o .
+	?view layout:hasWidget ?predicateWidget .
+}WHERE{
+	?view a layout:FormView ;
+            layout:classAssociated <{{data.widgetClass}}>;
+            layout:hasWidget ?predicateWidget .
+	?predicateWidget ?p ?o .
+ };
+
+
+INSERT {
+GRAPH   <{{flod.layoutGraph}}>{
+{%for b in data.bnodes%}
+		?view <http://cognita.io/poderoEditor/layoutOntology/hasWidget> [
+		{%for r in b%}
+		<{{r["p"]}}> {%if r["o"].type == "text"%} """{{r["o"].value}}"""{%if r["o"].lang%}@{{r["o"].lang}}{%endif%} {%elif r["o"].type == "number"%}"""{{r["o"].value}}"""^^xsd:decimal{%elif r["o"].type == "boolean"%}"""{{r["o"].value}}"""^^xsd:boolean{%elif r["o"].type == "blank"%}{{r["o"].value}}{%else %} <{{r["o"].value}}> {%endif%}  {%if not loop.last%} ; {%endif%}
+		{%endfor%}
+		] .
+{%endfor%}
+}
+}WHERE{
+	GRAPH   <{{flod.layoutGraph}}>{
+		?view a layout:FormView ;
+        	layout:classAssociated <{{data.widgetClass}}>.
+    }
+}
