@@ -92,7 +92,7 @@ $scope._getWidget = function(type, name, predicate, position, available, elem, c
 
   $compile(formElement)($scope);
   var parent = document.getElementById(elem).appendChild(formElement);
-  $scope.widgets[predicate].availability = available;console.log(available)
+  $scope.widgets[predicate].availability = available;
   $scope.widgets[predicate].name = name;
   $scope.widgets[predicate].position = parseInt(position);
   $scope.widgets[predicate].type = type;
@@ -108,7 +108,6 @@ $scope.letMeKnow = function(){
     bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/predicateDisplayed", o: {value: predicate, type: "uri"}});
     bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/positionNumber", o: {value: obj.position, type: "number"}});
     bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/anchoredTo", o: {value: "myForm", type: "text"}});
-    console.log(obj);
     bnode.push({p: "http://cognita.io/poderoEditor/layoutOntology/displayWidget", o: {value: obj.availability, type: "boolean"}});
     bnode.push({p: "http://www.w3.org/2004/02/skos/core#prefLabel", o: {value: obj.name, type: "text", lang: labelLanguage}});
     bnode.push({p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: obj.type, type: "uri"}});
@@ -137,7 +136,6 @@ $scope.letMeKnow = function(){
 
  // }
 var submitUrl = '/editLayout';
-console.log(msg);
 $http({url: submitUrl,
  data: msg,
  method: "POST",
@@ -178,9 +176,8 @@ $http.get(url, config).success(function(data){
         if(datum.prefLabel != null && datum.prefLabel != undefined && datum.prefLabel.value != "" && datum.prefLabel.value != null){
           propertyName = datum.prefLabel.value;
         }
-          console.log(datum.displayed.value)
         var propertyDisplay = true;
-        if(datum.displayed != null && datum.displayed != undefined && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
+        if(datum.displayed != null && datum.displayed != undefined && datum.displayed.value != undefined && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
           propertyDisplay = false;
         }
         $scope._getWidget(datum.widget.value, propertyName, datum.predicate.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
