@@ -177,7 +177,7 @@ $http.get(url, config).success(function(data){
           propertyName = datum.prefLabel.value;
         }
         var propertyDisplay = true;
-        if(datum.displayed != null && datum.displayed != undefined && datum.displayed.value != undefined && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
+        if(datum.displayed != null && datum.displayed != undefined && datum.displayed.value != undefined && datum.displayed.value != null && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
           propertyDisplay = false;
         }
         $scope._getWidget(datum.widget.value, propertyName, datum.predicate.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
