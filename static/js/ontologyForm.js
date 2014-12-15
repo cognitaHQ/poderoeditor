@@ -91,7 +91,6 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls){
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 });
   if(instanceData != null && instanceData[predicate] != undefined){
-    console.log(instanceData[predicate][0]);
     $scope.instance[predicate] = instanceData[predicate][0];
     $("#"+id).select2("data", instanceData[predicate][0]) ;
   }
@@ -103,6 +102,7 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls){
     f: function(s, p, o){
       var obj = $("#"+o).select2("data");
       if(obj != "" && obj != undefined && obj != null){
+        console.log(obj);
         return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj.id.mirroredUri, type: "uri"}}];
       }else{
         return [];
@@ -123,8 +123,10 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls){
         }
       }
     }
+    $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[cls].generators.length);
     $scope.subWidgets[cls].generators.push(_generator);
   }else{
+    $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
   }
 }
@@ -182,8 +184,10 @@ $scope._createCalendarWidget = function(predicate, title, htmlElement, cls){
         }
       }
     }
+    $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[cls].generators.length);
     $scope.subWidgets[cls].generators.push(_generator);
   }else{
+    $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
   }
 }
@@ -234,8 +238,10 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls){
         }
       }
     }
+    $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[cls].generators.length);
     $scope.subWidgets[cls].generators.push(_generator);
   }else{
+    $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
   }
 }
