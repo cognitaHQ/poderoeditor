@@ -13,6 +13,6 @@ SELECT DISTINCT ?id ?iLabel WHERE{
 			a ?range .
 		FILTER(regex(?iLabel, "{{args[0]}}", "i"))
 	}
-}LIMIT 10
+}LIMIT 100
 
 {%endif%}

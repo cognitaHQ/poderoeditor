@@ -1,8 +1,9 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
+select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
  graph <{{flod.dataGraph}}>{
    <{{"/".join(args)}}> a ?instanceClass .
  }
@@ -15,6 +16,16 @@ select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?
                      layout:anchoredTo ?htmlElement;
                      layout:predicateDisplayed ?predicate;
                      layout:positionNumber ?number .
+      OPTIONAL{
+         ?predicate skos:prefLabel ?predicatePreferedLabel .
+         FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
+      }
+      OPTIONAL{
+         graph <{{flod.dataOntologyGraph}}>{
+            ?predicate <{{flod.labelPredicate}}> ?predicateLabel .
+            FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
+         }
+      }
    }UNION{
       ?sub_view layout:classAssociated ?instanceClass;
                   layout:hasSubView ?view .
@@ -23,6 +34,16 @@ select distinct ?predicate ?htmlElement ?number ?widget ?sub_widget ?sub_class ?
       }
       OPTIONAL{
          ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
+      }
+      OPTIONAL{
+         graph <{{flod.dataOntologyGraph}}>{
+            ?sub_predicate <{{flod.labelPredicate}}> ?predicateLabel .
+            FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
+         }
+      }
+      OPTIONAL{
+         ?sub_predicate skos:prefLabel ?predicatePreferedLabel .
+          FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
       }
 
       ?view a layout:FormView ;

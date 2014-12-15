@@ -29,3 +29,16 @@ GRAPH   <{{flod.layoutGraph}}>{
         	layout:classAssociated <{{data.widgetClass}}>.
     }
 }
+
+{%for w in data.subwidgets%}
+WITH  <{{flod.layoutGraph}}>
+DELETE {
+	?sub_view layout:positionNumber
+	?view layout:hasWidget ?predicateWidget .
+}WHERE{
+	?view a layout:FormView ;
+            layout:classAssociated <{{data.widgetClass}}>;
+            layout:hasWidget ?predicateWidget .
+	?predicateWidget ?p ?o .
+};
+{%endfor%}

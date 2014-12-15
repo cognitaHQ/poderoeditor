@@ -19,23 +19,63 @@
 		  				:anchoredTo "myForm"
 		  			   ],
 		  			   [ a :HTMLInputTextWidget ;
-		  				:predicateDisplayed foaf:familyName;
+		  				:predicateDisplayed poder:firstLastName;
 		  				:positionNumber 20;
 		  				:anchoredTo "myForm"
 		  			   ],
-		  			   [ a :HTMLInputDateWidget ;
-		  				:predicateDisplayed foaf:birthday;
+		  			   [ a :HTMLInputTextWidget ;
+		  				:predicateDisplayed poder:otherLastName;
 		  				:positionNumber 30;
+		  				:anchoredTo "myForm"
+		  			   ],
+		  			   [ a :HTMLInputDateWidget ;
+		  				:predicateDisplayed foaf:based_near;
+		  				:positionNumber 30;
+		  				:anchoredTo "myForm"
+		  			   ],
+		  			   [ a :HTMLInputTextWidget ;
+		  				:predicateDisplayed poder:alias;
+		  				:positionNumber 35;
+		  				:anchoredTo "myForm"
+		  			   ],
+		  			   [ a :HTMLInputTextWidget ;
+		  				:predicateDisplayed poder:hasUrl;
+		  				:positionNumber 38;
+		  				:anchoredTo "myForm"
+		  			   ],
+		  			   [ a :HTMLInputTextWidget ;
+		  				:predicateDisplayed poder:hasShortBiography;
+		  				:positionNumber 40;
+		  				:anchoredTo "myForm"
+		  			   ],
+		  			   [ a :HTMLInputTextWidget ;
+		  				:predicateDisplayed poder:hasLongBiography;
+		  				:positionNumber 45;
+		  				:anchoredTo "myForm"
+		  			   ],
+		  			   [ a :HTMLResourceWidget ;
+						 :predicateDisplayed poder:hasMainSector ;
+						 :positionNumber 50;
+						 :anchoredTo "myForm"
+					   ] ,
+		  			   [ a :HTMLResourceWidget ;
+						 :predicateDisplayed poder:hasOtherSector ;
+						 :positionNumber 50;
+						 :anchoredTo "myForm"
+					   ] ,
+					   [ a :HTMLInputTextWidget ;
+		  				:predicateDisplayed poder:hasAlternativeMainSector;
+		  				:positionNumber 53;
 		  				:anchoredTo "myForm"
 		  			   ],
 		  			   [ a :HTMLResourceWidget ;
 						 :predicateDisplayed poder:countryOfResidence ;
-						 :positionNumber 40;
+						 :positionNumber 55;
 						 :anchoredTo "myForm"
 					   ] ;
 			:hasSubView [
 						a :FormView ;
-						:positionNumber 35;
+						:positionNumber 100;
 						:anchoredTo "myForm";
 						:classAssociated poder:Marriage ;
 						:reverseAssociatedPredicate poder:hasSpouse;
@@ -54,5 +94,28 @@
 									 :positionNumber 10;
 									 :anchoredTo "myForm"
 								   ]
+						] ,
+						[
+						a :FormView ;
+						:positionNumber 105;
+						:anchoredTo "myForm";
+						:classAssociated poder:StudentEducationalConnection ;
+						:reverseAssociatedPredicate poder:hasStudent;
+						:hasWidget [ a :HTMLInputDateWidget;
+									 :predicateDisplayed poder:connectionStartDate;
+									 :positionNumber 20;
+									 :anchoredTo "myForm"
+								   ],
+								   [ a :HTMLInputDateWidget;
+									 :predicateDisplayed poder:connectionEndDate;
+									 :positionNumber 30;
+									 :anchoredTo "myForm"
+								   ],
+								   [ a :HTMLResourceWidget;
+									 :predicateDisplayed poder:hasAcademicOrganization;
+									 :positionNumber 10;
+									 :anchoredTo "myForm"
+								   ]
 						]
+
 .
