@@ -102,8 +102,7 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls){
     f: function(s, p, o){
       var obj = $("#"+o).select2("data");
       if(obj != "" && obj != undefined && obj != null){
-        console.log(obj);
-        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj.id.mirroredUri, type: "uri"}}];
+        return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: obj.id.value, type: "uri"}}];
       }else{
         return [];
       }
