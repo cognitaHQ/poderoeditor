@@ -49,7 +49,7 @@
 	entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"] = [];{% set previousEntity = row.s.value%}
 	{%endif%}
 	{% if row.p.mirroredUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and row.o.mirroredUri != "/".join(args)%}
-    entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"] = {predicate: "{{row.p.value}}", obj: {id: {value: "{{row.o.mirroredUri}}" } {%if row.oLabel.value%}, iLabel: {value: "{{row.oLabel.value}}" }  {%endif%} }  } ;
+    entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"].push({predicate: "{{row.p.value}}", obj: {id: {value: "{{row.o.mirroredUri}}" } {%if row.oLabel.value%}, iLabel: {value: "{{row.oLabel.value}}" }  {%endif%} }  } );
 	{%endif%}
 	{%endfor%}
 	</script>

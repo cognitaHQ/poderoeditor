@@ -28,7 +28,6 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
  }
 
  $scope._getWidget = function(type, predicate, title, elem, cls, thisValue){
-  console.log(predicate, thisValue);
   if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
       $scope._createTextWidget(predicate, title, elem, null, thisValue);
     }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
@@ -198,7 +197,6 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
   aux.setAttribute("class", "form-control");
   aux.setAttribute("data-predicate", predicate);
   aux.setAttribute("ng-model", "instance[\""+id+"\"]");
-  console.log(predicate, thisValue);
   $scope.instance[id] = (thisValue == null)?"":thisValue.id;
   formElement.appendChild(aux);
   $compile(formElement)($scope);
@@ -308,8 +306,10 @@ $http.get(url, config).success(function(data){
       //Check if the data for this subwidget exist
       if(entitiesData[subClass] != undefined){
         //$.each(entitiesData[subClass], function(i, entity){
-          $.each(entitiesData[subClass], function(j, entity){
-            $.each(entity, function(i, e){
+          // $.each(entitiesData[subClass], function(j, entity){
+          //   console.log("ENTITY",j, entity);
+          //   $.each(entity, function(i, e){
+          //     console.log("SUB", e);
               if($scope.subWidgets[i] == undefined){
                 //_id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
                 var widgetIds = [];
@@ -324,10 +324,10 @@ $http.get(url, config).success(function(data){
               }else{
                 _id = $scope.subWidgets[i].id;
               }
-              var f = entity.obj; 
+              var f = null;//entity.obj; 
               $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, title, $scope.subWidgets[i].id, subClass, f);
-            })
-          });
+          //   })
+          // });
           //$.each(entity, function(j, item){
             //$scope._getWidget(_id, datum.sub_predicate.value, title, $scope.subWidgets[subClass].id, subClass, item);
           //})
