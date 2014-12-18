@@ -28,13 +28,15 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
  }
 
  $scope._getWidget = function(type, predicate, title, elem, cls, thisValue){
-  if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
-      $scope._createTextWidget(predicate, title, elem, null, thisValue);
+    var id = null;
+    if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
+      id = $scope._createTextWidget(predicate, title, elem, null, thisValue);
     }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
-      $scope._createCalendarWidget(predicate, title, elem, cls, thisValue);
+      id = $scope._createCalendarWidget(predicate, title, elem, cls, thisValue);
     }else{
-      $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue);
+      id = $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue);
     }
+    return id;
   }
 
  $scope._createSubWidgetElement = function(htmlElement, subClass){
@@ -136,6 +138,8 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
   }
+
+  return id;
 }
 
 
@@ -183,6 +187,7 @@ $scope._createCalendarWidget = function(predicate, title, htmlElement, cls, this
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
   }
+  return id;
 }
 
 $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValue){
@@ -223,6 +228,7 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
   }
+  return id;
 }
 
 $scope.identifier = "";
@@ -287,78 +293,105 @@ error(function(data, status, headers, config) {
 
 $("#uriLabel").attr("data-predicate", labelPredicate);
 $http.get(url, config).success(function(data){
+  $scope.subwidgets = {};
+  var currentSubwidget = null;
   $scope.formData = data.main;
   if(instanceData != null){
     $("#uriLabel").val(instanceData[labelPredicate][0].id);
   }
-  $scope.formData.forEach(function(datum){
+
+
+  $scope.formData.forEach(function(datum, i){
+    var key = datum.sub_class.value;
+    if(key != null){
+      if($scope.subwidgets[key] == undefined){
+        var title = datum.sub_predicate.value;
+        if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
+          title = datum.predicatePreferedLabel.value;
+        }else if(datum.predicateLabel && datum.predicateLabel.value){
+          title = datum.predicateLabel.value;
+        }
+        $scope.subwidgets[key] = {
+                                  title:title,
+                                  widgets: [],
+                                  visited: false,
+                                  subClass: datum.sub_class.value,
+                                  anchor: datum.htmlElement.value,
+                                  fwdlink: datum.super_predicate_forward.value,
+                                  revlink: datum.super_predicate_reverse.value
+                                };
+      }
+      $scope.subwidgets[key].widgets.push({
+                                            type: datum.sub_widget.value,
+                                            predicate: datum.sub_predicate.value,
+                                            title:title
+                                          });
+    }
+
+  });
+
+
+  $scope.formData.forEach(function(datum, i){
     var title = datum.predicate.value;
     if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
       title = datum.predicatePreferedLabel.value;
     }else if(datum.predicateLabel && datum.predicateLabel.value){
       title = datum.predicateLabel.value;
     }
-    if(datum.sub_class.value != null){
-      //it is a subwidget
-      var subClass = datum.sub_class.value;
-      var _id = null;
-      //Check if data structures for this subwidget exist
-      //Check if the data for this subwidget exist
-      if(entitiesData[subClass] != undefined){
-        //$.each(entitiesData[subClass], function(i, entity){
-          // $.each(entitiesData[subClass], function(j, entity){
-          //   console.log("ENTITY",j, entity);
-          //   $.each(entity, function(i, e){
-          //     console.log("SUB", e);
-              if($scope.subWidgets[i] == undefined){
-                //_id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-                var widgetIds = [];
-                if(datum.super_predicate_forward.value != null){
-                  _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-                  $scope.subWidgets[i] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
-                }
-                if(datum.super_predicate_reverse.value != null){
-                  _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-                  $scope.subWidgets[i] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
-                }
-              }else{
-                _id = $scope.subWidgets[i].id;
-              }
-              var f = null;//entity.obj; 
-              $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, title, $scope.subWidgets[i].id, subClass, f);
-          //   })
-          // });
-          //$.each(entity, function(j, item){
-            //$scope._getWidget(_id, datum.sub_predicate.value, title, $scope.subWidgets[subClass].id, subClass, item);
-          //})
-        //})
-      }else{
-        if($scope.subWidgets[subClass] == undefined){
-          if(datum.super_predicate_forward.value != null){
-            _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-            $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
+    var key = datum.sub_class.value;
+
+    if(key != null){
+      if($scope.subwidgets[key] != null){
+        if(entitiesData[key] != undefined){
+          for(var i in entitiesData[key]){
+            d = entitiesData[key][i];
+            var _id = $scope._createSubWidgetElement($scope.subwidgets[key].anchor, $scope.subwidgets[key].title, $scope.subwidgets[key].subClass, d);
           }
-          if(datum.super_predicate_reverse.value != null){
-            _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-            $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
-          }
+          $scope.subwidgets[key].visited = true;
         }else{
-          _id = $scope.subWidgets[subClass].id;
-        }        
-        $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, title, $scope.subWidgets[subClass].id, subClass);
+          if($scope.subwidgets[key].visited != true){
+            var _id = $scope._createSubWidgetElement($scope.subwidgets[key].anchor, $scope.subwidgets[key].title, $scope.subwidgets[key].subClass);
+            $scope.subwidgets[key].visited = true;
+          }
+        }
+      }else{
+        alert("Error!");
       }
+      // //it is a subwidget
       // var subClass = datum.sub_class.value;
-      // if($scope.subWidgets[subClass] == undefined){
-      //   var _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-      //   if(datum.super_predicate_forward.value != null){
-      //     $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
+      // var _id = null;
+      // //Check if data structures for this subwidget exist
+      // //Check if the data for this subwidget exist
+      //   if($scope.subWidgets[subClass] == undefined){
+      //     if(datum.super_predicate_forward.value != null){
+      //       _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
+      //       $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
+      //     }
+      //     if(datum.super_predicate_reverse.value != null){
+      //       _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
+      //       $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
+      //     }
+      //   }else{
+      //     _id = $scope.subWidgets[subClass].id;
       //   }
-      //   if(datum.super_predicate_reverse.value != null){
-      //     $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
-      //     //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
+      //   if(repeatedSubWidgets[subClass] == undefined){
+      //     repeatedSubWidgets[subClass] = {};
       //   }
-      // }
+      //   var widgetId = $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, title, $scope.subWidgets[subClass].id, subClass);
+      //   repeatedSubWidgets[subClass][widgetId] = datum.sub_predicate.value;
+      // // var subClass = datum.sub_class.value;
+      // // if($scope.subWidgets[subClass] == undefined){
+      // //   var _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
+      // //   if(datum.super_predicate_forward.value != null){
+      // //     $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
+      // //   }
+      // //   if(datum.super_predicate_reverse.value != null){
+      // //     $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
+      // //     //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
+      // //   }
+      // // }
     }else{
+      currentSubwidget = null;
       if(instanceData != null && instanceData[datum.predicate.value] != undefined){
         for(var i=0; i < instanceData[datum.predicate.value].length; i++){
           var thisValue = instanceData[datum.predicate.value][i];
@@ -369,7 +402,7 @@ $http.get(url, config).success(function(data){
       }
     }
   });
-
+  console.log($scope.subwidgets);
 
   var submit = document.createElement("submit");
   submit.type="submit";
