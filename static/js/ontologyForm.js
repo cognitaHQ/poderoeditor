@@ -293,7 +293,7 @@ error(function(data, status, headers, config) {
 
 $("#uriLabel").attr("data-predicate", labelPredicate);
 $http.get(url, config).success(function(data){
-  $scope.subwidgets = {};
+  $scope.subWidgets = {};
   var currentSubwidget = null;
   $scope.formData = data.main;
   if(instanceData != null){
@@ -304,27 +304,32 @@ $http.get(url, config).success(function(data){
   $scope.formData.forEach(function(datum, i){
     var key = datum.sub_class.value;
     if(key != null){
-      if($scope.subwidgets[key] == undefined){
+      if($scope.subWidgets[key] == undefined){
         var title = datum.sub_predicate.value;
         if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
           title = datum.predicatePreferedLabel.value;
         }else if(datum.predicateLabel && datum.predicateLabel.value){
           title = datum.predicateLabel.value;
         }
-        $scope.subwidgets[key] = {
+        $scope.subWidgets[key] = {
                                   title:title,
+                                  id: $scope.uuid(),
                                   widgets: [],
+                                  triples: [],
+                                  generators: [],
                                   visited: false,
-                                  subClass: datum.sub_class.value,
+                                  cls: datum.sub_class.value,
                                   anchor: datum.htmlElement.value,
                                   fwdlink: datum.super_predicate_forward.value,
                                   revlink: datum.super_predicate_reverse.value
                                 };
       }
-      $scope.subwidgets[key].widgets.push({
+      $scope.subWidgets[key].widgets.push({
                                             type: datum.sub_widget.value,
                                             predicate: datum.sub_predicate.value,
-                                            title:title
+                                            cls: datum.sub_class.value,
+                                            title:title,
+                                            triples: []
                                           });
     }
 
@@ -341,17 +346,32 @@ $http.get(url, config).success(function(data){
     var key = datum.sub_class.value;
 
     if(key != null){
-      if($scope.subwidgets[key] != null){
-        if(entitiesData[key] != undefined){
-          for(var i in entitiesData[key]){
-            d = entitiesData[key][i];
-            var _id = $scope._createSubWidgetElement($scope.subwidgets[key].anchor, $scope.subwidgets[key].title, $scope.subwidgets[key].subClass, d);
-          }
-          $scope.subwidgets[key].visited = true;
+      if($scope.subWidgets[key] != null){
+        if(entitiesData[key] != undefined && $scope.subWidgets[key].visited != true){
+          $.each(entitiesData[key], function(j, entity){
+            var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, $scope.subWidgets[key].title, $scope.subWidgets[key].subClass);
+            $scope.subWidgets[key].visited = true;
+            $.each($scope.subWidgets[key].widgets, function(i, item){
+              var values = entity.filter(function(d){return d.predicate == item.predicate}).pop();
+              if(values == undefined){
+                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls);
+              }else{
+                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, values.obj);
+              }
+            });
+          })
+          // for(var i in entitiesData[key]){
+          //   d = entitiesData[key][i];
+          //   var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, $scope.subWidgets[key].title, $scope.subWidgets[key].subClass, d);
+          // }
+          $scope.subWidgets[key].visited = true;
         }else{
-          if($scope.subwidgets[key].visited != true){
-            var _id = $scope._createSubWidgetElement($scope.subwidgets[key].anchor, $scope.subwidgets[key].title, $scope.subwidgets[key].subClass);
-            $scope.subwidgets[key].visited = true;
+          if($scope.subWidgets[key].visited != true){
+            var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, $scope.subWidgets[key].title, $scope.subWidgets[key].subClass);
+            $scope.subWidgets[key].visited = true;
+            $.each($scope.subWidgets[key].widgets, function(i, item){
+              var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls);
+            });
           }
         }
       }else{
@@ -402,7 +422,7 @@ $http.get(url, config).success(function(data){
       }
     }
   });
-  console.log($scope.subwidgets);
+  console.log($scope.subWidgets);
 
   var submit = document.createElement("submit");
   submit.type="submit";
