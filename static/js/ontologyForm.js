@@ -156,7 +156,7 @@ $scope._createCalendarWidget = function(predicate, title, htmlElement, cls, this
   aux.setAttribute("class", "form-control");
   aux.setAttribute("data-predicate", predicate);
   aux.setAttribute("ng-model", "instance[\""+id+"\"]");
-  $scope.instance[id] = (thisValue == null)?"":thisValue.id;
+  $scope.instance[id] = (thisValue == null)?"":thisValue.id.value;
   formElement.appendChild(aux);
   $compile(formElement)($scope);
   var parent = document.getElementById(htmlElement).appendChild(formElement);
