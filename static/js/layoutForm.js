@@ -82,20 +82,26 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     return;
   }
 
-  $scope._getSubWidget = function(predicate, subClass, position, available, elem){
-    var key = predicate+" "+subClass;
+  $scope._getSubWidget = function(name, subClass, position, available, elem){
+    var key = subClass;
     $scope.subwidgets[key] = {};
     var formElement = document.createElement("tr");
     var legendTd = document.createElement("td");
     var auxLabel = document.createElement("p");
     auxLabel.setAttribute("class", "");
-    auxLabel.innerHTML = subClass||predicate;
-    var aux3 = document.createElement("a");
+    auxLabel.innerHTML = subClass;
+    var aux3 = document.createElement("input");
+    aux3.type="text"
     aux3.setAttribute("id", $scope.uuid());
-    aux3.setAttribute("href","/layout/"+predicate);
-    aux3.innerHTML = subClass||predicate;
+    aux3.setAttribute("class","form-control");
+    aux3.setAttribute("ng-model", "subwidgets[\""+key+"\"].name");
     legendTd.appendChild(aux3);
-    legendTd.appendChild(auxLabel);
+    aux3 = document.createElement("a");
+    aux3.setAttribute("id", $scope.uuid());
+    aux3.setAttribute("href","/layout/"+subClass);
+    aux3.innerHTML = subClass;
+    legendTd.appendChild(aux3);
+    //legendTd.appendChild(auxLabel);
     formElement.appendChild(legendTd);
   
   
@@ -115,14 +121,14 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     var idNumber = $scope.uuid();
     aux2.setAttribute("id", idNumber);
     //aux2.setAttribute("value", position);
-    aux2.setAttribute("ng-model", "<sub></sub>widgets[\""+key+"\"].position");
+    aux2.setAttribute("ng-model", "subwidgets[\""+key+"\"].position");
     positionTd.appendChild(aux2);
     formElement.appendChild(positionTd);
-  
     $compile(formElement)($scope);
     var parent = document.getElementById(elem).appendChild(formElement);
     $scope.subwidgets[key].availability = available;
-    $scope.subwidgets[key].name = name;
+    $scope.subwidgets[key].name = name||subClass;
+    $scope.subwidgets[key].widgetClass = subClass;
     $scope.subwidgets[key].position = parseInt(position);
     return;
   
@@ -159,21 +165,27 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
   
   $("#uriLabel").attr("data-predicate", labelPredicate);
   $http.get(url, config).success(function(data){
+    console.log(data);
     $scope.formData = data.main;
     if(instanceData != null){
       $("#uriLabel").val(instanceData[labelPredicate][0]);
     }
     $scope.formData.forEach(function(datum){
       var propertyName = datum.predicate.value;
-      if(datum.prefLabel != null && datum.prefLabel != undefined && datum.prefLabel.value != "" && datum.prefLabel.value != null){
-        propertyName = datum.prefLabel.value;
+      if(datum.predicatePreferedLabel != null && datum.predicatePreferedLabel != undefined && datum.predicatePreferedLabel.value != "" && datum.predicatePreferedLabel.value != null){
+        propertyName = datum.predicatePreferedLabel.value;
+      }else{
+        if(datum.predicateLabel != null && datum.predicateLabel != undefined && datum.predicateLabel.value != "" && datum.predicateLabel.value != null){
+          propertyName = datum.predicateLabel.value;
+        }
       }
       var propertyDisplay = true;
       if(datum.displayed != null && datum.displayed != undefined && datum.displayed.value != undefined && datum.displayed.value != null && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
         propertyDisplay = false;
       }
-      if(datum.sub_class != null && datum.sub_class.value != null){
+      if(datum.sub_class != null && datum.sub_class.value != null && datum.sub_class.value != ""){
         $scope._getSubWidget(propertyName, datum.sub_class.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
+        //predicate, name, subClass, position, available, elem
       }else{
         $scope._getWidget(datum.widget.value, propertyName, datum.predicate.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
       }

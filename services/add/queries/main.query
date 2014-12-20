@@ -2,19 +2,30 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
 
 select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
  graph <{{flod.layoutGraph}}>  {
+
    {
       ?view a layout:FormView ;
             layout:classAssociated <{{"/".join(args)}}>;
             layout:hasWidget ?predicateWidget .
+            
       ?predicateWidget a ?widget;
                      layout:anchoredTo ?htmlElement;
       					layout:predicateDisplayed ?predicate;
       					layout:positionNumber ?number .
+      
+      {
+      ?predicateWidget layout:displayWidget ?a .
+      FILTER(?a = "True" ^^xsd:boolean )
+      }UNION{
+
+         FILTER NOT EXISTS { ?predicateWidget layout:displayWidget ?a .}
+      }
       OPTIONAL{
-         ?predicate skos:prefLabel ?predicatePreferedLabel .
+         ?predicateWidget skos:prefLabel ?predicatePreferedLabel .
          FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
 
       }
@@ -22,8 +33,12 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
          graph <{{flod.dataOntologyGraph}}>{
             ?predicate <{{flod.labelPredicate}}> ?predicateLabel .
             FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
-         }
       }
+
+      }
+      
+      
+
    }UNION{
       ?sub_view layout:classAssociated <{{"/".join(args)}}>;
                   layout:hasSubView ?view .
@@ -49,7 +64,7 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
                   layout:positionNumber ?sub_number .
 
       OPTIONAL{
-         ?sub_predicate skos:prefLabel ?predicatePreferedLabel .
+         ?sub_predicateWidget skos:prefLabel ?predicatePreferedLabel .
           FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
       }
 

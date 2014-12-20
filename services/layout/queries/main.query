@@ -3,7 +3,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-select distinct ?widget ?predicate ?htmlElement ?position ?widget ?displayed ?prefLabel ?sub_class WHERE {
+select distinct ?widget ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?position ?widget ?displayed ?prefLabel ?sub_class ?displayWidget WHERE {
  graph <{{flod.layoutGraph}}>  {
    {
       ?view a layout:FormView ;
@@ -15,30 +15,49 @@ select distinct ?widget ?predicate ?htmlElement ?position ?widget ?displayed ?pr
       					layout:predicateDisplayed ?predicate;
       					layout:positionNumber ?position .
       OPTIONAL{
+         ?predicateWidget skos:prefLabel ?predicatePreferedLabel .
+         FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
+
+      }
+      OPTIONAL{
+         graph <{{flod.dataOntologyGraph}}>{
+            ?predicate <{{flod.labelPredicate}}> ?predicateLabel .
+            FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
+         }
+      }
+      OPTIONAL{
          ?predicateWidget layout:displayWidget ?displayed .
       }
+   }UNION{
+      ?super_view layout:classAssociated <{{"/".join(args)}}>;
+                  layout:hasSubView ?view .
 
       OPTIONAL{
-         ?predicateWidget skos:prefLabel ?prefLabel .
+         ?view skos:prefLabel ?predicatePreferedLabel .
+         FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
+
       }
-   }UNION{
-      ?sub_view layout:classAssociated <{{"/".join(args)}}>;
-                  layout:hasSubView ?view .
+      OPTIONAL{
+         graph <{{flod.dataOntologyGraph}}>{
+            ?sub_class <{{flod.labelPredicate}}> ?predicateLabel .
+            FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
+         }
+      }
+
       OPTIONAL{
          ?view layout:reverseAssociatedPredicate ?super_predicate_reverse .
       }
       OPTIONAL{
          ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
       }
+      OPTIONAL{
+         ?view layout:displayWidget ?displayed .
+      }
 
       ?view a layout:FormView ;
             layout:positionNumber ?position;
             layout:anchoredTo ?htmlElement;
-            layout:classAssociated ?sub_class;
-            layout:hasWidget ?sub_predicateWidget .
-      ?sub_predicateWidget a ?sub_widget;
-                  layout:predicateDisplayed ?sub_predicate;
-                  layout:positionNumber ?sub_number .
+            layout:classAssociated ?sub_class.
    }
  }
 }ORDER BY ?position #?sub_number

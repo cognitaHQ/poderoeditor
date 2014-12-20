@@ -1,3 +1,4 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
 
@@ -28,17 +29,48 @@ GRAPH   <{{flod.layoutGraph}}>{
 		?view a layout:FormView ;
         	layout:classAssociated <{{data.widgetClass}}>.
     }
-}
+};
+
 
 {%for w in data.subwidgets%}
+
+
+# {{w}}
 WITH  <{{flod.layoutGraph}}>
 DELETE {
-	?sub_view layout:positionNumber
-	?view layout:hasWidget ?predicateWidget .
+	?sub_view layout:positionNumber ?position;
+			  layout:displayWidget ?displayed .
+	
+	?sub_view skos:prefLabel ?prefLabel .
+	
 }WHERE{
 	?view a layout:FormView ;
             layout:classAssociated <{{data.widgetClass}}>;
-            layout:hasWidget ?predicateWidget .
-	?predicateWidget ?p ?o .
+            layout:hasSubView ?sub_view .
+	?sub_view layout:positionNumber ?position;
+	 		  layout:classAssociated <{{data.subwidgets[w].widgetClass}}> .
+
+	OPTIONAL{
+		?sub_view layout:displayWidget ?displayed .
+	}
+	OPTIONAL{
+		?sub_view skos:prefLabel ?prefLabel .
+	}
+};
+
+INSERT {
+	GRAPH   <{{flod.layoutGraph}}>{
+		?sub_view layout:positionNumber """{{data.subwidgets[w].position}}"""^^xsd:decimal;
+				layout:classAssociated <{{data.subwidgets[w].widgetClass}}>;
+				skos:prefLabel """{{data.subwidgets[w].name}}"""{%if flod.labelLanguage%}@{{flod.labelLanguage}}{%endif%};
+				layout:displayWidget """{{data.subwidgets[w].availability}}"""^^xsd:boolean .
+	}
+}WHERE{
+	GRAPH   <{{flod.layoutGraph}}>{
+		?view a layout:FormView ;
+        	layout:classAssociated <{{data.widgetClass}}>;
+            layout:hasSubView ?sub_view .
+		?sub_view layout:classAssociated <{{data.subwidgets[w].widgetClass}}>;
+	}
 };
 {%endfor%}
