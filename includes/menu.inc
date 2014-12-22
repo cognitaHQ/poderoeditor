@@ -15,14 +15,19 @@
             {%if "username" not in session %}
             <li><a href="/login">{{flod.languages[flod.labelLanguage].menu_login}}</a></li>
             {%else%}
-            
-            <li><a href="/admin/edituser">{{flod.languages[flod.labelLanguage].menu_profile}}</a></li>
+
             <li><a href="/search">{{flod.languages[flod.labelLanguage].menu_search}}</a></li>
             <li><a href="/addEntity">{{flod.languages[flod.labelLanguage].menu_add_entity}}</a></li>
             <li><a href="/viz">{{flod.languages[flod.labelLanguage].menu_visualization}}</a></li>
-            <li><a href="/layout/http://xmlns.com/foaf/0.1/Person">Layout</a></li>
-            <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
-            <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin/edituser">{{flod.languages[flod.labelLanguage].menu_profile}}</a></li>
+                <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
+                <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
+                <li><a href="/layout/http://xmlns.com/foaf/0.1/Person">Edit layour</a></li>
+              </ul>
+            </li>
             <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
             {%endif%}
           </ul>
