@@ -59,7 +59,8 @@
 				"viz_title": "Visualización",
 				"viz_button": "Visualizar",
 				"edit_submit_button": "Guardar",
-				"edit_delete_button": "Eliminar"
+				"edit_delete_button": "Eliminar",
+				"edit_delete_warning": "Esta acción eliminará TODA la información de esta instancia. ¿Seguir?"
 			},
 			"en":{
 				"home_title": "Welcome to PoderoEditor",
@@ -91,7 +92,8 @@
 				"viz_title": "Visualization",
 				"viz_button": "Visualize",
 				"edit_submit_button": "Save",
-				"edit_delete_button": "Delete"
+				"edit_delete_button": "Delete",
+				"edit_delete_warning": "This action will delete ALL the information of this instance. Continue?"
 			}
 		}
 	},

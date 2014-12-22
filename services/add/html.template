@@ -7,13 +7,14 @@
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
 		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
 		<h2>{{flod.languages[flod.labelLanguage].add_title}} {{"/".join(args)}}</h2>
-			<form action="" method="POST" role="form" id="myForm">
-			<div class="form-group">
+			<form role="form">
+			<div class="form-group"  id="myForm">
 			<label>URI</label>
 				<input type="text" name="uri" id="uri" data-predicate="uri" class="form-control" value="[[baseNamespace()]]" required="required" title="" readonly>
 			<label>{{flod.languages[flod.labelLanguage].add_table_label}}</label>
 			<input type="text" name="uriLabel" id="uriLabel" class="form-control" ng-model="identifier" value=""/> 
 			</div>
+			<button class="btn btn-primary ng-scope" ng-click="letMeKnow()">Guardar</button>
 			</form>
 		</div>
 	</div>
@@ -29,6 +30,7 @@
 	    entitiesData = {};
 	</script>
 	<script src="/js/jquery.min.js"> </script>
+	<script src="/js/bootstrap.min.js"> </script>
 	<script src="/js/select2/select2.js"> </script>
     <script src="/js/bootstrap-datepicker.js"></script>
 	<script src="/js/angular.min.js"> </script>

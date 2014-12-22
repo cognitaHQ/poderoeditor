@@ -239,7 +239,22 @@ $scope.baseNamespace = function(){
   return (instanceData ==  null)?baseNamespace+$scope.urlify($scope.identifier):baseNamespace;
 
 };
+$scope.proceedDelete = function(){
+ msg = {uri: $("#uri").val()};
+ var submitUrl = '/editInstance';
+ $http({url: submitUrl,
+   data: msg,
+   method: "POST",
 
+ }).
+ success(function(data, status, headers, config) {
+  alert("Instance deleted");
+  window.location = "/";  
+}).
+ error(function(data, status, headers, config) {
+  alert("Error");
+});
+};
 
 $scope.letMeKnow = function(){
  msg = {uri: $("#uri").val(), triples: []};
@@ -422,25 +437,24 @@ $http.get(url, config).success(function(data){
       }
     }
   });
-  console.log($scope.subWidgets);
 
-  var submit = document.createElement("submit");
-  submit.type="submit";
-  submit.setAttribute("class", "btn btn-primary");
-  submit.innerHTML = submitLabel;
-  submit.setAttribute("ng-click", "letMeKnow()");
-  document.getElementById("myForm").appendChild(submit);
+  // var submit = document.createElement("submit");
+  // submit.type="submit";
+  // submit.setAttribute("class", "btn btn-primary");
+  // submit.innerHTML = submitLabel;
+  // submit.setAttribute("ng-click", "letMeKnow()");
+  // document.getElementById("myForm").appendChild(submit);
 
-  if(deleteLabel != null){
-    var deleteButton = document.createElement("deleteButton");
-    deleteButton.type="deleteButton";
-    deleteButton.setAttribute("class", "btn btn-danger");
-    deleteButton.innerHTML = deleteLabel || "delete";
-    deleteButton.setAttribute("ng-click", "deleteInstance()");
-    document.getElementById("myForm").appendChild(deleteButton);
-  }
+  // if(deleteLabel != null){
+  //   var deleteButton = document.createElement("deleteButton");
+  //   deleteButton.type="deleteButton";
+  //   deleteButton.setAttribute("class", "btn btn-danger");
+  //   deleteButton.innerHTML = deleteLabel || "delete";
+  //   deleteButton.setAttribute("ng-click", "deleteInstance()");
+  //   document.getElementById("myForm").appendChild(deleteButton);
+  // }
 
-  $compile(submit)($scope);
+//  $compile(submit)($scope);
 
 });
 }])

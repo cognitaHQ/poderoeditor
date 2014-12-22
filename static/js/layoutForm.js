@@ -165,7 +165,6 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
   
   $("#uriLabel").attr("data-predicate", labelPredicate);
   $http.get(url, config).success(function(data){
-    console.log(data);
     $scope.formData = data.main;
     if(instanceData != null){
       $("#uriLabel").val(instanceData[labelPredicate][0]);
@@ -192,23 +191,21 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     });
   
   
-    var submit = document.createElement("submit");
-    submit.type="submit";
-    submit.setAttribute("class", "btn btn-primary");
-    submit.innerHTML = submitLabel;
-    submit.setAttribute("ng-click", "letMeKnow()");
-    document.getElementById("myForm").appendChild(submit);
+    // var submit = document.createElement("button");
+    // //submit.type="submit";
+    // submit.setAttribute("class", "btn btn-primary");
+    // submit.innerHTML = submitLabel;
+    // submit.setAttribute("ng-click", "letMeKnow()");
+    // document.getElementById("myForm").appendChild(submit);
   
-    if(deleteLabel != null){
-      var deleteButton = document.createElement("deleteButton");
-      deleteButton.type="deleteButton";
-      deleteButton.setAttribute("class", "btn btn-danger");
-      deleteButton.innerHTML = deleteLabel || "delete";
-      deleteButton.setAttribute("ng-click", "deleteInstance()");
-      document.getElementById("myForm").appendChild(deleteButton);
-    }
+    // var deleteButton = document.createElement("button");      
+    // deleteButton.setAttribute("class", "btn btn-danger");
+    // deleteButton.innerHTML = deleteLabel;// || "delete";
+    // deleteButton.setAttribute("ng-click", "deleteInstance()");
+    // document.getElementById("myForm").appendChild(deleteButton);
   
-    $compile(submit)($scope);
+    // $compile(deleteButton)($scope);
+    // $compile(submit)($scope);
   
   });
 }]) 
