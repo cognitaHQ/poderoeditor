@@ -25,7 +25,7 @@
                 <li><a href="/admin/edituser">{{flod.languages[flod.labelLanguage].menu_profile}}</a></li>
                 <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
                 <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
-                <li><a href="/layout/http://xmlns.com/foaf/0.1/Person">Edit layour</a></li>
+                <li><a href="/editLayout">Edit layout</a></li>
               </ul>
             </li>
             <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
