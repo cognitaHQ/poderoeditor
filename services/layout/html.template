@@ -6,20 +6,71 @@
 
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
 		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-		<h2>{{flod.languages[flod.labelLanguage].layout_title}} {{"/".join(args)}}</h2>
+			<h2 class="page-header">{{flod.languages[flod.labelLanguage].layout_title}} {{"/".join(args)}}</h2>
+			<h4><button class="btn btn-primary ng-scope" data-toggle="modal" data-target="#addPredicate">Add predicate</button></h4>
+
 			<form action="" method="POST" role="form"> 
-<table class="table table-bordered table-hover">
-	<thead>
-		<tr>
-			<th>Predicate</th><th>Available?</th><th>Position</th>
-		</tr>
-	</thead>
-	<tbody id="myForm">
-	</tbody>
-</table>
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Predicate</th><th>Available?</th><th>Position</th>
+						</tr>
+					</thead>
+					<tbody id="myForm">
+					</tbody>
+				</table>
 			</form>
 		</div>
 	</div>
+	<div class="modal fade" id="addPredicate" data-ng-controller="createPredicateCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Add predicate</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<h4 class="modal-title">Add existing predicate</h4>
+						<label>Predicado</label>
+						<select name="" id="input" class="form-control" required="required" ng-model="selectedPredicate" ng-options="item.name+' ('+item.value+')' for item in availablePredicates">
+							<option value="">Select</option>
+						</select>
+						<label>Posición</label>
+						<input type="number" name="" id="input" class="form-control" ng-model="positionExisting" value="" min="0" max="" step="" required="required" title="">
+						<label>Tipo de Widget</label>
+						<select ng-model="selectedExistingWidget" class="form-control" required="required">
+							<option value="resource">Entidad (Persona, organización)</option>
+							<option value="text">Texto libre</option>
+							<option value="date">Fecha</option>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" ng-click="submitExistingPredicate()">Save changes</button>
+					</div>
+					<div class="division">OR</div>
+					<div>
+						<h4 class="modal-title">Create new predicate</h4>
+						<label>Nuevo predicado</label>
+						<input type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="">
+						<label>Posición</label>
+						<input type="number" name="" id="input" class="form-control" value="" ng-model="positionExisting"  min="0" max="" step="" required="required" title="">
+						<label>Tipo de Widget</label>
+						<select ng-model="selectedNewWidget" class="form-control" required="required">
+							<option value="resource">Entidad (Persona, organización)</option>
+							<option value="text">Texto libre</option>
+							<option value="date">Fecha</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" ng-click="submitNewPredicate()">Save changes</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 	<script>
 	var thisUri = null;
 	var labelLanguage = "{{flod.labelLanguage}}";
@@ -31,8 +82,12 @@
 	var uriClass = "{{"/".join(args)}}";
 	var instanceData = null,
 	    entitiesData = {};
+	var existingPredicates = [{%for row in queries.nopredicates%}
+						{value: "{{row.predicate.value}}", name: "{{row.predicateLabel.value}}", range: "{{row.range.value|default("null")}}"}{%if not loop.last%},{%endif%}
+						{%endfor%}];
 	</script>
 	<script src="/js/jquery.min.js"> </script>
+	<script src="/js/bootstrap.min.js"> </script>
 	<script src="/js/select2/select2.js"> </script>
     <script src="/js/bootstrap-datepicker.js"></script>
 	<script src="/js/angular.min.js"> </script>

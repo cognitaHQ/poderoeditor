@@ -12,6 +12,31 @@
 	<link href="/css/select2.css" rel="stylesheet"/>
 	<link href="/css/datepicker.css" rel="stylesheet" type="text/css">
 	<style>
+		.division {
+			overflow: hidden;
+			text-align: center;
+			font-size:150%;
+			color: #ccc;
+			margin: 20px;
+		}
+		.division:before,
+		.division:after {
+			background-color: #ccc;
+			content: "";
+			display: inline-block;
+			height: 1px;
+			position: relative;
+			vertical-align: middle;
+			width: 40%;
+		}
+		.division:before {
+			right: 0.5em;
+			margin-left: -40%;
+		}
+		.division:after {
+			left: 0.5em;
+			margin-right: -40%;
+		}
 		body {
 			padding-top: 40px;
 			padding-bottom: 40px;

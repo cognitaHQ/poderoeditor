@@ -191,21 +191,90 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     });
   
   
-    // var submit = document.createElement("button");
-    // //submit.type="submit";
-    // submit.setAttribute("class", "btn btn-primary");
-    // submit.innerHTML = submitLabel;
-    // submit.setAttribute("ng-click", "letMeKnow()");
-    // document.getElementById("myForm").appendChild(submit);
+    var submit = document.createElement("button");
+    //submit.type="submit";
+    submit.setAttribute("class", "btn btn-primary");
+    submit.innerHTML = submitLabel;
+    submit.setAttribute("ng-click", "letMeKnow()");
+    document.getElementById("myForm").appendChild(submit);
+    
   
-    // var deleteButton = document.createElement("button");      
-    // deleteButton.setAttribute("class", "btn btn-danger");
-    // deleteButton.innerHTML = deleteLabel;// || "delete";
-    // deleteButton.setAttribute("ng-click", "deleteInstance()");
-    // document.getElementById("myForm").appendChild(deleteButton);
+
+    $compile(submit)($scope);
   
-    // $compile(deleteButton)($scope);
-    // $compile(submit)($scope);
-  
-  });
-}]) 
+  });  
+}]) ;
+layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($scope, $http, $compile){
+    $scope.positionExisting = 10;
+    $scope.positionNew = 10;
+    $scope.predicateNew = "http://example.org/"
+    $scope.availablePredicates = existingPredicates;
+    $scope.selectedPredicate = {name: null, value: null};
+    $scope.selectedExistingWidget = null;
+    $scope.selectedNewWidget = null;
+    $scope.msg = {};
+
+    $scope.getUriForWidget = function(v){
+      if(v ==  null || v == ""){
+        return null;
+      }
+      if(v == "text"){
+        return "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"
+      }
+      if(v == "date"){
+        return "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"
+      }
+      if(v == "resource"){
+        return "http://cognita.io/poderoEditor/layoutOntology/HTMLResourceWidget" 
+      }
+      return "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget";
+    }
+
+    $scope.submitExistingPredicate = function(){
+      $scope.msg = {
+        predicate: $scope.selectedPredicate.value,
+        position: $scope.positionExisting,
+        viewClass: uriClass,
+        widgetClass: $scope.getUriForWidget($scope.selectedExistingWidget)
+      }
+      $scope.submitPredicate();
+    }
+
+    $scope.submitNewPredicate = function(){
+      $scope.msg = {
+        predicate: $scope.predicateNew,
+        position: $scope.positionNew,
+        viewClass: uriClass,
+        widgetClass: $scope.getUriForWidget($scope.selectedNewWidget)
+      }
+      $scope.submitPredicate();
+    }
+
+    $scope.submitPredicate = function(){
+      if(isNaN($scope.msg.position) || $scope.msg.position < 0){
+        alert("Posición debe ser un número mayor a 0");
+        return;
+      }
+      if($scope.msg.predicate == "" || $scope.msg.predicate == null){
+        alert("Debe escoger un predicado");
+        return;
+      }
+      if($scope.msg.widgetClass == "" || $scope.msg.widgetClass == null){
+        alert("Debe escoger un widget");
+        return;
+      }
+       console.log($scope.msg);
+
+      $http({url: "/createPredicate",
+       data: $scope.msg,
+       method: "POST",
+      }).
+      success(function(data, status, headers, config) {
+        alert("Nuevo predicado creado");
+        location.reload();
+      }).
+      error(function(data, status, headers, config) {
+        alert("Error");
+      });
+    }
+  }]);

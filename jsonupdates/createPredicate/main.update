@@ -1,0 +1,18 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://cognita.io/poderoEditor/layoutOntology/>
+
+INSERT{
+#Insert
+  GRAPH <{{flod.layoutGraph}}>{
+  	?view :hasWidget [ a <{{data.widgetClass}}> ;
+          				:predicateDisplayed <{{data.predicate}}>;
+		  				:positionNumber """{{data.position}}"""^^xsd:decimal;
+		  				:anchoredTo "myForm"
+		  			 ] .
+    }
+}WHERE{
+  GRAPH <{{flod.layoutGraph}}>{
+	?view a :FormView ;
+			:classAssociated <{{data.viewClass}}> .
+  }
+}
