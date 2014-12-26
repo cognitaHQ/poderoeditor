@@ -9,7 +9,6 @@ SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
   	}UNION{
   		?c a rdfs:Class .
   	}
-    ?predicate rdfs:domain ?c .
   	OPTIONAL{
   		?c <{{flod.labelPredicate}}> ?cName
       OPTIONAL{
@@ -18,7 +17,7 @@ SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
   	}
   }
   graph <{{flod.layoutGraph}}>  {
-      ?view layout:predicateDisplayed ?predicate .
+      ?view layout:classAssociated ?c .
       OPTIONAL{
         ?parent layout:hasSubView ?view .
       }
