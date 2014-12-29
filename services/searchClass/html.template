@@ -1,0 +1,41 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+
+<div class="container" data-ng-app="searchFormApp">
+<div class="row" data-ng-controller="searchForm">
+<h1>{{flod.languages[flod.labelLanguage].search_search_title}}</h1>
+	<form role="form" ng-submit="goSearch()">
+	
+		<div class="form-group">
+			<input type="text" class="form-control" id="search-text" placeholder="{{flod.languages[flod.labelLanguage].search_input_placeholder}}" ng-model="searchText">
+		</div>
+	
+		
+	
+		<button type="submit" class="btn btn-primary" >{{flod.languages[flod.labelLanguage].search_submit_button}}</button>
+	</form>
+</div>
+<div class="row">
+{%if queries.main%}
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Found</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for row in queries.main%}
+				<tr>
+					<td><a href='{{row.id.value}}'>{{row.iLabel.value}}</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+{%endif%}
+</div>
+<script src="/js/angular.min.js"> </script>
+<script src="/js/searchForm.js"> </script>	
+</div>
+{%endblock%}

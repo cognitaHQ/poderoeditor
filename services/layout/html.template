@@ -9,7 +9,7 @@
 			<h2 class="page-header">{{flod.languages[flod.labelLanguage].layout_title}} {{"/".join(args)}}</h2>
 			<h4><button class="btn btn-primary ng-scope" data-toggle="modal" data-target="#addPredicate">Add predicate</button></h4>
 
-			<form action="" method="POST" role="form"> 
+			<form role="form"> 
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
@@ -53,15 +53,18 @@
 					<div>
 						<h4 class="modal-title">Create new predicate</h4>
 						<label>Nuevo predicado</label>
-						<input type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="">
+						<input type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" ng-model="predicateNew">
 						<label>Posición</label>
 						<input type="number" name="" id="input" class="form-control" value="" ng-model="positionExisting"  min="0" max="" step="" required="required" title="">
 						<label>Tipo de Widget</label>
-						<select ng-model="selectedNewWidget" class="form-control" required="required">
+						<select ng-model="selectedNewWidget" class="form-control" required="required" ng-change="checkIfResource()">
 							<option value="resource">Entidad (Persona, organización)</option>
 							<option value="text">Texto libre</option>
 							<option value="date">Fecha</option>
 						</select>
+						<label>Range</label>
+						<input type="hidden" name="" id="newPredicateDomain" class="form-control" value="">
+
 					</div>
 				</div>
 				<div class="modal-footer">

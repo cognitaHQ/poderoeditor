@@ -149,13 +149,14 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
       msg.bnodes.push(bnode);
     }
     msg.subwidgets = $scope.subwidgets;
-   var submitUrl = '/editLayout';
+   var submitUrl = '/saveLayout';
    $http({url: submitUrl,
      data: msg,
      method: "POST",
   
    }).
    success(function(data, status, headers, config) {
+    alert("Ok");
     location.reload();
   }).
    error(function(data, status, headers, config) {
@@ -207,7 +208,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
 layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($scope, $http, $compile){
     $scope.positionExisting = 10;
     $scope.positionNew = 10;
-    $scope.predicateNew = "http://example.org/"
+    $scope.predicateNew = baseNamespace;
     $scope.availablePredicates = existingPredicates;
     $scope.selectedPredicate = {name: null, value: null};
     $scope.selectedExistingWidget = null;
@@ -230,23 +231,53 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
       return "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget";
     }
 
+    $scope.checkIfResource = function(){
+      if($scope.selectedNewWidget == "resource"){
+          $("#newPredicateDomain").select2("enable", true);
+      }else{
+          $("#newPredicateDomain").select2("enable", false);
+          $("#newPredicateDomain").select2('val', '');
+      }
+    }
+
     $scope.submitExistingPredicate = function(){
       $scope.msg = {
         predicate: $scope.selectedPredicate.value,
         position: $scope.positionExisting,
         viewClass: uriClass,
-        widgetClass: $scope.getUriForWidget($scope.selectedExistingWidget)
+        widgetClass: $scope.getUriForWidget($scope.selectedExistingWidget),
+        domain: null
       }
       $scope.submitPredicate();
     }
 
     $scope.submitNewPredicate = function(){
-      $scope.msg = {
-        predicate: $scope.predicateNew,
-        position: $scope.positionNew,
-        viewClass: uriClass,
-        widgetClass: $scope.getUriForWidget($scope.selectedNewWidget)
+      var range = null;
+      if($scope.selectedNewWidget == "resource"){
+        if(($("#newPredicateDomain").select2("data")) == null){
+          alert("No hay rango definido");
+          return;
+        }
+        range = ($("#newPredicateDomain").select2("data")).id.value;
+        console.log(range);
       }
+      if(range != null){
+        $scope.msg = {
+          predicate: $scope.predicateNew,
+          position: $scope.positionNew,
+          viewClass: uriClass,
+          widgetClass: $scope.getUriForWidget($scope.selectedNewWidget),
+          range: range
+        }
+      }else{
+        $scope.msg = {
+          predicate: $scope.predicateNew,
+          position: $scope.positionNew,
+          viewClass: uriClass,
+          widgetClass: $scope.getUriForWidget($scope.selectedNewWidget)       
+        }
+      }
+      console.log($scope.msg);
       $scope.submitPredicate();
     }
 
@@ -277,4 +308,37 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
         alert("Error");
       });
     }
+
+
+    $("#newPredicateDomain").select2({
+    placeholder: "",
+    minimumInputLength: 1,
+    ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+        url: function(terms){return "/searchClass/"+terms},
+        params: { headers: {"Accept": "application/json"}},
+        dataType: 'json',
+        quietMillis: 450,
+        id: function(item){return item.id.mirroredUri; },
+        results: function (data, page) { return { results: data.main, more: false }; },
+        cache: false
+    },
+    formatResult: function(item) {
+      var markup =
+      '<div class="row">' +
+          '<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">' +
+            '<div class="row">' +
+               '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">' + item.iLabel.value + '</div>' +
+               '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><a href="' + item.id.mirroredUri + '">'+item.id.mirroredUri+'</a></div>' +
+            '</div>'+
+          '</div>';
+
+      return markup;
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function(item) {
+      return item.iLabel.value;
+    },
+    dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  });
+  $("#newPredicateDomain").select2("enable", false);
   }]);

@@ -1,5 +1,7 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX : <http://cognita.io/poderoEditor/layoutOntology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 INSERT{
 #Insert
@@ -9,10 +11,17 @@ INSERT{
 		  				:positionNumber """{{data.position}}"""^^xsd:decimal;
 		  				:anchoredTo "myForm"
 		  			 ] .
-    }
+  }
+  GRAPH <{{flod.layoutOntologyGraph}}>{
+	<{{data.predicate}}> a {%if data.range%}owl:ObjectProperty{%else%}owl:DatatypeProperty{%endif%};
+						 <{{flod.labelPredicate}}> """My new predicte""";
+						 rdfs:domain <{{data.viewClass}}>;
+						 rdfs:range {%if data.range%}<{{data.range}}>
+						 {%elif data.widgetClass == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"%}xsd:DatatypeProperty
+						 {%else%}rdfs:Literal{%endif%} .
+  }
 }WHERE{
   GRAPH <{{flod.layoutGraph}}>{
-	?view a :FormView ;
-			:classAssociated <{{data.viewClass}}> .
-  }
+	?view :classAssociated <{{data.viewClass}}> .
+}
 }

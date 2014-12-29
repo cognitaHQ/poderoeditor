@@ -22,7 +22,5 @@ SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
         ?parent layout:hasSubView ?view .
       }
               FILTER(!BOUND(?parent))
-
-
   }
 }GROUP BY ?c
