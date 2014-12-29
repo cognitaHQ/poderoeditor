@@ -1,0 +1,22 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
+
+SELECT DISTINCT ?c ?className ?classNameLanguage ?classPreferedName ?classParent WHERE{
+  graph <{{flod.dataOntologyGraph}}>  {
+      ?c <{{flod.labelPredicate}}> ?className, ?classNameLanguage;
+         a owl:Class .
+      
+      OPTIONAL{ ?c rdfs:subClassOf ?classParent. }
+      FILTER(LANG(?classNameLanguage) = "{{flod.labelLanguage}}")
+      FILTER(LANG(?className) = "en")
+OPTIONAL{
+  graph <{{flod.layoutGraph}}>{
+    ?view layout:classAssociated ?c;
+          skos:prefLabel ?classPreferedName .
+  }
+}
+  }
+
+}

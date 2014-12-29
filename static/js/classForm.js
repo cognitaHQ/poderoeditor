@@ -18,6 +18,16 @@ clasFormApp.controller('createClassCtrl', ['$scope', '$http', '$compile', functi
     return r;
   }
 
+  $scope.findClassChildren = function(elem){
+    var r = [];
+    $.each(data, function(i, item){
+      if(item.classParent.value == elem){
+        r.push(item)
+      }
+    })
+    return r;
+  }
+
   $scope.findParents = function(elem){
     var r = [];
     $.each(data, function(i, item){
@@ -26,6 +36,27 @@ clasFormApp.controller('createClassCtrl', ['$scope', '$http', '$compile', functi
         r.push(item);
       }
     })
+    return r;
+  }
+
+  $scope.travelTree = function(item){
+    var name = item.c.value;
+    if(item.className.value != null){
+      name = item.className.value;
+    }
+    if(item.classNameLanguage.value != null){
+      name = item.classNameLanguage.value;
+    }
+    if(item.classPreferedName.value != null){
+      name = item.classPreferedName.value;
+    }
+
+    var r = {"text": name, "state" : { "opened" : false}, "children": []};
+    childrenKeys = $scope.findClassChildren(item.c.value);
+    $.each(childrenKeys, function(i, child){
+        var x = $scope.travelTree(child);
+        r["children"].push(x);
+    })    
     return r;
   }
 
@@ -49,8 +80,10 @@ clasFormApp.controller('createClassCtrl', ['$scope', '$http', '$compile', functi
       if(item.classPreferedName.value != null){
         name = item.classPreferedName.value;
       }
-      classes.push({"text": name, "id": item.c.value, children: []})
-    })
+      
+      classes.push($scope.travelTree(item))
+    });
+    console.log(classes);
     // [
     //     { 
     //       "text" : "Root node", 
