@@ -2,6 +2,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
 
 select distinct ?widget ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?position ?widget ?displayed ?prefLabel ?sub_class ?displayWidget WHERE {
  graph <{{flod.layoutGraph}}>  {
@@ -25,10 +26,12 @@ select distinct ?widget ?predicate ?predicateLabel ?predicatePreferedLabel ?html
             FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
          }
       }
-      OPTIONAL{
-         ?predicateWidget layout:displayWidget ?displayed .
+      {
+         ?predicateWidget layout:displayWidget true .
+      }UNION{
+         FILTER NOT EXISTS { ?predicateWidget layout:displayWidget false .}
       }
-   }UNION{
+       }UNION{
       ?super_view layout:classAssociated <{{"/".join(args)}}>;
                   layout:hasSubView ?view .
 

@@ -26,8 +26,8 @@
 		"layoutGraph": "http://cognita.io/poderoEditor/layout",
 		"labelPredicate": "http://www.w3.org/2000/01/rdf-schema#label",
 		"labelLanguage": "es",
-		"instanceNamespace": "http://poderopedia.org/instance/",
-		"vocabNamespace": "http://poderopedia.org/vocab/",
+		"instanceNamespace": "http://poderopedia.com/instance/",
+		"vocabNamespace": "http://poderopedia.com/vocab/",
 		"localInstanceNamespace": "http://localhost:54321/instance/",
 		"languages": {
 			"es":{

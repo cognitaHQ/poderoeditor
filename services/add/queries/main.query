@@ -6,7 +6,6 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
  graph <{{flod.layoutGraph}}>  {
-
    {
       ?view a layout:FormView ;
             layout:classAssociated <{{"/".join(args)}}>;
@@ -18,11 +17,9 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
       					layout:positionNumber ?number .
       
       {
-      ?predicateWidget layout:displayWidget ?a .
-      FILTER(?a = "True" ^^xsd:boolean )
+         ?predicateWidget layout:displayWidget true .
       }UNION{
-
-         FILTER NOT EXISTS { ?predicateWidget layout:displayWidget ?a .}
+         FILTER NOT EXISTS { ?predicateWidget layout:displayWidget false .}
       }
       OPTIONAL{
          ?predicateWidget skos:prefLabel ?predicatePreferedLabel .
@@ -48,12 +45,6 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
       OPTIONAL{
          ?view layout:forwardAssociatedPredicate ?super_predicate_forward .
       }
-      OPTIONAL{
-         graph <{{flod.dataOntologyGraph}}>{
-            ?sub_predicate <{{flod.labelPredicate}}> ?predicateLabel .
-            FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
-         }
-      }
       ?view a layout:FormView ;
             layout:positionNumber ?number ;
             layout:anchoredTo ?htmlElement;
@@ -66,6 +57,12 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
       OPTIONAL{
          ?sub_predicateWidget skos:prefLabel ?predicatePreferedLabel .
           FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
+      }
+      OPTIONAL{
+         graph <{{flod.dataOntologyGraph}}>{
+            ?sub_predicate <{{flod.labelPredicate}}> ?predicateLabel .
+            FILTER(langMatches(lang(?predicateLabel), "{{flod.labelLanguage}}"))
+         }
       }
 
    }

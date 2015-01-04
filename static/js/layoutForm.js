@@ -307,7 +307,7 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
           alert("No hay rango definido");
           return;
         }
-        range = ($("#newPredicateDomain").select2("data")).id.value;
+        range = ($("#newPredicateDomain").select2("data")).id.mirroredUri;
         console.log(range);
       }
       if(range != null){
