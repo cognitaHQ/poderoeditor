@@ -27,14 +27,14 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   });
  }
 
- $scope._getWidget = function(type, predicate, title, elem, cls, thisValue){
+ $scope._getWidget = function(type, predicate, title, elem, cls, thisValue, cloned){
     var id = null;
     if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
       id = $scope._createTextWidget(predicate, title, elem, null, thisValue);
     }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
       id = $scope._createCalendarWidget(predicate, title, elem, cls, thisValue);
     }else{
-      id = $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue, false);
+      id = $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue, cloned);
     }
     return id;
   }
@@ -112,7 +112,7 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
   };
-  if(cloned == false){
+  if(cloned != true){
     var buttonId = $scope.uuid();
     legend.html(title+" <button class='btn btn-default btn-xs clone-btn' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
     $scope.widgetConfigs[buttonId] = {
@@ -138,10 +138,11 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
   //$scope.instance[predicate] = {"predicate": predicate}
   aux.appendTo(formElement);
   $compile(formElement)($scope);
-  if(cloned == false){
+  if(cloned != true){
     var parent = formElement.appendTo("#"+htmlElement);
   }else{
-    formElement.insertAfter("#"+htmlElement);
+    var p = $("#"+htmlElement).parent()
+    formElement.insertAfter(p);
   }
 
   $("#"+id).select2(myConfig);
@@ -472,9 +473,10 @@ $http.get(url, config).success(function(data){
     }else{
       currentSubwidget = null;
       if(instanceData != null && instanceData[datum.predicate.value] != undefined){
+        var _elem = datum.htmlElement.value;
         for(var i=0; i < instanceData[datum.predicate.value].length; i++){
           var thisValue = instanceData[datum.predicate.value][i];
-          $scope._getWidget(datum.widget.value, datum.predicate.value, title, datum.htmlElement.value, null, thisValue);
+          _elem = $scope._getWidget(datum.widget.value, datum.predicate.value, title, _elem, null, thisValue, (i==0)?false:true);
         }
       }else{
         $scope._getWidget(datum.widget.value, datum.predicate.value, title, datum.htmlElement.value);
