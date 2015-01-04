@@ -16,7 +16,7 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
 
   $scope.tripleGenerators = [];
   $scope.subWidgets = {};
-
+  $scope.widgetConfigs = {}
   $scope.urlify = function(u){
    return u.toLowerCase().replace(/[^a-zA-Z0-9\-]+/g, '_');
  }
@@ -34,7 +34,7 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
     }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
       id = $scope._createCalendarWidget(predicate, title, elem, cls, thisValue);
     }else{
-      id = $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue);
+      id = $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue, false);
     }
     return id;
   }
@@ -56,23 +56,32 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   return id;
  }
 
-$scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, thisValue){
-  var formElement = document.createElement("p");
-  var legend = document.createElement("label");
-  legend.innerHTML = title;
-  formElement.appendChild(legend);
-  var aux = document.createElement('input');
+$scope.removeThis = function(event){
+  $(event.target).parent().parent().remove();
+}
+
+$scope.cloneThis = function(event){
+  var x = $(event.target).attr("id");
+  alert("X");
+  if($scope.widgetConfigs[x] != undefined){
+    if($scope.widgetConfigs[x].type == "autocomplete"){
+      var _title = $scope.widgetConfigs[x].title,
+          _predicate =  $scope.widgetConfigs[x].predicate,
+          _elem = $scope.widgetConfigs[x].elem,
+          _cls = $scope.widgetConfigs[x].cls,
+          _value = $scope.widgetConfigs[x].thisValue;
+      $scope._createAutocompleteWidget(_predicate, _title, _elem, _cls, _value, true);
+    }
+    
+
+  }
+}
+
+$scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, thisValue, cloned){
+  var formElement = $("<p>");
+  var legend = $("<label>");
   var id = $scope.uuid();
-  aux.setAttribute("id", id);
-  aux.setAttribute("type", "hidden");
-  aux.setAttribute("class", "form-control input-xlarge");
-  aux.setAttribute("data-predicate", predicate);
-  aux.setAttribute("ng-model", "instance[\""+id+"\"]");
-  //$scope.instance[predicate] = {"predicate": predicate}
-  formElement.appendChild(aux);
-  $compile(formElement)($scope);
-  var parent = document.getElementById(htmlElement).appendChild(formElement);
-  $("#"+id).select2({
+  var myConfig = {
     placeholder: "",
     minimumInputLength: 1,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
@@ -101,7 +110,39 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
     },
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-});
+  };
+  if(cloned == false){
+    var buttonId = $scope.uuid();
+    legend.html(title+" <button class='btn btn-default btn-xs clone-btn' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
+    $scope.widgetConfigs[buttonId] = {
+      type: "autocomplete",
+      predicate: predicate,
+      title: title,
+      cls: cls,
+      elem: id,
+      thisValue: thisValue,
+      config: myConfig
+    };
+  }else{
+    legend.html(title);
+  }
+  legend.appendTo(formElement);
+  var aux = $('<input>');
+  aux.attr("id", id);
+  aux.attr("type", "hidden");
+  aux.attr("class", "form-control input-xlarge");
+  aux.attr("data-predicate", predicate);
+  aux.attr("ng-model", "instance[\""+id+"\"]");
+  //$scope.instance[predicate] = {"predicate": predicate}
+  aux.appendTo(formElement);
+  $compile(formElement)($scope);
+  if(cloned == false){
+    var parent = formElement.appendTo("#"+htmlElement);
+  }else{
+    formElement.insertAfter("#"+htmlElement);
+  }
+
+  $("#"+id).select2(myConfig);
   // if(instanceData != null && instanceData[predicate] != undefined){
   //   $scope.instance[predicate] = instanceData[predicate][0];
   //   $("#"+id).select2("data", instanceData[predicate][0]) ;
@@ -249,7 +290,7 @@ $scope.proceedDelete = function(){
  }).
  success(function(data, status, headers, config) {
   alert("Instance deleted");
-  window.location = "/";  
+  window.location = "/";
 }).
  error(function(data, status, headers, config) {
   alert("Error");
