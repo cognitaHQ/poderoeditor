@@ -54,10 +54,13 @@
 	var instanceData = {},
 	    entitiesData = {};
 	{%for row in queries.uridata%}
+	if(instanceData["{{row.p.mirroredUri}}"] == undefined){
+		instanceData["{{row.p.mirroredUri}}"] = [];
+	}
 	{%if row.oLabel.value %}
-	instanceData["{{row.p.mirroredUri}}"] = [{id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} }];
+	instanceData["{{row.p.mirroredUri}}"].push({id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} });
 	{%else%}
-	instanceData["{{row.p.mirroredUri}}"] = [{id: "{{row.o.value}}"}];
+	instanceData["{{row.p.mirroredUri}}"].push({id: "{{row.o.value}}"});
 	{%endif%}
 	{%endfor%}
 	{% set previousEntity = "" %}{% set previousClass = "" %}
