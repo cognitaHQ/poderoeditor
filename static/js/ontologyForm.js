@@ -319,13 +319,13 @@ $http.get(url, config).success(function(data){
   $scope.formData.forEach(function(datum, i){
     var key = datum.sub_class.value;
     if(key != null){
+      var title = datum.sub_predicate.value;
+      if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
+        title = datum.predicatePreferedLabel.value;
+      }else if(datum.predicateLabel && datum.predicateLabel.value){
+        title = datum.predicateLabel.value;
+      }
       if($scope.subWidgets[key] == undefined){
-        var title = datum.sub_predicate.value;
-        if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
-          title = datum.predicatePreferedLabel.value;
-        }else if(datum.predicateLabel && datum.predicateLabel.value){
-          title = datum.predicateLabel.value;
-        }
         $scope.subWidgets[key] = {
                                   title:title,
                                   id: $scope.uuid(),
@@ -381,10 +381,10 @@ $http.get(url, config).success(function(data){
           $scope.subWidgets[key].visited = true;
         }else{
           if($scope.subWidgets[key].visited != true){
-            var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, $scope.subWidgets[key].title, $scope.subWidgets[key].subClass);
+            var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, title, $scope.subWidgets[key].subClass);
             $scope.subWidgets[key].visited = true;
             $.each($scope.subWidgets[key].widgets, function(i, item){
-              var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls);
+              var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls);
             });
           }
         }
