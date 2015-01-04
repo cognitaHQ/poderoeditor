@@ -1,0 +1,13 @@
+prefix : <http://cognita.io/poderoEditor/layoutOntology/> 
+
+SELECT DISTINCT ?type ?predicate ?position ?anchor WHERE{
+	GRAPH <{{flod.layoutGraph}}>{		
+		?view a :FormView ;
+			:classAssociated <{{"/".join(args)}}> ;
+			:hasWidget [ a ?type ;
+          				:predicateDisplayed ?predicate;
+		  				:positionNumber ?position;
+		  				:anchoredTo ?anchor
+		  			   ]
+	}
+}ORDER BY ?position

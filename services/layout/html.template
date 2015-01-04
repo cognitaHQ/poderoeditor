@@ -3,13 +3,12 @@
 
 <div class="container" data-ng-app="layoutFormApp">
 	<div class="row" data-ng-controller="layoutFormList">
-
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
 		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
 			<h2 class="page-header">{{flod.languages[flod.labelLanguage].layout_title}} {{"/".join(args)}}</h2>
-			<h4><button class="btn btn-primary ng-scope" data-toggle="modal" data-target="#addPredicate">Add predicate</button></h4>
+			<h4><button class="btn btn-primary ng-scope" data-toggle="modal" data-target="#addPredicate">Add predicate</button> <button class="btn btn-primary ng-scope" data-toggle="modal" data-target="#addSubwidget">Add subwidget</button></h4>
 
-			<form role="form"> 
+			<form role="form">
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
@@ -74,6 +73,34 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+<div class="modal fade" id="addSubwidget" data-ng-controller="createPredicateCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Add predicate</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<h4 class="modal-title">Add existing widget</h4>
+						<label>Widget</label>
+						<select name="" id="input" class="form-control" required="required" ng-model="selectedSubwidget" ng-options="item.name+' '+item.label for item in availableSubwidgets" ng-change="reloadPredicatesForSubwidget()">
+							<option value="">Select</option>
+						</select>
+						<label>Tipo de Widget</label>
+						<select ng-model="selectedSubwidgetPredicate" ng-options="item.label+' ('+item.uri+')' for item in availableSubwidgetPredicate" class="form-control" required="required">
+						</select>
+						<label>Posición</label>
+						<input type="number" name="" id="input" class="form-control" ng-model="positionExisting" value="" min="0" max="" step="" required="required" title="">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" ng-click="submitNewSubwidget()">Save changes</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 	<script>
 	var thisUri = null;
 	var labelLanguage = "{{flod.labelLanguage}}";
@@ -87,6 +114,9 @@
 	    entitiesData = {};
 	var existingPredicates = [{%for row in queries.nopredicates%}
 						{value: "{{row.predicate.value}}", name: "{{row.predicateLabel.value}}", range: "{{row.range.value|default("null")}}"}{%if not loop.last%},{%endif%}
+						{%endfor%}];
+	var existingWidgets = [{%for row in queries.widgets%}
+						{value: "{{row.cls.mirroredUri}}", name: "{%if row.viewPreferedLabelLabel%}{{row.viewPreferedLabelLabel.value}}{%endif%}", label: "{{row.viewLabel.value|default("null")}}"}{%if not loop.last%},{%endif%}
 						{%endfor%}];
 	</script>
 	<script src="/js/jquery.min.js"> </script>

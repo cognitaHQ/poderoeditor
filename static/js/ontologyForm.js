@@ -359,7 +359,6 @@ $http.get(url, config).success(function(data){
       title = datum.predicateLabel.value;
     }
     var key = datum.sub_class.value;
-
     if(key != null){
       if($scope.subWidgets[key] != null){
         if(entitiesData[key] != undefined && $scope.subWidgets[key].visited != true){

@@ -1,0 +1,38 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://cognita.io/poderoEditor/layoutOntology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+INSERT DATA{
+	#Insert
+	GRAPH <{{flod.dataOntologyGraph}}>{
+		<{{data.uri}}> a owl:Class;
+		{%if data.parent%}rdfs:subClassOf <{{data.parent}}>;{%endif%}
+		<{{flod.labelPredicate}}> """{{data.name}}"""@{{flod.labelLanguage}}, """{{data.name}}""" .
+	}
+	GRAPH <{{flod.layoutGraph}}> {
+		{%for t in data.triples%}
+	  #triple
+		{%if t["s"].type == "blank" %} {{t["s"].value}}
+		{%else %}<{{t["s"].value}}>{%endif%}
+		 <{{t["p"]}}> 
+		 {%if t["o"].type == "text" %} """{{t["o"].value}}""" 
+		 {%elif t["o"].type == "number" %}"""{{t["o"].value}}"""^^xsd:decimal
+		 {%elif t["o"].type == "boolean" %}"""{{t["o"].value}}"""^^xsd:boolean
+		 {%elif t["o"].type == "blank" %}{{t["o"].value}}{%else %} <{{t["o"].value}}> 
+		 {%endif%}.
+  		{%endfor%}
+	}
+};
+
+INSERT {
+	GRAPH <{{flod.layoutGraph}}> {
+		?view :hasSubView ?subview .
+	}
+}WHERE{
+	GRAPH <{{flod.layoutGraph}}> {
+		?view :classAssociated <{{data.uri}}> .
+		?x :hasSubView ?subview;
+		   :classAssociated <{{data.parent}}> .
+	}
+}

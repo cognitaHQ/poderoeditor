@@ -1,0 +1,5 @@
+[
+{%for row in queries.main%}
+	{ "uri": "{{row.p.mirroredUri}}", "label": "{{row.label.value}}" } {%if not loop.last%},{%endif%}
+{%endfor%}
+]

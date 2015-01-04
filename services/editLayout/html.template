@@ -30,15 +30,19 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Modal title</h4>
+				<h4 class="modal-title">Crear nueva clase</h4>
 			</div>
 			<div class="modal-body">
+				<label>Nombre de la nueva clase</label>
+				<input type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" ng-model="newClassName" ng-change="changeName()">
+				<input type="text" name="uri" id="uri" data-predicate="uri" class="form-control" value="" ng-model="newClassUri" required="required" title="" readonly="">
+				<label>Subclase de</label>
 				<div id="classTree"></div>
 
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-primary" ng-click="createClass()">Crear nueva clase</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
@@ -47,7 +51,8 @@
 <script src="/js/jstree.min.js"> </script>
 
 <script>
-data = {{queries.classTree|json}};
+	var baseNamespace = "{{flod.vocabNamespace}}";
+	var data = {{queries.classTree|json}};
 </script>
 <script src="/js/angular.min.js"> </script>
 <script src="/js/classForm.js"></script>

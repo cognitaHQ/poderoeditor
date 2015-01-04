@@ -12,7 +12,7 @@ INSERT{
 		  				:anchoredTo "myForm"
 		  			 ] .
   }
-  GRAPH <{{flod.layoutOntologyGraph}}>{
+  GRAPH <{{flod.dataOntologyGraph}}>{
 	<{{data.predicate}}> a {%if data.range%}owl:ObjectProperty{%else%}owl:DatatypeProperty{%endif%};
 						 <{{flod.labelPredicate}}> """My new predicte""";
 						 rdfs:domain <{{data.viewClass}}>;

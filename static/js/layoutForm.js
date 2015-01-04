@@ -171,7 +171,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
       $("#uriLabel").val(instanceData[labelPredicate][0]);
     }
     $scope.formData.forEach(function(datum){
-      var propertyName = datum.predicate.value;
+      var propertyName = datum.predicate.mirroredUri;
       if(datum.predicatePreferedLabel != null && datum.predicatePreferedLabel != undefined && datum.predicatePreferedLabel.value != "" && datum.predicatePreferedLabel.value != null){
         propertyName = datum.predicatePreferedLabel.value;
       }else{
@@ -184,10 +184,10 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
         propertyDisplay = false;
       }
       if(datum.sub_class != null && datum.sub_class.value != null && datum.sub_class.value != ""){
-        $scope._getSubWidget(propertyName, datum.sub_class.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
+        $scope._getSubWidget(propertyName, datum.sub_class.mirroredUri, datum.position.value, propertyDisplay, datum.htmlElement.value);
         //predicate, name, subClass, position, available, elem
       }else{
-        $scope._getWidget(datum.widget.value, propertyName, datum.predicate.value, datum.position.value, propertyDisplay, datum.htmlElement.value);
+        $scope._getWidget(datum.widget.mirroredUri, propertyName, datum.predicate.mirroredUri, datum.position.value, propertyDisplay, datum.htmlElement.value);
       }
     });
   
@@ -210,10 +210,59 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
     $scope.positionNew = 10;
     $scope.predicateNew = baseNamespace;
     $scope.availablePredicates = existingPredicates;
+    $scope.availableSubwidgets = existingWidgets;
     $scope.selectedPredicate = {name: null, value: null};
     $scope.selectedExistingWidget = null;
     $scope.selectedNewWidget = null;
     $scope.msg = {};
+    $scope.availableSubwidgetPredicate = [];
+    $scope.selectedSubwidgetPredicate = null;
+    $scope.selectedSubwidget = null;
+
+    $scope.reloadPredicatesForSubwidget = function(){
+      console.log($scope.selectedSubwidget);
+      $http.get("/getPredicates",{
+        params:{
+          domain: $scope.selectedSubwidget["value"],
+          range: uriClass
+        }
+      }).
+      success(function(data, status, headers, config) {        
+        $scope.availableSubwidgetPredicate = data;
+      }).
+      error(function(){
+        alert("Error");
+      });
+    }
+
+    $scope.submitNewSubwidget = function(){
+      if($scope.selectedSubwidget == null){
+        alert("Debe seleccionar un widget");
+        return;
+      }
+      if($scope.selectedSubwidgetPredicate == null){
+        alert("Debe seleccionar una propiedad");
+        return;
+      }
+      var msg = {
+        "subWigetClass": $scope.selectedSubwidget["value"],
+        "position": $scope.positionExisting,
+        "widgetClass": uriClass,
+        "predicate": $scope.selectedSubwidgetPredicate["uri"]
+      }
+      console.log(msg);
+      $http({url: "/createSubwidget",
+       data: msg,
+       method: "POST",
+      }).
+      success(function(){
+        alert("Subwidget agregado");
+        window.reload();
+      }).
+      error(function(){
+        alert("Error");
+      })
+    }
 
     $scope.getUriForWidget = function(v){
       if(v ==  null || v == ""){

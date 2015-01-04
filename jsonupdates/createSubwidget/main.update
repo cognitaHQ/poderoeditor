@@ -1,0 +1,20 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://cognita.io/poderoEditor/layoutOntology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+INSERT{
+#Insert
+  GRAPH <{{flod.layoutGraph}}>{
+  	?view :hasSubView ?subwidget .
+ 	?subwidget :positionNumber {{data.position}} ;
+ 			   :anchoredTo "myForm" ;
+			   :reverseAssociatedPredicate <{{data.predicate}}> .
+
+  }
+}WHERE{
+  GRAPH <{{flod.layoutGraph}}>{
+	?view :classAssociated <{{data.widgetClass}}> .
+	?subwidget :classAssociated <{{data.subWigetClass}}> .
+  }
+}

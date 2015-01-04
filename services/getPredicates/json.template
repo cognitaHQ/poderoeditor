@@ -1,0 +1,5 @@
+[
+{%for row in queries.main%}
+	{ "uri": "{{row.p}}", "label": "{{row.label.value}}" } {%if not loop.last%},{%endif%}
+{%endfor%}
+]

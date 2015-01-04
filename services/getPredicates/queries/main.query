@@ -1,0 +1,14 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX : <http://cognita.io/poderoEditor/layoutOntology/> 
+
+SELECT DISTINCT ?p ?label WHERE{
+	GRAPH <{{flod.dataOntologyGraph}}>{		
+		?p rdfs:domain ?domainCls;
+		   rdfs:range ?rangeCls .
+		OPTIONAL{
+			?p <{{flod.labelPredicate}}> ?label .
+		}
+		<{{params["domain"]}}> rdfs:subClassOf* ?domainCls .
+		<{{params["range"]}}> rdfs:subClassOf* ?rangeCls .
+	}
+}
