@@ -57,12 +57,13 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
  }
 
 $scope.removeThis = function(event){
+  var k = parseInt($(event.target).attr("data-generator-key"));
+  $scope.tripleGenerators[k] = null;
   $(event.target).parent().parent().remove();
 }
 
 $scope.cloneThis = function(event){
   var x = $(event.target).attr("id");
-  alert("X");
   if($scope.widgetConfigs[x] != undefined){
     if($scope.widgetConfigs[x].type == "autocomplete"){
       var _title = $scope.widgetConfigs[x].title,
@@ -72,7 +73,7 @@ $scope.cloneThis = function(event){
           _value = $scope.widgetConfigs[x].thisValue;
       $scope._createAutocompleteWidget(_predicate, _title, _elem, _cls, _value, true);
     }
-    
+
 
   }
 }
@@ -124,7 +125,8 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
       config: myConfig
     };
   }else{
-    legend.html(title);
+    var generatorIndex = $scope.tripleGenerators.length;
+    legend.html(title+" <button class='btn btn-danger btn-xs remove-btn' data-generator-key='"+generatorIndex+"' ng-click='removeThis($event)'>X</button>");
   }
   legend.appendTo(formElement);
   var aux = $('<input>');
@@ -303,8 +305,10 @@ $scope.letMeKnow = function(){
  msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});
  for(var i=0; i<$scope.tripleGenerators.length; i++){
   var thisGenerator = $scope.tripleGenerators[i];
-  a = thisGenerator.f($("#uri").val(), thisGenerator.predicate, thisGenerator.objId);
-  msg.triples = msg.triples.concat(a);
+  if(thisGenerator != null){
+    a = thisGenerator.f($("#uri").val(), thisGenerator.predicate, thisGenerator.objId);
+    msg.triples = msg.triples.concat(a);
+  }
  }
  //Sub widgets
  for(var k in $scope.subWidgets){
