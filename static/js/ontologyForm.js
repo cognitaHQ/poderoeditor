@@ -16,7 +16,9 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
 
   $scope.tripleGenerators = [];
   $scope.subWidgets = {};
-  $scope.widgetConfigs = {}
+  $scope.widgetConfigs = {};
+  $scope.subWidgetsWidget = {};
+
   $scope.urlify = function(u){
    return u.toLowerCase().replace(/[^a-zA-Z0-9\-]+/g, '_');
  }
@@ -30,9 +32,9 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
  $scope._getWidget = function(type, predicate, title, elem, cls, thisValue, cloned){
     var id = null;
     if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget"){
-      id = $scope._createTextWidget(predicate, title, elem, null, thisValue);
+      id = $scope._createTextWidget(predicate, title, elem, cls, thisValue, cloned);
     }else if(type == "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"){
-      id = $scope._createCalendarWidget(predicate, title, elem, cls, thisValue);
+      id = $scope._createCalendarWidget(predicate, title, elem, cls, thisValue, cloned);
     }else{
       id = $scope._createAutocompleteWidget(predicate, title, elem, cls, thisValue, cloned);
     }
@@ -40,19 +42,22 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   }
 
  $scope._createSubWidgetElement = function(htmlElement, subClass){
-  var id = $scope.uuid();
-  var div = document.createElement("div");
-  div.setAttribute("class", "panel panel-default");
-  var divH = document.createElement("div");
-  divH.setAttribute("class", "panel-heading");
-  divH.innerHTML= subClass;
-  var div2 = document.createElement("div");
-  div2.setAttribute("class", "panel-body");
-  div2.setAttribute("id", id);
-  div.appendChild(divH);
-  div.appendChild(div2);
+  var identifier = $scope.uuid(),
+      buttonId = $scope.uuid();
+  var div = $("<div>");
+  id = $scope.uuid();
+  div.attr("id", id);
+  div.attr("class", "panel panel-default");
+  var divH = $("<div>");
+  divH.attr("class", "panel-heading");
+  divH.html(subClass+" <button class='btn btn-default btn-xs clone-btn' data-subclass='"+subClass+"' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
+  var div2 = $("<div>");
+  div2.attr("class", "panel-body");
+  div2.attr("id", id);
+  divH.appendTo(div);
+  div2.appendTo(div);
   $compile(div)($scope);
-  document.getElementById(htmlElement).appendChild(div);
+  div.appendTo($("#"+htmlElement));
   return id;
  }
 
@@ -65,22 +70,36 @@ $scope.removeThis = function(event){
 $scope.cloneThis = function(event){
   var x = $(event.target).attr("id");
   if($scope.widgetConfigs[x] != undefined){
-    if($scope.widgetConfigs[x].type == "autocomplete"){
       var _title = $scope.widgetConfigs[x].title,
           _predicate =  $scope.widgetConfigs[x].predicate,
           _elem = $scope.widgetConfigs[x].elem,
           _cls = $scope.widgetConfigs[x].cls,
           _value = $scope.widgetConfigs[x].thisValue;
+    if($scope.widgetConfigs[x].type == "autocomplete"){
       $scope._createAutocompleteWidget(_predicate, _title, _elem, _cls, _value, true);
     }
-
-
+    if($scope.widgetConfigs[x].type == "text"){
+      $scope._createTextWidget(_predicate, _title, _elem, _cls, _value, true);
+    }
+  }
+  x = $(event.target).parent().parent().attr("id");
+  if($scope.subWidgetsWidget[x] != undefined){
+    alert("subwidget!");
+    var cls = $(event.target).attr("data-subclass");
+    console.log($scope.subWidgetsWidget[x]);
+    var _id = $scope._createSubWidgetElement("myForm", cls);
+    $.each($scope.subWidgetsWidget[x], function(i, item){
+      $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+    })
+  }else{
+    console.log(x, $scope.subWidgetsWidget);
   }
 }
 
 $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, thisValue, cloned){
   var formElement = $("<p>");
   var legend = $("<label>");
+  legend.html(title);
   var id = $scope.uuid();
   var myConfig = {
     placeholder: "",
@@ -112,7 +131,7 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
   };
-  if(cloned != true){
+  if(cloned == false){
     var buttonId = $scope.uuid();
     legend.html(title+" <button class='btn btn-default btn-xs clone-btn' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
     $scope.widgetConfigs[buttonId] = {
@@ -124,7 +143,8 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
       thisValue: thisValue,
       config: myConfig
     };
-  }else{
+  }
+  if(cloned == true){
     var generatorIndex = $scope.tripleGenerators.length;
     legend.html(title+" <button class='btn btn-danger btn-xs remove-btn' data-generator-key='"+generatorIndex+"' ng-click='removeThis($event)'>X</button>");
   }
@@ -188,22 +208,38 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
 
 
 
-$scope._createCalendarWidget = function(predicate, title, htmlElement, cls, thisValue){
-  var formElement = document.createElement("p");
-  var legend = document.createElement("label");
-  legend.innerHTML = title;
-  formElement.appendChild(legend);
-  var aux = document.createElement('input');
-  aux.type="text";
+$scope._createCalendarWidget = function(predicate, title, htmlElement, cls, thisValue, cloned){
+  var formElement = $("<p>");
+  var legend = $("<label>");
   var id = $scope.uuid();
-  aux.setAttribute("id", id);
-  aux.setAttribute("class", "form-control");
-  aux.setAttribute("data-predicate", predicate);
-  aux.setAttribute("ng-model", "instance[\""+id+"\"]");
+  legend.html(title);
+  if(cloned == false){
+    var buttonId = $scope.uuid();
+    legend.html(title+" <button class='btn btn-default btn-xs clone-btn' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
+    $scope.widgetConfigs[buttonId] = {
+      type: "autocomplete",
+      predicate: predicate,
+      title: title,
+      cls: cls,
+      elem: id,
+      thisValue: thisValue
+    };
+  }
+  if(cloned == true){
+    var generatorIndex = $scope.tripleGenerators.length;
+    legend.html(title+" <button class='btn btn-danger btn-xs remove-btn' data-generator-key='"+generatorIndex+"' ng-click='removeThis($event)'>X</button>");
+  }
+  legend.appendTo(formElement);
+  var aux = $('<input>');
+  aux.attr("type", "text");
+  aux.attr("id", id);
+  aux.attr("class", "form-control");
+  aux.attr("data-predicate", predicate);
+  aux.attr("ng-model", "instance[\""+id+"\"]");
   $scope.instance[id] = (thisValue == null)?"":thisValue.id.value;
-  formElement.appendChild(aux);
+  aux.appendTo(formElement);
   $compile(formElement)($scope);
-  var parent = document.getElementById(htmlElement).appendChild(formElement);
+  formElement.appendTo($("#"+htmlElement));
   $("#"+id).datepicker({format: "yyyy-mm-dd", autoclose: true});
   if(instanceData != null && instanceData[id] != undefined){
     //$scope.instance[id] = instanceData[id][0];
@@ -234,22 +270,42 @@ $scope._createCalendarWidget = function(predicate, title, htmlElement, cls, this
   return id;
 }
 
-$scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValue){
-  var formElement = document.createElement("p");
-  var legend = document.createElement("label");
-  legend.innerHTML = title;
-  formElement.appendChild(legend);
-  var aux = document.createElement('input');
-  aux.type="text";
+$scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValue, cloned){
+  var formElement = $("<p>");
+  var legend = $("<label>");
   var id = $scope.uuid();
-  aux.setAttribute("id", id);
-  aux.setAttribute("class", "form-control");
-  aux.setAttribute("data-predicate", predicate);
-  aux.setAttribute("ng-model", "instance[\""+id+"\"]");
+  legend.html(title);
+  if(cloned != true){
+    var buttonId = $scope.uuid();
+    legend.html(title+" <button class='btn btn-default btn-xs clone-btn' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
+    $scope.widgetConfigs[buttonId] = {
+      type: "text",
+      predicate: predicate,
+      title: title,
+      cls: cls,
+      elem: id,
+      thisValue: thisValue
+    };
+  }else{
+    var generatorIndex = $scope.tripleGenerators.length;
+    legend.html(title+" <button class='btn btn-danger btn-xs remove-btn' data-generator-key='"+generatorIndex+"' ng-click='removeThis($event)'>X</button>");
+  }
+  legend.appendTo(formElement);
+  var aux = $('<input>');
+  aux.attr("type", "text");
+  aux.attr("id", id);
+  aux.attr("class", "form-control");
+  aux.attr("data-predicate", predicate);
+  aux.attr("ng-model", "instance[\""+id+"\"]");
   $scope.instance[id] = (thisValue == null)?"":thisValue.id;
-  formElement.appendChild(aux);
+  aux.appendTo(formElement);
   $compile(formElement)($scope);
-  var parent = document.getElementById(htmlElement).appendChild(formElement);
+  if(cloned != true){
+    var parent = formElement.appendTo("#"+htmlElement);
+  }else{
+    var p = $("#"+htmlElement).parent();
+    formElement.insertAfter(p);
+  }
 
   var _generator = {
     predicate: predicate,
@@ -334,7 +390,6 @@ $scope.letMeKnow = function(){
 
  }
 var submitUrl = (instanceData ==  null)?'/create':'/editInstance';
-console.log(msg);
 $http({url: submitUrl,
  data: msg,
  method: "POST",
@@ -428,9 +483,20 @@ $http.get(url, config).success(function(data){
         }else{
           if($scope.subWidgets[key].visited != true){
             var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, title, $scope.subWidgets[key].subClass);
+            
             $scope.subWidgets[key].visited = true;
+            if($scope.subWidgetsWidget[_id] == undefined){
+              $scope.subWidgetsWidget[_id] = [];
+            }
             $.each($scope.subWidgets[key].widgets, function(i, item){
-              var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls);
+              var aux = {
+                type: item.type,
+                predicate: item.predicate,
+                title: item.title,
+                cls: item.cls
+              }
+              $scope.subWidgetsWidget[_id].push(aux);
+              var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
             });
           }
         }
@@ -479,7 +545,7 @@ $http.get(url, config).success(function(data){
           _elem = $scope._getWidget(datum.widget.value, datum.predicate.value, title, _elem, null, thisValue, (i==0)?false:true);
         }
       }else{
-        $scope._getWidget(datum.widget.value, datum.predicate.value, title, datum.htmlElement.value);
+        $scope._getWidget(datum.widget.value, datum.predicate.value, title, datum.htmlElement.value, null, null, false);
       }
     }
   });
