@@ -52,7 +52,8 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   divH.attr("class", "panel-heading");
   divH.html(subClass+" <button class='btn btn-default btn-xs clone-btn' data-subclass='"+subClass+"' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
   var div2 = $("<div>");
-  div2.attr("class", "panel-body");
+  div2.attr("class", "panel-body subwidget");
+  id = $scope.uuid();
   div2.attr("id", id);
   divH.appendTo(div);
   div2.appendTo(div);

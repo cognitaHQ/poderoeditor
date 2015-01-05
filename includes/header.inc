@@ -13,6 +13,9 @@
 	<link href="/css/style.min.css" rel="stylesheet"/>
 	<link href="/css/datepicker.css" rel="stylesheet" type="text/css">
 	<style>
+		.subwidget{
+			padding: 10px;
+		}
 		.division {
 			overflow: hidden;
 			text-align: center;
