@@ -16,8 +16,9 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
 
   $scope.tripleGenerators = [];
   $scope.subWidgets = {};
+  $scope.visitedSubWidgets = {};
   $scope.widgetConfigs = {};
-  $scope.subWidgetsWidget = {};
+  $scope.subWidgetModels = {};
 
   $scope.urlify = function(u){
    return u.toLowerCase().replace(/[^a-zA-Z0-9\-]+/g, '_');
@@ -41,16 +42,21 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
     return id;
   }
 
- $scope._createSubWidgetElement = function(htmlElement, subClass){
+ $scope._createSubWidgetElement = function(htmlElement, title, subClass, cloned){
   var identifier = $scope.uuid(),
       buttonId = $scope.uuid();
   var div = $("<div>");
   id = $scope.uuid();
   div.attr("id", id);
   div.attr("class", "panel panel-default");
+  div.attr("data-subclass", subClass);
   var divH = $("<div>");
   divH.attr("class", "panel-heading");
-  divH.html(subClass+" <button class='btn btn-default btn-xs clone-btn' data-subclass='"+subClass+"' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
+  if(cloned == true){
+    divH.html(title+" <button class='btn btn-danger btn-xs remove-btn' data-subclass='"+subClass+"' id='"+buttonId+"' ng-click='removeThis($event)'>X</button>");
+  }else{
+    divH.html(title+" <button class='btn btn-default btn-xs clone-btn' data-subclass='"+subClass+"' id='"+buttonId+"' ng-click='cloneThis($event)'>+</button>");
+  }
   var div2 = $("<div>");
   div2.attr("class", "panel-body subwidget");
   id = $scope.uuid();
@@ -58,7 +64,12 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   divH.appendTo(div);
   div2.appendTo(div);
   $compile(div)($scope);
-  div.appendTo($("#"+htmlElement));
+  if(cloned == true){
+    alert("Cloning after"+ htmlElement);
+    div.insertAfter($("#"+htmlElement));
+  }else{
+    div.appendTo($("#"+htmlElement));
+  }
   return id;
  }
 
@@ -83,18 +94,48 @@ $scope.cloneThis = function(event){
       $scope._createTextWidget(_predicate, _title, _elem, _cls, _value, true);
     }
   }
-  x = $(event.target).parent().parent().attr("id");
-  if($scope.subWidgetsWidget[x] != undefined){
-    alert("subwidget!");
-    var cls = $(event.target).attr("data-subclass");
-    console.log($scope.subWidgetsWidget[x]);
-    var _id = $scope._createSubWidgetElement("myForm", cls);
-    $.each($scope.subWidgetsWidget[x], function(i, item){
-      $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
-    })
-  }else{
-    console.log(x, $scope.subWidgetsWidget);
+  x = $(event.target).parent().parent().attr("data-subclass");
+  if(x != undefined && x != null){
+    if($scope.subWidgetModels[x] != undefined){
+      parentId = $(event.target).parent().parent().attr("id");
+      var _id = $scope._createSubWidgetElement(parentId, $scope.subWidgetModels[x].title, $scope.subWidgetModels[x].cls, true);
+      $scope.subWidgets[_id] = {
+                                  title:$scope.subWidgetModels[x].title,
+                                  id: $scope.uuid(),
+                                  widgets: $scope.subWidgetModels[x].widgets,
+                                  triples: [],
+                                  generators: [],
+                                  visited: false,
+                                  cls: $scope.subWidgetModels[x].cls,
+                                  anchor: $scope.subWidgetModels[x].anchor,
+                                  fwdlink: $scope.subWidgetModels[x].fwdlink,
+                                  revlink: $scope.subWidgetModels[x].revlink
+                                };
+
+      $scope.subWidgets[_id].generators = [];
+      $.each($scope.subWidgets[_id].widgets, function(i, item){
+        var aux = {
+          type: item.type,
+          predicate: item.predicate,
+          title: item.title,
+          cls: item.cls
+        }
+        var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+      });
+    }
   }
+  // if($scope.subWidgetsWidget[x] != undefined){
+  //   alert("subwidget!");
+  //   var cls = $(event.target).attr("data-subclass");
+  //   console.log($scope.subWidgetsWidget[x]);
+  //   var _id = $scope._crea teSubWidgetElement("myForm", cls);
+  //   $.each($scope.subWidgetsWidget[x], function(i, item){
+  //     $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+  //   })
+  // }else{
+  //   console.log(x, $scope.subWidgetsWidget);
+  // }
+
 }
 
 $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, thisValue, cloned){
@@ -144,10 +185,21 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
       thisValue: thisValue,
       config: myConfig
     };
-  }
-  if(cloned == true){
+  }else if(cloned == true){
     var generatorIndex = $scope.tripleGenerators.length;
     legend.html(title+" <button class='btn btn-danger btn-xs remove-btn' data-generator-key='"+generatorIndex+"' ng-click='removeThis($event)'>X</button>");
+  }else{
+    legend.html(title);
+    var buttonId = $scope.uuid();
+    $scope.widgetConfigs[buttonId] = {
+      type: "autocomplete",
+      predicate: predicate,
+      title: title,
+      cls: cls,
+      elem: id,
+      thisValue: thisValue,
+      config: myConfig
+    };
   }
   legend.appendTo(formElement);
   var aux = $('<input>');
@@ -184,6 +236,7 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
     f: function(s, p, o){
       var obj = $("#"+o).select2("data");
       if(obj != "" && obj != undefined && obj != null){
+        console.log("Using s=",s," with predicate",p);
         return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: (obj.id.mirroredUri)?obj.id.mirroredUri:obj.id.value, type: "uri"}}];
       }else{
         return [];
@@ -193,14 +246,22 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
 
 
   if(cls != null){
-    //console.log($scope.subWidgets[cls]);
-    if($scope.subWidgets[cls] == undefined){
-      $scope.subWidgets[cls] = {generators: []};
+    if(cloned == undefined){
+      console.log($scope.subWidgets);
+      $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[htmlElement].generators.length);
+      console.log("Attaching to subwidget", htmlElement);
+      $scope.subWidgets[htmlElement].generators.push(_generator);
+    }else{
+      if($scope.subWidgets[cls] == undefined){
+        $scope.subWidgets[cls] = {generators: []};
+      }
+      $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[htmlElement].generators.length);
+      console.log("Attaching to subwidget class", cls);
+      $scope.subWidgets[htmlElement].generators.push(_generator);
     }
-    $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[cls].generators.length);
-    $scope.subWidgets[cls].generators.push(_generator);
   }else{
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
+    console.log("Attaching to widget list");
     $scope.tripleGenerators.push(_generator);
   }
 
@@ -262,8 +323,8 @@ $scope._createCalendarWidget = function(predicate, title, htmlElement, cls, this
   }
 
   if(cls != undefined){
-    $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[cls].generators.length);
-    $scope.subWidgets[cls].generators.push(_generator);
+    $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[htmlElement].generators.length);
+    $scope.subWidgets[htmlElement].generators.push(_generator);
   }else{
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
@@ -324,7 +385,11 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
   }
   if(cls != undefined){
     $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[cls].generators.length);
-    $scope.subWidgets[cls].generators.push(_generator);
+    if(cloned == true){
+      $scope.subWidgets[htmlElement].generators.push(_generator);
+    }else{
+      $scope.subWidgets[cls].generators.push(_generator);
+    }
   }else{
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
     $scope.tripleGenerators.push(_generator);
@@ -371,7 +436,7 @@ $scope.letMeKnow = function(){
  //Sub widgets
  for(var k in $scope.subWidgets){
   var subwidget = $scope.subWidgets[k];
-  var blankNode = "_:"+subwidget.id;
+  var blankNode = "_:b"+$scope.uuid();
   if(subwidget.revlink != null){
     subwidget.triples.push({s: {value: blankNode, type: "blank"}, p: subwidget.revlink, o: {value: $("#uri").val(), type: "uri"}});
   }else{
@@ -382,6 +447,7 @@ $scope.letMeKnow = function(){
     var thisGenerator = subwidget.generators[j];
     //thisGenerator.subject = blankNode;
     //thisGenerator.objId = $("#"+thisGenerator.objId).val(),
+    console.log("sending s=",blankNode, "for class",subwidget.cls, " and predicate", thisGenerator.predicate, k);
     a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
     subwidget.triples = subwidget.triples.concat(a);
   }
@@ -427,8 +493,8 @@ $http.get(url, config).success(function(data){
       }else if(datum.predicateLabel && datum.predicateLabel.value){
         title = datum.predicateLabel.value;
       }
-      if($scope.subWidgets[key] == undefined){
-        $scope.subWidgets[key] = {
+      if($scope.subWidgetModels[key] == undefined){
+        $scope.subWidgetModels[key] = {
                                   title:title,
                                   id: $scope.uuid(),
                                   widgets: [],
@@ -441,7 +507,7 @@ $http.get(url, config).success(function(data){
                                   revlink: datum.super_predicate_reverse.value
                                 };
       }
-      $scope.subWidgets[key].widgets.push({
+      $scope.subWidgetModels[key].widgets.push({
                                             type: datum.sub_widget.value,
                                             predicate: datum.sub_predicate.value,
                                             cls: datum.sub_class.value,
@@ -462,41 +528,60 @@ $http.get(url, config).success(function(data){
     }
     var key = datum.sub_class.value;
     if(key != null){
-      if($scope.subWidgets[key] != null){
-        if(entitiesData[key] != undefined && $scope.subWidgets[key].visited != true){
+      if($scope.subWidgetModels[key] != null){
+        if(entitiesData[key] != undefined && $scope.visitedSubWidgets[key] != true){
+          //There is data related to this subwidget
           $.each(entitiesData[key], function(j, entity){
-            var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, $scope.subWidgets[key].title, $scope.subWidgets[key].subClass);
-            $scope.subWidgets[key].visited = true;
-            $.each($scope.subWidgets[key].widgets, function(i, item){
+            var _id = $scope._createSubWidgetElement($scope.subWidgetModels[key].anchor, $scope.subWidgetModels[key].title, $scope.subWidgetModels[key].cls, false);
+            $scope.visitedSubWidgets[key] = true;
+            if($scope.subWidgets[_id] == undefined){
+              $scope.subWidgets[_id] = {
+                                  title:title,
+                                  id: $scope.uuid(),
+                                  widgets: [],
+                                  triples: [],
+                                  generators: [],
+                                  visited: false,
+                                  cls: datum.sub_class.value,
+                                  anchor: datum.htmlElement.value,
+                                  fwdlink: datum.super_predicate_forward.value,
+                                  revlink: datum.super_predicate_reverse.value
+                                };
+            }
+            $.each($scope.subWidgetModels[key].widgets, function(i, item){
               var values = entity.filter(function(d){return d.predicate == item.predicate}).pop();
               if(values == undefined){
-                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls);
+                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, null, undefined);
               }else{
-                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, values.obj);
+                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, values.obj, undefined);
               }
+              alert(_id);
             });
           })
-          // for(var i in entitiesData[key]){
-          //   d = entitiesData[key][i];
-          //   var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, $scope.subWidgets[key].title, $scope.subWidgets[key].subClass, d);
-          // }
-          $scope.subWidgets[key].visited = true;
+          $scope.visitedSubWidgets[key] = true;
         }else{
-          if($scope.subWidgets[key].visited != true){
-            var _id = $scope._createSubWidgetElement($scope.subWidgets[key].anchor, title, $scope.subWidgets[key].subClass);
-            
-            $scope.subWidgets[key].visited = true;
-            if($scope.subWidgetsWidget[_id] == undefined){
-              $scope.subWidgetsWidget[_id] = [];
-            }
-            $.each($scope.subWidgets[key].widgets, function(i, item){
+          if($scope.visitedSubWidgets[key] == undefined){
+            var _id = $scope._createSubWidgetElement($scope.subWidgetModels[key].anchor, title, $scope.subWidgetModels[key].cls);
+            $scope.subWidgets[_id] = {
+              title:title,
+              id: $scope.uuid(),
+              widgets: [],
+              triples: [],
+              generators: [],
+              visited: false,
+              cls: datum.sub_class.value,
+              anchor: datum.htmlElement.value,
+              fwdlink: datum.super_predicate_forward.value,
+              revlink: datum.super_predicate_reverse.value
+            };              
+            $scope.visitedSubWidgets[key] = true;
+            $.each($scope.subWidgetModels[key].widgets, function(i, item){
               var aux = {
                 type: item.type,
                 predicate: item.predicate,
                 title: item.title,
                 cls: item.cls
               }
-              $scope.subWidgetsWidget[_id].push(aux);
               var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
             });
           }
@@ -504,39 +589,6 @@ $http.get(url, config).success(function(data){
       }else{
         alert("Error!");
       }
-      // //it is a subwidget
-      // var subClass = datum.sub_class.value;
-      // var _id = null;
-      // //Check if data structures for this subwidget exist
-      // //Check if the data for this subwidget exist
-      //   if($scope.subWidgets[subClass] == undefined){
-      //     if(datum.super_predicate_forward.value != null){
-      //       _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-      //       $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
-      //     }
-      //     if(datum.super_predicate_reverse.value != null){
-      //       _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-      //       $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
-      //     }
-      //   }else{
-      //     _id = $scope.subWidgets[subClass].id;
-      //   }
-      //   if(repeatedSubWidgets[subClass] == undefined){
-      //     repeatedSubWidgets[subClass] = {};
-      //   }
-      //   var widgetId = $scope._getWidget(datum.sub_widget.value, datum.sub_predicate.value, title, $scope.subWidgets[subClass].id, subClass);
-      //   repeatedSubWidgets[subClass][widgetId] = datum.sub_predicate.value;
-      // // var subClass = datum.sub_class.value;
-      // // if($scope.subWidgets[subClass] == undefined){
-      // //   var _id = $scope._createSubWidgetElement(datum.htmlElement.value, title, subClass);
-      // //   if(datum.super_predicate_forward.value != null){
-      // //     $scope.subWidgets[subClass] = {generators: [], id: _id, fwdlink: datum.super_predicate_forward.value, triples: [], cls: subClass};
-      // //   }
-      // //   if(datum.super_predicate_reverse.value != null){
-      // //     $scope.subWidgets[subClass] = {generators: [], id: _id, revlink: datum.super_predicate_reverse.value, triples: [], cls: subClass};
-      // //     //$scope.subWidgets[subClass].triples.push({s: $("#uri").val(), p: datum.super_predicate_reverse.value, o: {value: "_:"+_id, type: "blank"}})
-      // //   }
-      // // }
     }else{
       currentSubwidget = null;
       if(instanceData != null && instanceData[datum.predicate.value] != undefined){

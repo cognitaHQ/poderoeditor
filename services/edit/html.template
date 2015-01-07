@@ -76,6 +76,9 @@
 	{%endif%}
 	{%endfor%}
 	</script>
+	<!--
+	{{queries.entities|json}}
+	-->
 	<script src="/js/ontologyForm.js"> </script>
 </div>
 	{%endblock%}
