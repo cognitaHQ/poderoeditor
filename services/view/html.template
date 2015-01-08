@@ -1,0 +1,79 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+
+<div class="container" data-ng-app="viewApp">
+	<div class="row" data-ng-controller="viewList">
+
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+		<h2 class="page-header">{{"/".join(args)}}</h2>
+		<a href='/edit/{{"/".join(args)}}'>Edit</a>
+			<div class="form-group" id="myForm">
+			<label>{{flod.languages[flod.labelLanguage].add_table_label}}</label>
+			<p>[[identifier]]!!!</p>
+			</div>
+		</div>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">{{flod.languages[flod.labelLanguage].edit_delete_button}}</h4>
+				</div>
+				<div class="modal-body">
+					{{flod.languages[flod.labelLanguage].edit_delete_warning}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger ng-scope" ng-click="proceedDelete()">{{flod.languages[flod.labelLanguage].edit_delete_button}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<script>
+	var baseNamespace = "{{flod.instanceNamespace}}";
+	var localNamespace = "{{flod.localInstanceNamespace}}";
+	var thisUri = "{{"/".join(args)}}";
+	var labelPredicate = "{{flod.labelPredicate}}";
+	var submitLabel = "{{flod.languages[flod.labelLanguage].edit_submit_button}}";
+	var deleteLabel = "{{flod.languages[flod.labelLanguage].edit_delete_button}}";
+	var uriClass = "{{first.uritype.type.value}}";
+	</script>
+	<script src="/js/jquery.min.js"> </script>
+	<script src="/js/select2/select2.js"> </script>
+    <script src="/js/bootstrap-datepicker.js"></script>
+	<script src="/js/angular.min.js"> </script>
+	<script>
+	var instanceData = {},
+	    entitiesData = {};
+	{%for row in queries.uridata%}
+	if(instanceData["{{row.p.mirroredUri}}"] == undefined){
+		instanceData["{{row.p.mirroredUri}}"] = [];
+	}
+	{%if row.oLabel.value %}
+	instanceData["{{row.p.mirroredUri}}"].push({id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} });
+	{%else%}
+	instanceData["{{row.p.mirroredUri}}"].push({id: "{{row.o.value}}"});
+	{%endif%}
+	{%endfor%}
+	{% set previousEntity = "" %}{% set previousClass = "" %}
+	{%for row in queries.entities%}
+	{%if previousClass != row.entityClass.value %}{% set previousClass = row.entityClass.value%}
+	entitiesData["{{row.entityClass.value}}"] = {};
+	{%endif%}
+	{%if previousEntity != row.s.value %}
+	entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"] = [];{% set previousEntity = row.s.value%}
+	{%endif%}
+	{% if row.p.mirroredUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and row.o.mirroredUri != "/".join(args)%}
+    entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"].push({predicate: "{{row.p.value}}", obj: {id: {value: "{{row.o.mirroredUri}}" } {%if row.oLabel.value%}, iLabel: {value: "{{row.oLabel.value}}" }  {%endif%} }  } );
+	{%endif%}
+	{%endfor%}
+	</script>
+	<!--
+	{{queries.entities|json}}
+	-->
+	<script src="/js/viewApp.js"> </script>
+</div>
+	{%endblock%}

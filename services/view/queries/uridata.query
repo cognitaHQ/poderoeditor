@@ -1,0 +1,9 @@
+SELECT ?p ?o ?oLabel WHERE {
+	GRAPH <{{flod.dataGraph}}>{
+		<{{"/".join(args)}}> ?p ?o .
+		OPTIONAL{
+			?o <{{flod.labelPredicate}}> ?oLabel .
+		}
+
+	}
+}

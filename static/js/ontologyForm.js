@@ -464,9 +464,9 @@ $http({url: submitUrl,
 }).
 success(function(data, status, headers, config) {
   if(thisUri == null){
-    window.location = msg.uri.replace(baseNamespace, localNamespace);
+    window.location = "/view/"+msg.uri;
   }else{
-    window.location = thisUri.replace(baseNamespace, localNamespace);
+    window.location = "/view/"+thisUri;
   }
 }).
 error(function(data, status, headers, config) {
@@ -555,7 +555,6 @@ $http.get(url, config).success(function(data){
               }else{
                 var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, values.obj, undefined);
               }
-              alert(_id);
             });
           })
           $scope.visitedSubWidgets[key] = true;
