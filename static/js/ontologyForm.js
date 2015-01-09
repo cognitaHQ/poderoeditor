@@ -551,9 +551,9 @@ $http.get(url, config).success(function(data){
             $.each($scope.subWidgetModels[key].widgets, function(i, item){
               var values = entity.filter(function(d){return d.predicate == item.predicate}).pop();
               if(values == undefined){
-                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, null, undefined);
+                var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
               }else{
-                var widgetId = $scope._getWidget(item.type, item.predicate, title, _id, item.cls, values.obj, undefined);
+                var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, values.obj, undefined);
               }
             });
           })

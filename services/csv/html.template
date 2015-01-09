@@ -1,0 +1,2 @@
+{%for row in queries.main%}{% set rowloop = loop %}{%for i in row%}{%if rowloop.first%}"{{i}}"{%if not loop.last%},{%endif%}{%endif%}{%endfor%}
+{%for i in row%}{%if row[i]%}"{{row[i].value|default("")}}"{%else%}{%endif%}{%if not loop.last%},{%endif%}{%endfor%}{%endfor%}

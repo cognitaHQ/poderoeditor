@@ -1,0 +1,15 @@
+{% set n = params["n"]|int %}
+{% set c = 0 %}
+{%set s = c|string%}
+SELECT {% for c in range(n)%}{%set s = c|string%}{%set p = "pred"+s%}?{{p}} {%endfor%} WHERE{
+	GRAPH <{{flod.dataGraph}}>{
+	?s a <{{params["class"]}}> .
+{% for c in range(n)%}
+{%set s = c|string%}
+{%set p = "pred"+s%}
+		OPTIONAL{
+			?s <{{params[p]}}> ?{{p}} .
+		}
+{%endfor%}
+	}
+}ORDER BY ?s ?o
