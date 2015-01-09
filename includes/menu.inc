@@ -26,6 +26,7 @@
                 <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
                 <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
                 <li><a href="/editLayout">Edit layout</a></li>
+                <li><a href="/prepareDataApi">Export selected fields</a></li>
               </ul>
             </li>
             <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
