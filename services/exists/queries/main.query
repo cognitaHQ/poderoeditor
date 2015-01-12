@@ -1,0 +1,9 @@
+SELECT * WHERE{
+ {
+	GRAPH ?g{
+	<{{"/".join(args)}}> ?s ?p
+	}
+ }UNION{
+	<{{"/".join(args)}}> ?s ?p
+ }
+}LIMIT 1

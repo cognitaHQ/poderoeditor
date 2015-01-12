@@ -1,0 +1,5 @@
+{%if queries.main|length > 0%}
+{"exists": true}
+{%else%}
+{"exists": false}
+{%endif%}
