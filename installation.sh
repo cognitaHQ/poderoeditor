@@ -178,6 +178,6 @@ chmod +x $END_SCRIPT
 echo 
 echo
 echo
-echo ${MSG_INSTALL_OK[$LANG]}
+echo -e ${MSG_INSTALL_OK[$LANG]}
 echo
 echo
