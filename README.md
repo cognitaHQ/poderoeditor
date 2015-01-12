@@ -12,3 +12,19 @@ bash <(curl -skL 'https://raw.githubusercontent.com/cognitaHQ/poderoeditor/maste
 
 Luego sólo hay que seguir las instrucciones.
 
+# Para iniciar Podeoroeditor
+
+```
+cd poderoeditor
+./startPoderoeditor.sh
+```
+
+# Para ingresar al sistema
+
+Ir a la dirección señalada durante la instalación (usualmente `http://localhost:54321`) y en *ingresar* usar defaults, user: `admin`, pass: `flod`
+
+# Para iniciar Podeoroeditor
+
+```
+./stopPoderoeditor.sh
+```
