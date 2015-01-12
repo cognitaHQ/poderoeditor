@@ -45,7 +45,7 @@ MSG_WAIT_FUSEKI=("Esperando 10 segundos para inicio de Fuseki." "Waiting 10 seco
 MSG_FUSEKI_RUN_ERROR=("Fuseki no está corriendo. Instalación abortada.", "Fuseki is not running. Installation aborted.")
 MSG_SCRIPTS=("Agregando scripts" "Adding scripts")
 MSG_FUSEKI_OK=("Fuseki instalado" "Fuseki installed")
-MSG_INSTALL_OK=("Instalación terminada. En tu browser anda a http://localhost:54321 e ingresa con usuario 'admin' y password 'flod'" "Installation complete. Go to http://localhost:54321 and log in with user 'admin' and password 'flod'")
+MSG_INSTALL_OK=("Instalación terminada. Para iniciar Poderoeditor\n\n cd poderoeditor\n./startPoderoeditor.sh\n\nEn tu browser anda a http://localhost:54321 e ingresa con usuario 'admin' y password 'flod'" "Installation complete. Start Poderoeditor with\n\n cd poderoeditor\n./startPoderoeditor.sh\n\nGo to http://localhost:54321 and log in with user 'admin' and password 'flod'")
 echo
 echo
 echo ${MSG_REQ[$LANG]}
