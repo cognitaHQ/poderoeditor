@@ -170,7 +170,7 @@ echo "cd $DB">> $END_SCRIPT
 echo "kill \`cat .pid\`">> $END_SCRIPT
 echo "#FLOD">> $END_SCRIPT
 echo "cd ../flod">> $END_SCRIPT
-echo "kill \`cat .pid\`">> $END_SCRIPT
+echo "kill -INT \`cat .pid\`">> $END_SCRIPT
 
 chmod +x $START_SCRIPT
 chmod +x $END_SCRIPT
@@ -179,3 +179,5 @@ echo
 echo
 echo
 echo ${MSG_INSTALL_OK[$LANG]}
+echo
+echo
