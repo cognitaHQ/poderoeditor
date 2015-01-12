@@ -39,6 +39,7 @@
 
 	<script>
 	var baseNamespace = "{{flod.instanceNamespace}}";
+	var isUriNew = true;
 	var localNamespace = "{{flod.localInstanceNamespace}}";
 	var thisUri = "{{"/".join(args)}}";
 	var labelPredicate = "{{flod.labelPredicate}}";

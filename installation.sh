@@ -45,6 +45,7 @@ MSG_WAIT_FUSEKI=("Esperando 10 segundos para inicio de Fuseki." "Waiting 10 seco
 MSG_FUSEKI_RUN_ERROR=("Fuseki no está corriendo. Instalación abortada.", "Fuseki is not running. Installation aborted.")
 MSG_SCRIPTS=("Agregando scripts" "Adding scripts")
 MSG_FUSEKI_OK=("Fuseki instalado" "Fuseki installed")
+MSG_INSTALL_OK=("Instalación terminada. En tu browser anda a http://localhost:54321 e ingresa con usuario 'admin' y password 'flod'" "Installation complete. Go to http://localhost:54321 and log in with user 'admin' and password 'flod'")
 echo
 echo
 echo ${MSG_REQ[$LANG]}
@@ -174,4 +175,7 @@ echo "kill \`cat .pid\`">> $END_SCRIPT
 chmod +x $START_SCRIPT
 chmod +x $END_SCRIPT
 
-echo FIN!
+echo 
+echo
+echo
+echo ${MSG_INSTALL_OK[$LANG]}

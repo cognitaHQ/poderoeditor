@@ -398,11 +398,28 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
 }
 
 $scope.identifier = "";
+$scope.isUriNew = isUriNew;
+var request = null;
+$scope.checkIfUriExists = function(){
+  var newUri = baseNamespace+$scope.urlify($scope.identifier);
+  clearTimeout(request);
+  request = setTimeout(function(){
+    $http.get("/exists/"+newUri).success(function(data){
+      $scope.isUriNew = !data.exists;
+      if($scope.isUriNew == false){
+        alert("Cambie el nombre, esa URIya existe");
+      }
+    });
+  }, 1000);
+
+}
 $scope.baseNamespace = function(){
   // $.ajax({
   //   url: "/getUri/"+ baseNamespace+$scope.urlify($scope.identifier)
   // })
-  return (instanceData ==  null)?baseNamespace+$scope.urlify($scope.identifier):baseNamespace;
+  var newUri = baseNamespace+$scope.urlify($scope.identifier);
+
+  return (instanceData ==  null)?newUri:baseNamespace;
 
 };
 $scope.proceedDelete = function(){
@@ -423,6 +440,9 @@ $scope.proceedDelete = function(){
 };
 
 $scope.letMeKnow = function(){
+ if(! $scope.isUriNew){
+  alert("Debe cambiar la etiqueta");
+ }
  msg = {uri: $("#uri").val(), triples: []};
  msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: labelPredicate, o: {value: $("#uriLabel").val(), type: "text"}});
  msg.triples.push({s: {value: $("#uri").val(), type: "uri"}, p: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", o: {value: uriClass, type: "uri"}});

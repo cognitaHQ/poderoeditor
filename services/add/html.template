@@ -12,7 +12,7 @@
 			<label>URI</label>
 				<input type="text" name="uri" id="uri" data-predicate="uri" class="form-control" value="[[baseNamespace()]]" required="required" title="" readonly>
 			<label>{{flod.languages[flod.labelLanguage].add_table_label}}</label>
-			<input type="text" name="uriLabel" id="uriLabel" class="form-control" ng-model="identifier" value=""/> 
+			<input type="text" name="uriLabel" id="uriLabel" class="form-control" ng-model="identifier" ng-change="checkIfUriExists()" value=""/> 
 			</div>
 			<button class="btn btn-primary ng-scope" ng-click="letMeKnow()">Guardar</button>
 			</form>
@@ -20,6 +20,7 @@
 	</div>
 	<script>
 	var thisUri = null;
+	var isUriNew = false;
 	var baseNamespace = "{{flod.instanceNamespace}}";
 	var localNamespace = "{{flod.localInstanceNamespace}}";
 	var labelPredicate = "{{flod.labelPredicate}}";

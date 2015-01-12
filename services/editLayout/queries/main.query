@@ -14,4 +14,4 @@ SELECT DISTINCT ?c ?className ?classNameLang WHERE{
       FILTER(LANG(?className) = "{{flod.labelLanguage}}")
   }
 
-}
+}ORDER BY ?className ?classNameLang
