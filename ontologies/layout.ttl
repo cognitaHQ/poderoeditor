@@ -119,3 +119,76 @@
 						]
 
 .
+
+
+<#basicViewAcademicOrganization> a :FormView ;
+			:classAssociated poder:AcademicOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewNonGovernmentalOrganization> a :FormView ;
+			:classAssociated poder:NonGovernmentalOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewInternationalOrganization> a :FormView ;
+			:classAssociated poder:InternationalOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewRestrictedAccessOrganization> a :FormView ;
+			:classAssociated poder:RestrictedAccessOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewReligiousOrganization> a :FormView ;
+			:classAssociated poder:ReligiousOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewProgrammaticOrganization> a :FormView ;
+			:classAssociated poder:ProgrammaticOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewPoliticalOrganization> a :FormView ;
+			:classAssociated poder:PoliticalOrganization ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
+
+<#basicViewCompany> a :FormView ;
+			:classAssociated poder:Company ;
+			:hasWidget [ a :HTMLInputTextWidget ;
+          				:predicateDisplayed foaf:name;
+		  				:positionNumber 10;
+		  				:anchoredTo "myForm"
+		  			   ]
+.
