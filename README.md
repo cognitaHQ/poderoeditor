@@ -4,7 +4,11 @@ Poderoeditor es un editor de ontologías enfocado (pero no limitado a) la ontolo
 
 #Instalación
 
+Abrir un terminal (usando `bash`) y correr el siguiente comando:
+
 ```
 bash <(curl -skL 'https://raw.githubusercontent.com/cognitaHQ/poderoeditor/master/installation.sh')
 ```
+
+Luego sólo hay que seguir las instrucciones.
 
