@@ -23,6 +23,15 @@ cd poderoeditor
 
 Ir a la dirección señalada durante la instalación (usualmente `http://localhost:54321`) y en *ingresar* usar defaults, user: `admin`, pass: `flod`
 
+#Videos
+##Cómo instalar Poderoeditor
+		<iframe width="560" height="315" src="//www.youtube.com/embed/seB2dzB5odU" frameborder="0" allowfullscreen></iframe>
+##Cómo agregar una nueva instancia
+		<iframe width="560" height="315" src="//www.youtube.com/embed/FrCWY36YRgU" frameborder="0" allowfullscreen></iframe>
+##Cómo editar una instancia
+		<iframe width="560" height="315" src="//www.youtube.com/embed/JVXR4WzsGTY" frameborder="0" allowfullscreen></iframe>
+##Cómo agregar una clase
+		<iframe width="560" height="315" src="//www.youtube.com/embed/seB2dzB5odU" frameborder="0" allowfullscreen></iframe>
 # Para iniciar Podeoroeditor
 
 ```
