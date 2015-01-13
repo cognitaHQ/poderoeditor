@@ -165,10 +165,10 @@ $scope.baseNamespace = function(){
 };
 
 $("#uriLabel").attr("data-predicate", labelPredicate);
-$http.get(url, config).success(function(data){
+$scope.initForm = function(){
   $scope.subWidgets = {};
   var currentSubwidget = null;
-  $scope.formData = data.main;
+  $scope.formData = d.main;
   if(instanceData != null){
     $("#uriLabel").val(instanceData[labelPredicate][0].id);
   }
@@ -282,5 +282,6 @@ $http.get(url, config).success(function(data){
 
 //  $compile(submit)($scope);
 
-});
+}
+$scope.initForm();
 }])

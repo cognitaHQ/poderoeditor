@@ -65,7 +65,6 @@ ontologyFormApp.controller('ontologyFormList', ['$scope', '$http', '$compile', f
   div2.appendTo(div);
   $compile(div)($scope);
   if(cloned == true){
-    alert("Cloning after"+ htmlElement);
     div.insertAfter($("#"+htmlElement));
   }else{
     div.appendTo($("#"+htmlElement));
@@ -495,10 +494,10 @@ error(function(data, status, headers, config) {
 }
 
 $("#uriLabel").attr("data-predicate", labelPredicate);
-$http.get(url, config).success(function(data){
+$scope.initForm = function(data){
   $scope.subWidgets = {};
   var currentSubwidget = null;
-  $scope.formData = data.main;
+  $scope.formData = d.main;
   if(instanceData != null){
     $("#uriLabel").val(instanceData[labelPredicate][0].id);
   }
@@ -540,7 +539,7 @@ $http.get(url, config).success(function(data){
 
 
   $scope.formData.forEach(function(datum, i){
-    var title = datum.predicate.value;
+    var title = datum.predicate.mirroredUri;
     if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
       title = datum.predicatePreferedLabel.value;
     }else if(datum.predicateLabel && datum.predicateLabel.value){
@@ -610,18 +609,17 @@ $http.get(url, config).success(function(data){
       }
     }else{
       currentSubwidget = null;
-      if(instanceData != null && instanceData[datum.predicate.value] != undefined){
+      if(instanceData != null && instanceData[datum.predicate.mirroredUri] != undefined){
         var _elem = datum.htmlElement.value;
-        for(var i=0; i < instanceData[datum.predicate.value].length; i++){
-          var thisValue = instanceData[datum.predicate.value][i];
-          _elem = $scope._getWidget(datum.widget.value, datum.predicate.value, title, _elem, null, thisValue, (i==0)?false:true);
+        for(var i=0; i < instanceData[datum.predicate.mirroredUri].length; i++){
+          var thisValue = instanceData[datum.predicate.mirroredUri][i];
+          _elem = $scope._getWidget(datum.widget.value, datum.predicate.mirroredUri, title, _elem, null, thisValue, (i==0)?false:true);
         }
       }else{
-        $scope._getWidget(datum.widget.value, datum.predicate.value, title, datum.htmlElement.value, null, null, false);
+        $scope._getWidget(datum.widget.value, datum.predicate.mirroredUri, title, datum.htmlElement.value, null, null, false);
       }
     }
   });
-
   // var submit = document.createElement("submit");
   // submit.type="submit";
   // submit.setAttribute("class", "btn btn-primary");
@@ -640,5 +638,7 @@ $http.get(url, config).success(function(data){
 
 //  $compile(submit)($scope);
 
-});
+}
+$scope.initForm();
+
 }])

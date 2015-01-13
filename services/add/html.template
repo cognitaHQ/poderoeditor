@@ -29,6 +29,7 @@
 	var uriClass = "{{"/".join(args)}}";
 	var instanceData = null,
 	    entitiesData = {};
+	var d = {{queries|json}};
 	</script>
 	<script src="/js/select2/select2.js"> </script>
     <script src="/js/bootstrap-datepicker.js"></script>

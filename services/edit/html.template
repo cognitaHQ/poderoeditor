@@ -76,6 +76,8 @@
     entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"].push({predicate: "{{row.p.value}}", obj: {id: {value: "{{row.o.mirroredUri}}" } {%if row.oLabel.value%}, iLabel: {value: "{{row.oLabel.value}}" }  {%endif%} }  } );
 	{%endif%}
 	{%endfor%}
+	var d = {{queries|json}};
+
 	</script>
 	<!--
 	{{queries.entities|json}}
