@@ -25,7 +25,8 @@ Ir a la dirección señalada durante la instalación (usualmente `http://localho
 
 #Videos
 ##Cómo instalar Poderoeditor
-		<iframe width="560" height="315" src="//www.youtube.com/embed/seB2dzB5odU" frameborder="0" allowfullscreen></iframe>
+[![Cómo instalar Poderoeditor](http://img.youtube.com/vi/seB2dzB5odU/0.jpg)](http://www.youtube.com/watch?v=seB2dzB5odU)
+
 ##Cómo agregar una nueva instancia
 		<iframe width="560" height="315" src="//www.youtube.com/embed/FrCWY36YRgU" frameborder="0" allowfullscreen></iframe>
 ##Cómo editar una instancia
