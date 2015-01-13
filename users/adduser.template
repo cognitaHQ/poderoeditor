@@ -11,8 +11,8 @@
   				<input type="text" class="form-control" id="username" name="username" placeholder="Username">
   				<label for="">Password</label>
   				<input type="password" class="form-control" id="password" name="password" placeholder="Password">
-          <label for="inputGroups">Groups:</label><br/>
-            <select multiple name="groups" id="groups" class="" required="required">
+          <label for="inputGroups">Groups:</label>
+          <select name="groups" id="groups" class="form-control" required="required">
               {%for row in groups%}
               <option value="{{row.g}}">{{row.name}}</option>
               {%endfor%}              

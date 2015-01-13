@@ -19,16 +19,24 @@
             <li><a href="/search">{{flod.languages[flod.labelLanguage].menu_search}}</a></li>
             <li><a href="/addEntity">{{flod.languages[flod.labelLanguage].menu_add_entity}}</a></li>
             <li><a href="/viz">{{flod.languages[flod.labelLanguage].menu_visualization}}</a></li>
+            {%if "admin" in session["groups"]%}
             <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="/admin/edituser">{{flod.languages[flod.labelLanguage].menu_profile}}</a></li>
+                <li><a href="/admin/createuser">{{flod.languages[flod.labelLanguage].menu_create_user}}</a></li>
+                <li><a href="/admin/deleteuser">{{flod.languages[flod.labelLanguage].menu_delete_user}}</a></li>
+                <li role="presentation" class="divider"></li>
                 <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
                 <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
+                <li role="presentation" class="divider"></li>
                 <li><a href="/editLayout">Edit layout</a></li>
+                <li role="presentation" class="divider"></li>
                 <li><a href="/prepareDataApi">Export selected fields</a></li>
               </ul>
             </li>
+            {%endif%}
+            <li><a href="/help">{{flod.languages[flod.labelLanguage].menu_help}}</a></li>
             <li><a href="/logout">{{flod.languages[flod.labelLanguage].menu_logout}}</a></li>
             {%endif%}
           </ul>
