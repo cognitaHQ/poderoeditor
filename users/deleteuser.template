@@ -1,0 +1,55 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+  	<div class="container">
+  		<form class="form-signin" role="form" action="{{uri}}" method="post">
+  			<h2 class="form-signin-heading">Delete user</h2>
+
+  			<div class="form-group">
+          <label for="inputGroups">Users:</label>
+          <select name="user" id="user" class="form-control" required="required">
+              {%for row in users%}
+              {%if row.name != session["username"]%}
+              <option value="{{row.u}}">{{row.name}}</option>
+              {%endif%}
+              {%endfor%}              
+            </select>
+        </div>
+  			<button type="submit" class="btn btn-danger">Delete</button>
+  		</form>
+  	</div>
+  	<div class="row">
+  		<div class="msg">
+  			{%if loginError == True%}
+  			<div class="panel panel-danger">
+  				<div class="panel-heading">
+  					<h3 class="panel-title">Error in login</h3>
+  				</div>
+  				<div class="panel-body">
+  					User/pass invalid
+  				</div>
+  			</div>
+  			{%endif%}
+        {%if creationSuccess == True%}
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Success</h3>
+          </div>
+          <div class="panel-body">
+            User deleted successfully!
+          </div>
+        </div>
+        {%endif%}
+        {%if creationSuccess == False%}
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Error</h3>
+          </div>
+          <div class="panel-body">
+            An error occurred
+          </div>
+        </div>
+        {%endif%} 
+  		</div>
+  	</div>
+  </div>
+{%endblock%}
