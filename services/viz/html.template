@@ -3,33 +3,81 @@
 
 <div class="container">
 	<div class="row">
-	<h1>{{flod.languages[flod.labelLanguage].viz_title}}</h1>
-		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			{{flod.languages[flod.labelLanguage].viz_select_label}}
-			<select name="" id="input" class="form-control" required="required">
-				<option value=""></option>
-			</select>
-		</div>
-		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			{{flod.languages[flod.labelLanguage].viz_select_label}}
-			<select name="" id="input" class="form-control" required="required">
-				<option value=""></option>
-			</select>
-		</div>
-
-
-
+		<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 text-center" id="viz"></div>
+		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center" id="details"></div>
 	</div>
-	<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-		<button type="button" class="btn btn-primary">{{flod.languages[flod.labelLanguage].viz_button}}</button>
-	</div>
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-		<svg width="500" height="500" style="background:white"></svg>
-	
-		</div>
-		
-	</div>
-	
 </div>
+<script src="/js/d3.v3.min.js"> </script>
+<script>
+var d = {{queries|json}};
+
+var width = 960,
+    height = 500;
+
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(80)
+    .size([width, height]);
+
+var svg = d3.select("#viz").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+function graph(graph) {
+  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("data-name", function(d){console.log(d);return d.name})
+      .attr("data-uri", function(d){return d.uri})
+      .attr("r", 10)
+      .style("fill", function(d) { return color(d.group); })
+      .call(force.drag);
+
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  node.on("mouseover", function(){
+  	d3.select("#details").html(d3.select(this).attr("data-name")+" "+d3.select(this).attr("data-uri"));
+  })
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+}
+var people = {
+	"nodes": [],
+	"links": []
+};
+
+people.nodes.push({name: "Michelle Bachelet", group: 2});
+	
+for(var i =0; i < d.main.length; i++){
+	var p = d.main[i].sName.value;
+	if(people.nodes.map(function(d){return d.name}).indexOf(p) < 0){
+		people.nodes.push({name: p, uri: d.main[i].sName.mirroredUri, group: 1});
+		people.links.push({source: 0, target: people.nodes.map(function(d){return d.name}).indexOf(p), value: 1});
+	}
+}
+graph(people);
+</script>
 {%endblock%}

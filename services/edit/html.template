@@ -59,9 +59,9 @@
 		instanceData["{{row.p.mirroredUri}}"] = [];
 	}
 	{%if row.oLabel.value %}
-	instanceData["{{row.p.mirroredUri}}"].push({id: {value: "{{row.o.value}}" }, iLabel: {value: "{{row.oLabel.value}}"} });
+	instanceData["{{row.p.mirroredUri}}"].push({id: {value: "{{row.o.mirroredUri}}" }, iLabel: {value: "{{row.oLabel.mirroredUri}}"} });
 	{%else%}
-	instanceData["{{row.p.mirroredUri}}"].push({id: "{{row.o.value}}"});
+	instanceData["{{row.p.mirroredUri}}"].push({id: {value: "{{row.o.mirroredUri}}"}, iLabel: {value: "{{row.o.mirroredUri}}"} });
 	{%endif%}
 	{%endfor%}
 	{% set previousEntity = "" %}{% set previousClass = "" %}
@@ -70,10 +70,10 @@
 	entitiesData["{{row.entityClass.value}}"] = {};
 	{%endif%}
 	{%if previousEntity != row.s.value %}
-	entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"] = [];{% set previousEntity = row.s.value%}
+	entitiesData["{{row.entityClass.value}}"]["{{row.s.mirroredUri}}"] = [];{% set previousEntity = row.s.mirroredUri%}
 	{%endif%}
 	{% if row.p.mirroredUri != "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" and row.o.mirroredUri != "/".join(args)%}
-    entitiesData["{{row.entityClass.value}}"]["{{row.s.value}}"].push({predicate: "{{row.p.value}}", obj: {id: {value: "{{row.o.mirroredUri}}" } {%if row.oLabel.value%}, iLabel: {value: "{{row.oLabel.value}}" }  {%endif%} }  } );
+    entitiesData["{{row.entityClass.value}}"]["{{row.s.mirroredUri}}"].push({predicate: "{{row.p.mirroredUri}}", obj: {id: {value: "{{row.o.mirroredUri}}" } {%if row.oLabel.mirroredUri%}, iLabel: {value: "{{row.oLabel.mirroredUri}}" }  {%endif%} }  } );
 	{%endif%}
 	{%endfor%}
 	var d = {{queries|json}};

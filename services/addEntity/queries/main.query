@@ -24,3 +24,4 @@ SELECT DISTINCT ?c (SAMPLE(?cName) AS ?className) WHERE{
               FILTER(!BOUND(?parent))
   }
 }GROUP BY ?c
+ORDER BY ?className

@@ -77,9 +77,12 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
   legend.html(title);
   var buttonId = $scope.uuid();
   legend.appendTo(formElement);
-  var  aux = $('<p>');
+  var p = $("<p>");
+  var  aux = $('<a>');
   aux.attr("id", id);
-  aux.appendTo(formElement);
+  aux.attr("href", "/view/"+thisValue.id.value)
+  aux.appendTo(p);
+  p.appendTo(formElement);
   $compile(formElement)($scope);
   if(cloned != true){
     var parent = formElement.appendTo("#"+htmlElement);
@@ -89,7 +92,6 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
   }
 
   if(thisValue != null){
-    console.log(thisValue.iLabel.value)
     aux.html(thisValue.iLabel.value);
   }
   return id;
@@ -101,7 +103,7 @@ $scope._createCalendarWidget = function(predicate, title, htmlElement, cls, this
   var formElement = $("<p>");
   var legend = $("<label>");
   var id = $scope.uuid();
-  legend.html(title+"A");  
+  legend.html(title);  
   legend.appendTo($("#"+htmlElement));
   $compile(formElement)($scope);
   formElement.appendTo($("#"+htmlElement));
@@ -120,7 +122,7 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
   legend.appendTo(formElement);
   var aux = $('<p>');
   aux.attr("id", id);
-  aux.html((thisValue == null)?"":thisValue.id);
+  aux.html((thisValue == null)?"":thisValue.id.value);
   aux.appendTo(formElement);
   $compile(formElement)($scope);
   if(cloned != true){

@@ -9,7 +9,7 @@ SELECT DISTINCT ?id ?iLabel WHERE{
 	}
 	{%endif%}
 	GRAPH <{{flod.dataGraph}}>{
-		?id ?x ?iLabel ;
+		?id <{{flod.labelPredicate}}> ?iLabel ;
 			a ?range .
 		FILTER(regex(?iLabel, "{{args[0]}}", "i"))
 	}

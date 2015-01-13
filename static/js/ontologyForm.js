@@ -235,7 +235,6 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
     f: function(s, p, o){
       var obj = $("#"+o).select2("data");
       if(obj != "" && obj != undefined && obj != null){
-        console.log("Using s=",s," with predicate",p);
         return [{s: {value: s, type: (s.indexOf("_:")==0)?"blank":"uri"}, p: p, o: {value: (obj.id.mirroredUri)?obj.id.mirroredUri:obj.id.value, type: "uri"}}];
       }else{
         return [];
@@ -246,21 +245,17 @@ $scope._createAutocompleteWidget = function(predicate, title, htmlElement, cls, 
 
   if(cls != null){
     if(cloned == undefined){
-      console.log($scope.subWidgets);
       $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[htmlElement].generators.length);
-      console.log("Attaching to subwidget", htmlElement);
       $scope.subWidgets[htmlElement].generators.push(_generator);
     }else{
       if($scope.subWidgets[cls] == undefined){
         $scope.subWidgets[cls] = {generators: []};
       }
       $("#"+id).attr("data-subwidget-generator-id", $scope.subWidgets[htmlElement].generators.length);
-      console.log("Attaching to subwidget class", cls);
       $scope.subWidgets[htmlElement].generators.push(_generator);
     }
   }else{
     $("#"+id).attr("data-widget-generator-id", $scope.tripleGenerators.length);
-    console.log("Attaching to widget list");
     $scope.tripleGenerators.push(_generator);
   }
 
@@ -345,7 +340,7 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
       title: title,
       cls: cls,
       elem: id,
-      thisValue: thisValue
+      thisValue: (thisValue != null)?thisValue.id.value:""
     };
   }else{
     var generatorIndex = $scope.tripleGenerators.length;
@@ -358,7 +353,7 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
   aux.attr("class", "form-control");
   aux.attr("data-predicate", predicate);
   aux.attr("ng-model", "instance[\""+id+"\"]");
-  $scope.instance[id] = (thisValue == null)?"":thisValue.id;
+  $scope.instance[id] = (thisValue == null)?"":thisValue.id.value;
   aux.appendTo(formElement);
   $compile(formElement)($scope);
   if(cloned != true){
@@ -466,7 +461,6 @@ $scope.letMeKnow = function(){
     var thisGenerator = subwidget.generators[j];
     //thisGenerator.subject = blankNode;
     //thisGenerator.objId = $("#"+thisGenerator.objId).val(),
-    console.log("sending s=",blankNode, "for class",subwidget.cls, " and predicate", thisGenerator.predicate, k);
     a = thisGenerator.f(blankNode, thisGenerator.predicate, thisGenerator.objId);
     subwidget.triples = subwidget.triples.concat(a);
   }

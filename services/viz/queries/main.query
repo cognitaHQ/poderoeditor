@@ -1,3 +1,11 @@
 SELECT DISTINCT * WHERE{
-  ?s ?p ?o .
-}LIMIT 10
+	GRAPH <{{flod.dataGraph}}>{
+		{
+			?s <{{flod.labelPredicate}}> ?sName .
+			<{{"/".join(args)}}> ?p ?s .
+			}UNION{
+			?s <{{flod.labelPredicate}}> ?sName .
+			?s ?p  <{{"/".join(args)}}> .				
+			}
+	}
+}

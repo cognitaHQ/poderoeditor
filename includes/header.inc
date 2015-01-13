@@ -13,6 +13,14 @@
 	<link href="/css/style.min.css" rel="stylesheet"/>
 	<link href="/css/datepicker.css" rel="stylesheet" type="text/css">
 	<style>
+		.node {
+  			stroke: #fff;
+  			stroke-width: 1.5px;
+		}
+		.link {
+  			stroke: #999;
+  			stroke-opacity: .6;
+		}
 		.subwidget{
 			padding: 10px;
 		}
