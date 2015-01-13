@@ -53,7 +53,8 @@
 	<script src="/js/angular.min.js"> </script>
 	<script>
 	var instanceData = {},
-	    entitiesData = {};
+	    entitiesData = {},
+	    uriLabel = "{{first.uritype.label.value}}";
 	{%for row in queries.uridata%}
 	if(instanceData["{{row.p.mirroredUri}}"] == undefined){
 		instanceData["{{row.p.mirroredUri}}"] = [];

@@ -1,5 +1,8 @@
-SELECT ?type WHERE {
+SELECT ?type ?label WHERE {
 	GRAPH <{{flod.dataGraph}}>{
 		<{{"/".join(args)}}> a ?type .
+		OPTIONAL{
+			<{{"/".join(args)}}> <{{flod.labelPredicate}}> ?label .
+		}
 	}
 }limit 1

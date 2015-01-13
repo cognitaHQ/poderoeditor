@@ -391,7 +391,7 @@ $scope._createTextWidget = function(predicate, title, htmlElement, cls, thisValu
   return id;
 }
 
-$scope.identifier = "";
+$scope.identifier = uriLabel;
 $scope.isUriNew = isUriNew;
 var request = null;
 $scope.checkIfUriExists = function(){

@@ -26,7 +26,8 @@
 	var labelPredicate = "{{flod.labelPredicate}}";
 	var submitLabel = "{{flod.languages[flod.labelLanguage].add_submit_button}}";
 	var deleteLabel = null;
-	var uriClass = "{{"/".join(args)}}";
+	var uriClass = "{{"/".join(args)}}",
+		uriLabel ="";
 	var instanceData = null,
 	    entitiesData = {};
 	var d = {{queries|json}};
