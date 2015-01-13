@@ -27,7 +27,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     return v.toString(16);
    });
   }
- 
+
   $scope.baseNamespace = function(){
   // $.ajax({
   //   url: "/getUri/"+ baseNamespace+$scope.urlify($scope.identifier)
@@ -62,7 +62,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     aux.setAttribute("ng-model", "widgets[\""+predicate+"\"].availability");
     availabilityTd.appendChild(aux);
     formElement.appendChild(availabilityTd);
-  
+
     var positionTd = document.createElement("td");
     var aux2 = document.createElement('input');
     aux2.type="number";
@@ -72,7 +72,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     aux2.setAttribute("ng-model", "widgets[\""+predicate+"\"].position");
     positionTd.appendChild(aux2);
     formElement.appendChild(positionTd);
-  
+
     $compile(formElement)($scope);
     var parent = document.getElementById(elem).appendChild(formElement);
     $scope.widgets[predicate].availability = available;
@@ -103,8 +103,8 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     legendTd.appendChild(aux3);
     //legendTd.appendChild(auxLabel);
     formElement.appendChild(legendTd);
-  
-  
+
+
     var availabilityTd = document.createElement("td");
     availabilityTd.setAttribute("class", "text-center");
     var aux = document.createElement('input');
@@ -114,7 +114,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     aux.setAttribute("ng-model", "subwidgets[\""+key+"\"].availability");
     availabilityTd.appendChild(aux);
     formElement.appendChild(availabilityTd);
-  
+
     var positionTd = document.createElement("td");
     var aux2 = document.createElement('input');
     aux2.type="number";
@@ -131,10 +131,10 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     $scope.subwidgets[key].widgetClass = subClass;
     $scope.subwidgets[key].position = parseInt(position);
     return;
-  
+
   }
-  
-  
+
+
   $scope.letMeKnow = function(){
     msg = {widgetClass: uriClass, bnodes: [], subwidgets: {} };
     for(var predicate in $scope.widgets){
@@ -153,7 +153,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
    $http({url: submitUrl,
      data: msg,
      method: "POST",
-  
+
    }).
    success(function(data, status, headers, config) {
     alert("Ok");
@@ -163,10 +163,10 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
     alert("Error");
   });
   }
-  
+
   $("#uriLabel").attr("data-predicate", labelPredicate);
-  $http.get(url, config).success(function(data){
-    $scope.formData = data.main;
+  $scope.initForm = function(){
+    $scope.formData = d.main;
     if(instanceData != null){
       $("#uriLabel").val(instanceData[labelPredicate][0]);
     }
@@ -180,6 +180,7 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
         }
       }
       var propertyDisplay = true;
+      console.log(datum);
       if(datum.displayed != null && datum.displayed != undefined && datum.displayed.value != undefined && datum.displayed.value != null && (datum.displayed.value.toLowerCase() === "false" || datum.displayed.value === "0")){
         propertyDisplay = false;
       }
@@ -190,20 +191,21 @@ layoutFormApp.controller('layoutFormList', ['$scope', '$http', '$compile', funct
         $scope._getWidget(datum.widget.mirroredUri, propertyName, datum.predicate.mirroredUri, datum.position.value, propertyDisplay, datum.htmlElement.value);
       }
     });
-  
-  
+
+
     var submit = document.createElement("button");
     //submit.type="submit";
     submit.setAttribute("class", "btn btn-primary");
     submit.innerHTML = submitLabel;
     submit.setAttribute("ng-click", "letMeKnow()");
     document.getElementById("myForm").appendChild(submit);
-    
-  
+
+
 
     $compile(submit)($scope);
-  
-  });  
+
+  }
+$scope.initForm();
 }]) ;
 layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($scope, $http, $compile){
     $scope.positionExisting = 10;
@@ -227,7 +229,7 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
           range: uriClass
         }
       }).
-      success(function(data, status, headers, config) {        
+      success(function(data, status, headers, config) {
         $scope.availableSubwidgetPredicate = data;
       }).
       error(function(){
@@ -275,7 +277,7 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
         return "http://cognita.io/poderoEditor/layoutOntology/HTMLInputDateWidget"
       }
       if(v == "resource"){
-        return "http://cognita.io/poderoEditor/layoutOntology/HTMLResourceWidget" 
+        return "http://cognita.io/poderoEditor/layoutOntology/HTMLResourceWidget"
       }
       return "http://cognita.io/poderoEditor/layoutOntology/HTMLInputTextWidget";
     }
@@ -323,7 +325,7 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
           predicate: $scope.predicateNew,
           position: $scope.positionNew,
           viewClass: uriClass,
-          widgetClass: $scope.getUriForWidget($scope.selectedNewWidget)       
+          widgetClass: $scope.getUriForWidget($scope.selectedNewWidget)
         }
       }
       console.log($scope.msg);

@@ -118,6 +118,7 @@
 	var existingWidgets = [{%for row in queries.widgets%}
 						{value: "{{row.cls.mirroredUri}}", name: "{%if row.viewPreferedLabelLabel%}{{row.viewPreferedLabelLabel.value}}{%endif%}", label: "{{row.viewLabel.value|default("null")}}"}{%if not loop.last%},{%endif%}
 						{%endfor%}];
+	var d = {{queries|json}};
 	</script>
 	<script src="/js/jquery.min.js"> </script>
 	<script src="/js/select2/select2.js"> </script>
