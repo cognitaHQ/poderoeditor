@@ -19,12 +19,27 @@ cd poderoeditor
 ./startPoderoeditor.sh
 ```
 
-# Para ingresar al sistema
 
-Ir a la dirección señalada durante la instalación (usualmente `http://localhost:54321`) y en *ingresar* usar defaults, user: `admin`, pass: `flod`
-
-# Para iniciar Podeoroeditor
+		
+# Para detener Podeoroeditor
 
 ```
 ./stopPoderoeditor.sh
 ```
+
+
+# Para ingresar al sistema
+
+Ir a la dirección señalada durante la instalación (usualmente `http://localhost:54321`) y en *ingresar* usar defaults, user: `admin`, pass: `flod`
+
+#Videos
+##Cómo instalar Poderoeditor
+[![Cómo instalar Poderoeditor](http://img.youtube.com/vi/seB2dzB5odU/0.jpg)](http://www.youtube.com/watch?v=seB2dzB5odU)
+
+##Cómo agregar una nueva instancia
+[![Cómo agregar una nueva instancia](http://img.youtube.com/vi/FrCWY36YRgU/0.jpg)](http://www.youtube.com/watch?v=FrCWY36YRgU)
+
+		
+##Cómo editar una instancia
+
+[![Cómo editar una instancia](http://img.youtube.com/vi/JVXR4WzsGTY/0.jpg)](http://www.youtube.com/watch?v=JVXR4WzsGTY)
