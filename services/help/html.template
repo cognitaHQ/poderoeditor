@@ -1,0 +1,20 @@
+{%extends "components/includes/base.html"%}
+{%block content%}
+
+<div class="container" data-ng-app="viewApp">
+	<div class="row" data-ng-controller="viewList">
+	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div>
+	<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+		<h3>{{flod.languages[flod.labelLanguage].help_video_installation}}</h3>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/seB2dzB5odU" frameborder="0" allowfullscreen></iframe>
+		<h3>{{flod.languages[flod.labelLanguage].help_video_add_instance}}</h3>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/FrCWY36YRgU" frameborder="0" allowfullscreen></iframe>
+		<h3>{{flod.languages[flod.labelLanguage].help_video_edit_instance}}</h3>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/JVXR4WzsGTY" frameborder="0" allowfullscreen></iframe>
+		<h3>{{flod.languages[flod.labelLanguage].help_video_add_class}}</h3>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/seB2dzB5odU" frameborder="0" allowfullscreen></iframe>
+
+	</div>
+	</div>
+</div>
+	{%endblock%}
