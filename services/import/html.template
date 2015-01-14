@@ -6,7 +6,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
 
-				<h2 for="fileToUpload">Select a File to Upload</h2>
+				<h2 for="fileToUpload">Seleccione archivo a subir</h2>
 				<input type="file" ng-model-instant id="fileToUpload" style="margin:auto;" onchange="angular.element(this).scope().setFiles(this)" />
 				<div id="dropbox" class="dropbox" ng-class="dropClass" style="margin:auto;"><span>[[dropText]]</span></div>
 				<div ng-show="files.length">

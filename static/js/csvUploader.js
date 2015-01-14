@@ -32,7 +32,7 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
         var clazz = 'not-available'
         var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.indexOf('Files') >= 0
         $scope.$apply(function(){
-            $scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!'
+            $scope.dropText = ok ? 'Arrastre archivo aquí...' : 'Sólo archivos son permitodos!'
             $scope.dropClass = ok ? 'over' : 'not-available'
         })
     }, false)
@@ -41,7 +41,7 @@ csvUploaderApp.controller('csvUploaderCtrl', ['$scope', '$http', function($scope
         evt.stopPropagation()
         evt.preventDefault()
         $scope.$apply(function(){
-            $scope.dropText = 'Drop files here...'
+            $scope.dropText = 'Arrastre archivos aquí...'
             $scope.dropClass = ''
         })
         var files = evt.dataTransfer.files

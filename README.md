@@ -43,3 +43,11 @@ Ir a la dirección señalada durante la instalación (usualmente `http://localho
 ##Cómo editar una instancia
 
 [![Cómo editar una instancia](http://img.youtube.com/vi/JVXR4WzsGTY/0.jpg)](http://www.youtube.com/watch?v=JVXR4WzsGTY)
+
+##Cómo modificar formularios
+
+[![Cómo modificar formularios](http://img.youtube.com/vi/ht3h56ip_8o/0.jpg)](http://www.youtube.com/watch?v=ht3h56ip_8o)
+
+##Cómo importar datos desde un CSV
+
+[![Cómo importar datos desde un CSV](http://img.youtube.com/vi/VQoSArFgSaQ/0.jpg)](http://www.youtube.com/watch?v=VQoSArFgSaQ)

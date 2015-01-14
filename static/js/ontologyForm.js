@@ -113,7 +113,7 @@ $scope.cloneThis = function(event){
 
       $scope.subWidgets[_id].generators = [];
       $.each($scope.subWidgets[_id].widgets, function(i, item){
-        //if(item.displayed.value != false){
+        if(item.displayed == null || item.displayed.toLowerCase() != "false"){
           var aux = {
             type: item.type,
             predicate: item.predicate,
@@ -121,7 +121,7 @@ $scope.cloneThis = function(event){
             cls: item.cls
           }
           var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
-        //}
+        }
       });
     }
   }
@@ -565,14 +565,14 @@ $scope.initForm = function(data){
                                 };
             }
             $.each($scope.subWidgetModels[key].widgets, function(i, item){
-              //if(item.displayed.value != false){
+             if(item.displayed == null || item.displayed.toLowerCase() != "false"){
                 var values = entity.filter(function(d){return d.predicate == item.predicate}).pop();
                 if(values == undefined){
                   var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
                 }else{
                   var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, values.obj, undefined);
                 }
-              //}
+              }
             });
           })
           $scope.visitedSubWidgets[key] = true;
@@ -594,7 +594,7 @@ $scope.initForm = function(data){
             $scope.visitedSubWidgets[key] = true;
             $.each($scope.subWidgetModels[key].widgets, function(i, item){
                             
-//             if(item.displayed == null || item.displayed.toLowerCase() != "false"){
+             if(item.displayed == null || item.displayed.toLowerCase() != "false"){
                             var aux = {
                 type: item.type,
                 predicate: item.predicate,
@@ -602,7 +602,7 @@ $scope.initForm = function(data){
                 cls: item.cls
               }
               var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
-  //          }
+          }
             });
           }
         }
