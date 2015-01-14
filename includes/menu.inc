@@ -29,9 +29,9 @@
                 <li><a href="/import">{{flod.languages[flod.labelLanguage].menu_import}}</a></li>
                 <li><a href="/export">{{flod.languages[flod.labelLanguage].menu_export}}</a></li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="/editLayout">Edit layout</a></li>
+                <li><a href="/editLayout">{{flod.languages[flod.labelLanguage].menu_edit_layout}}</a></li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="/prepareDataApi">Export selected fields</a></li>
+                <li><a href="/prepareDataApi">{{flod.languages[flod.labelLanguage].menu_export_selected_fields}}</a></li>
               </ul>
             </li>
             {%endif%}

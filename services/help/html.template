@@ -13,6 +13,10 @@
 		<iframe width="560" height="315" src="//www.youtube.com/embed/JVXR4WzsGTY" frameborder="0" allowfullscreen></iframe>
 		<h3>{{flod.languages[flod.labelLanguage].help_video_add_class}}</h3>
 		<iframe width="560" height="315" src="//www.youtube.com/embed/seB2dzB5odU" frameborder="0" allowfullscreen></iframe>
+		<h3>{{flod.languages[flod.labelLanguage].help_video_modify_forms}}</h3>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/ht3h56ip_8o" frameborder="0" allowfullscreen></iframe>
+		<h3>{{flod.languages[flod.labelLanguage].help_video_import_data}}</h3>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/VQoSArFgSaQ" frameborder="0" allowfullscreen></iframe>
 
 	</div>
 	</div>

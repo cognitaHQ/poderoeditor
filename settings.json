@@ -44,6 +44,8 @@
 				"menu_create_user": "Crear usuario",
 				"menu_delete_user": "Eliminar usuario",
 				"menu_visualization": "Visualización",
+				"menu_edit_layout": "Editar layout",
+				"menu_export_selected_fields": "Exportar campos seleccionados",
 				"menu_help": "Ayuda",
 				"search_search_title": "Buscar",
 				"search_submit_button": "Buscar",
@@ -62,14 +64,19 @@
 				"viz_select_label": "Seleccione una entidad",
 				"viz_title": "Visualización",
 				"viz_button": "Visualizar",
+				"button_add_predicate": "Agregar campo",
+				"button_add_subwidget": "Agregar conexión",
 				"edit_submit_button": "Guardar",
+				"edit_close_button": "Cerrar",
 				"edit_delete_button": "Eliminar",
 				"edit_delete_warning": "Esta acción eliminará TODA la información de esta instancia. ¿Seguir?",
 				"help_video_installation": "Cómo instalar Poderoeditor",
 				"help_video_add_instance": "Cómo agregar una nueva instancia",
 				"help_video_edit_instance": "Cómo editar una instancia",
 				"help_video_add_class": "Cómo agregar una clase",
-				"help_video_add_predicate": "Cómo agregar una propiedad"
+				"help_video_add_predicate": "Cómo agregar una propiedad",
+				"help_video_modify_forms": "Cómo modificar un formulario",
+				"help_video_import_data": "Cómo importar datos desde un CSV"
 
 			},
 			"en":{
@@ -86,6 +93,8 @@
 				"menu_create_user": "Create user",
 				"menu_deletete_user": "Delete user",
 				"menu_visualization": "Visualization",
+				"menu_edit_layout": "Edit layout",
+				"menu_export_selected_fields": "Export selected fields",
 				"menu_help": "Help",
 				"search_search_title": "Search",
 				"search_submit_button": "Submit",
@@ -104,14 +113,19 @@
 				"viz_select_label": "Select an entity",
 				"viz_title": "Visualization",
 				"viz_button": "Visualize",
+				"button_add_predicate": "Add predicate",
+				"button_add_subwidget": "Add connection",
 				"edit_submit_button": "Save",
+				"edit_close_button": "Close",
 				"edit_delete_button": "Delete",
 				"edit_delete_warning": "This action will delete ALL the information of this instance. Continue?",
 				"help_video_installation": "How to install Poderoeditor",
 				"help_video_add_instance": "How to add a new instance",
 				"help_video_edit_instance": "How to edit an instance",
 				"help_video_add_class": "How to add a new class",
-				"help_video_add_predicate": "How to add a new property"
+				"help_video_add_predicate": "How to add a new property",
+				"help_video_modify_forms": "How to modify forms",
+				"help_video_import_data": "How to import data form a CSV file"
 			}
 		}
 	},

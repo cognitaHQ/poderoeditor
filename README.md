@@ -39,7 +39,7 @@ Ir a la dirección señalada durante la instalación (usualmente `http://localho
 ##Cómo agregar una nueva instancia
 [![Cómo agregar una nueva instancia](http://img.youtube.com/vi/FrCWY36YRgU/0.jpg)](http://www.youtube.com/watch?v=FrCWY36YRgU)
 
-		
+	
 ##Cómo editar una instancia
 
 [![Cómo editar una instancia](http://img.youtube.com/vi/JVXR4WzsGTY/0.jpg)](http://www.youtube.com/watch?v=JVXR4WzsGTY)
