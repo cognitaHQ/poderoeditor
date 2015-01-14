@@ -1,11 +1,22 @@
-SELECT DISTINCT * WHERE{
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?s ?sName ?parent WHERE{
 	GRAPH <{{flod.dataGraph}}>{
 		{
 			?s <{{flod.labelPredicate}}> ?sName .
-			<{{"/".join(args)}}> ?p ?s .
-			}UNION{
+			?parent ?p ?s .
+			FILTER(?parent = <{{"/".join(args)}}>)
+		}UNION{
 			?s <{{flod.labelPredicate}}> ?sName .
-			?s ?p  <{{"/".join(args)}}> .				
+			?s ?p  ?parent .
+			FILTER(?parent = <{{"/".join(args)}}>)
+		}UNION{
+			?connection ?x ?parent;
+					   ?y ?s.
+			GRAPH <{{flod.dataOntologyGraph}}>{
+				?connection rdfs:subClassOf+ <http://poderopedia.com/vocab/Connection> .
 			}
+			?s <{{flod.labelPredicate}}> ?sName .
+			FILTER(?parent = <{{"/".join(args)}}>)
+		}
 	}
 }
