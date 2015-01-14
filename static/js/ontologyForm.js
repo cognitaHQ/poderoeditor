@@ -113,13 +113,15 @@ $scope.cloneThis = function(event){
 
       $scope.subWidgets[_id].generators = [];
       $.each($scope.subWidgets[_id].widgets, function(i, item){
-        var aux = {
-          type: item.type,
-          predicate: item.predicate,
-          title: item.title,
-          cls: item.cls
-        }
-        var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+        //if(item.displayed.value != false){
+          var aux = {
+            type: item.type,
+            predicate: item.predicate,
+            title: item.title,
+            cls: item.cls
+          }
+          var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+        //}
       });
     }
   }
@@ -524,6 +526,7 @@ $scope.initForm = function(data){
                                             type: datum.sub_widget.value,
                                             predicate: datum.sub_predicate.mirroredUri,
                                             cls: datum.sub_class.value,
+                                            displayed: datum.displayed,
                                             title:title,
                                             triples: []
                                           });
@@ -562,12 +565,14 @@ $scope.initForm = function(data){
                                 };
             }
             $.each($scope.subWidgetModels[key].widgets, function(i, item){
-              var values = entity.filter(function(d){return d.predicate == item.predicate}).pop();
-              if(values == undefined){
-                var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
-              }else{
-                var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, values.obj, undefined);
-              }
+              //if(item.displayed.value != false){
+                var values = entity.filter(function(d){return d.predicate == item.predicate}).pop();
+                if(values == undefined){
+                  var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+                }else{
+                  var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, values.obj, undefined);
+                }
+              //}
             });
           })
           $scope.visitedSubWidgets[key] = true;
@@ -588,13 +593,16 @@ $scope.initForm = function(data){
             };              
             $scope.visitedSubWidgets[key] = true;
             $.each($scope.subWidgetModels[key].widgets, function(i, item){
-              var aux = {
+                            
+//             if(item.displayed == null || item.displayed.toLowerCase() != "false"){
+                            var aux = {
                 type: item.type,
                 predicate: item.predicate,
                 title: item.title,
                 cls: item.cls
               }
               var widgetId = $scope._getWidget(item.type, item.predicate, item.title, _id, item.cls, null, undefined);
+  //          }
             });
           }
         }

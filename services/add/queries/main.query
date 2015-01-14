@@ -4,7 +4,7 @@ PREFIX layout: <http://cognita.io/poderoEditor/layoutOntology/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
 
-select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?number ?widget ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_widget WHERE {
+select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement ?number ?widget ?displayed ?sub_widget ?sub_class ?super_predicate_reverse ?super_predicate_forward ?sub_predicate ?sub_htmlElement ?sub_number ?sub_display ?sub_widget WHERE {
  graph <{{flod.layoutGraph}}>  {
    {
       ?view a layout:FormView ;
@@ -15,7 +15,10 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
                      layout:anchoredTo ?htmlElement;
       					layout:predicateDisplayed ?predicate;
       					layout:positionNumber ?number .
-      
+      OPTIONAL{
+         ?predicateWidget layout:displayWidget ?displayed .
+      }
+
       {
          ?predicateWidget layout:displayWidget true .
       }UNION{
@@ -52,11 +55,16 @@ select distinct ?predicate ?predicateLabel ?predicatePreferedLabel ?htmlElement 
             layout:hasWidget ?sub_predicateWidget .
       ?sub_predicateWidget a ?sub_widget;
                   layout:predicateDisplayed ?sub_predicate;
+                  layout:displayWidget ?sub_display;
                   layout:positionNumber ?sub_number .
 
       OPTIONAL{
          ?sub_predicateWidget skos:prefLabel ?predicatePreferedLabel .
           FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
+      }
+
+      OPTIONAL{
+         ?sub_predicateWidget layout:displayWidget ?displayed .
       }
       OPTIONAL{
          graph <{{flod.dataOntologyGraph}}>{

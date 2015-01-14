@@ -16,6 +16,9 @@ select distinct ?widget ?predicate ?predicateLabel ?predicatePreferedLabel ?html
       					layout:predicateDisplayed ?predicate;
       					layout:positionNumber ?position .
       OPTIONAL{
+         ?predicateWidget layout:displayWidget ?displayed .
+      }
+      OPTIONAL{
          ?predicateWidget skos:prefLabel ?predicatePreferedLabel .
          FILTER(langMatches(lang(?predicatePreferedLabel), "{{flod.labelLanguage}}"))
 
@@ -31,7 +34,7 @@ select distinct ?widget ?predicate ?predicateLabel ?predicatePreferedLabel ?html
       }UNION{
          FILTER NOT EXISTS { ?predicateWidget layout:displayWidget false .}
       }
-       }UNION{
+   }UNION{
       ?super_view layout:classAssociated <{{"/".join(args)}}>;
                   layout:hasSubView ?view .
 

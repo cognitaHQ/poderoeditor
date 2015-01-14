@@ -353,7 +353,7 @@ layoutFormApp.controller('createPredicateCtrl', ['$scope', '$http', function($sc
       }).
       success(function(data, status, headers, config) {
         alert("Nuevo predicado creado");
-        location.reload();
+        window.reload();
       }).
       error(function(data, status, headers, config) {
         alert("Error");
