@@ -12,7 +12,7 @@ bash <(curl -skL 'https://raw.githubusercontent.com/cognitaHQ/poderoeditor/maste
 
 Luego sólo hay que seguir las instrucciones.
 
-# Para iniciar Podeoroeditor
+# Para iniciar Poderoeditor
 
 ```
 cd poderoeditor
@@ -21,7 +21,7 @@ cd poderoeditor
 
 
 		
-# Para detener Podeoroeditor
+# Para detener Poderoeditor
 
 ```
 ./stopPoderoeditor.sh
