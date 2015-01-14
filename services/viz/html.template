@@ -3,7 +3,12 @@
 
 <div class="container">
 	<div class="row" style="margin-top:50px;">
-		<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 text-center" id="viz"></div>
+		<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 text-center">
+    <div id="viz">  
+    </div>
+              <a class="btn btn-default download" href="javascript:(function () { var e = document.createElement('script'); if (window.location.protocol === 'https:') { e.setAttribute('src', 'https://rawgit.com/NYTimes/svg-crowbar/gh-pages/svg-crowbar.js'); } else { e.setAttribute('src', 'http://nytimes.github.com/svg-crowbar/svg-crowbar.js'); } e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();"><!--⤋--><big>⇩</big> Download</a>
+
+    </div>
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center">
       <div id="details"></div>
       <div>
@@ -99,8 +104,8 @@ function resetMouseVars() {
 function tick() {
   // draw directed edges with proper padding from node centers
   path.attr('d', function(d) {
-    var deltaX = d.target.x - d.source.x,
-        deltaY = d.target.y - d.source.y,
+    var deltaX = d.target.x - d.source.x +1,
+        deltaY = d.target.y - d.source.y +1,
         dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
         normX = deltaX / dist,
         normY = deltaY / dist,
@@ -162,7 +167,9 @@ function restart() {
 
   // circle (node) group
   // NB: the function arg is crucial here! nodes are known by id, not by index!
-  circle = circle.data(nodes, function(d) { return d.id; });
+  console.log(circle);
+  circle = circle.data(nodes, function(d) {return d.id; });
+  console.log(circle);
 
   // update existing nodes (reflexive & selected visual states)
   circle.selectAll('circle')

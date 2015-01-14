@@ -498,9 +498,9 @@ $scope.initForm = function(data){
 
 
   $scope.formData.forEach(function(datum, i){
-    var key = datum.sub_class.value;
+    var key = datum.sub_class.mirroredUri;
     if(key != null){
-      var title = datum.sub_predicate.value;
+      var title = datum.sub_predicate.mirroredUri;
       if(datum.predicatePreferedLabel && datum.predicatePreferedLabel.value){
         title = datum.predicatePreferedLabel.value;
       }else if(datum.predicateLabel && datum.predicateLabel.value){
@@ -522,7 +522,7 @@ $scope.initForm = function(data){
       }
       $scope.subWidgetModels[key].widgets.push({
                                             type: datum.sub_widget.value,
-                                            predicate: datum.sub_predicate.value,
+                                            predicate: datum.sub_predicate.mirroredUri,
                                             cls: datum.sub_class.value,
                                             title:title,
                                             triples: []

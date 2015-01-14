@@ -1,4 +1,5 @@
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 WITH  <{{flod.dataGraph}}>
 DELETE {
  		<{{data.uri}}> ?p ?o .
@@ -13,7 +14,9 @@ DELETE {
 }
 WHERE{
  	    ?x ?y <{{data.uri}}> ;
-                 ?z ?w .
+           ?z ?w ;
+           a ?type .
+        ?type rdfs:subClassOf* <http://poderopedia.com/vocab/Connection> .
 };
 {%if data.triples%}
 INSERT DATA{

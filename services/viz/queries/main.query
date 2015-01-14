@@ -1,5 +1,6 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?s ?sName ?parent WHERE{
+{
 	GRAPH <{{flod.dataGraph}}>{
 		{
 			?s <{{flod.labelPredicate}}> ?sName .
@@ -9,14 +10,19 @@ SELECT DISTINCT ?s ?sName ?parent WHERE{
 			?s <{{flod.labelPredicate}}> ?sName .
 			?s ?p  ?parent .
 			FILTER(?parent = <{{"/".join(args)}}>)
-		}UNION{
-			?connection ?x ?parent;
-					   ?y ?s.
-			GRAPH <{{flod.dataOntologyGraph}}>{
-				?connection rdfs:subClassOf+ <http://poderopedia.com/vocab/Connection> .
-			}
-			?s <{{flod.labelPredicate}}> ?sName .
-			FILTER(?parent = <{{"/".join(args)}}>)
 		}
 	}
+}UNION{
+	GRAPH <{{flod.dataGraph}}>{
+			?connection ?x ?parent;
+					   ?y ?s;
+					   a ?type.
+
+			?s <{{flod.labelPredicate}}> ?sName .
+			FILTER(?parent = <{{"/".join(args)}}>)
+	}
+	GRAPH <{{flod.dataOntologyGraph}}>{
+		?type rdfs:subClassOf+ <http://poderopedia.com/vocab/Connection> .
+	}
+}
 }
