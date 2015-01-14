@@ -28,7 +28,7 @@
 		  				:positionNumber 30;
 		  				:anchoredTo "myForm"
 		  			   ],
-		  			   [ a :HTMLInputDateWidget ;
+		  			   [ a :HTMLInputTextWidget ;
 		  				:predicateDisplayed foaf:based_near;
 		  				:positionNumber 30;
 		  				:anchoredTo "myForm"
