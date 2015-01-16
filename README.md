@@ -3,11 +3,11 @@ Versión 1.0.0
 
 ##¿Qué es?
 
-Poderoeditor es un editor de ontologías enfocado (pero no limitado a) la ontología de (Poderopedia)[https://github.com/poderopedia/podervocabulary]. Poderoeditor está escrito en Python y por defecto utiliza Jena Fuseki como backend.
+Poderoeditor es un editor de ontologías enfocado (pero no limitado a) la ontología de [Poderopedia](https://github.com/poderopedia/podervocabulary). Poderoeditor está escrito en Python y por defecto utiliza [Jena Fuseki](http://jena.apache.org) como backend.
 
 ##Instalación
 
-Abrir un terminal (usando `bash`) y correr el siguiente comando:
+Poderoeditor puede ser instalado en cualquier sistema Unix. Ha sido probado en Linux y OS X. Para instalarlo, basta con abrir un terminal (cuyo shell sea `bash`) y ejecutar el siguiente comando:
 
 ```
 bash <(curl -skL 'https://raw.githubusercontent.com/cognitaHQ/poderoeditor/master/installation.sh')
